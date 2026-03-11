@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 2: Writing Different Sentence Types</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral:#E66B5D;--coral-pale:#FDF0EE;--teal:#3A7D8C;--light-blue:#D7ECF0;
+  --blue-pale:#EBF5F8;--yellow:#F3D25B;--yellow-dark:#9E7F0A;--dark-gold:#B8860B;
+  --white:#FFFFFF;--dark:#1A1A2E;--gray:#6B7280;--success:#22C55E;--error:#EF4444;
+  --green:#2E7D32;--green-bg:#E8F5E9;--green-border:#66BB6A;
+  --orange:#E65100;--orange-bg:#FFF3E0;--orange-border:#FB8C00;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'Open Sans',sans-serif;background:#F8FAFC;color:var(--dark);height:100%;overflow:hidden}
+
+/* Progress */
+.progress-bar{height:6px;background:#E5E7EB;position:fixed;top:0;left:0;right:0;z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--coral));transition:width .4s;width:0%}
+
+/* Star */
+.star-counter{position:fixed;top:16px;right:20px;z-index:100;background:var(--white);border-radius:24px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:var(--yellow-dark);display:flex;align-items:center;gap:6px}
+.star-counter .si{font-size:20px}
+.star-counter.anim .si{animation:sp .5s ease}
+@keyframes sp{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+/* Slide wrapper */
+#sw{position:fixed;top:6px;left:0;right:0;bottom:60px;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px 20px}
+.slide{display:none;max-width:900px;width:100%;background:var(--white);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:44px;animation:fi .35s ease-out}
+.slide.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* Nav */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--white);border-top:2px solid var(--light-blue);padding:0 24px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.nb{font-family:'Open Sans',sans-serif;font-weight:600;font-size:15px;padding:10px 24px;border-radius:10px;border:none;cursor:pointer;transition:all .2s}
+.nb.bk{background:var(--blue-pale);color:var(--teal)}.nb.bk:hover{background:var(--light-blue)}
+.nb.nx{background:var(--teal);color:var(--white)}.nb.nx:hover{background:#2d6570}
+.nb:disabled{opacity:.35;cursor:not-allowed}
+.sc{font-family:'Open Sans',sans-serif;font-size:13px;color:var(--gray)}
+
+/* Phase labels */
+.pl{display:inline-block;font-family:'Open Sans',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;padding:4px 14px;border-radius:6px;margin-bottom:16px}
+.pl-learn{background:var(--light-blue);color:var(--teal)}
+.pl-practice{background:var(--coral-pale);color:var(--coral)}
+.pl-review{background:var(--blue-pale);color:var(--teal)}
+
+/* Type */
+.st{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.7rem;color:var(--teal);margin-bottom:8px;line-height:1.3}
+.ss{font-family:'Poppins',sans-serif;font-weight:500;font-size:1.05rem;color:var(--coral);margin-bottom:18px}
+.tx{font-family:'Poppins',sans-serif;font-size:1rem;line-height:1.7;color:var(--dark)}
+.dir{font-family:'Open Sans',sans-serif;font-size:.92rem;color:var(--gray);margin-bottom:18px;font-style:italic}
+
+/* Title */
+.ti{text-align:center;padding:32px 0}
+.ti .brand{font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;color:var(--coral);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ti .ul{font-family:'Open Sans',sans-serif;font-weight:600;font-size:.9rem;color:var(--gray);margin-bottom:24px}
+.ti h1{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.3rem;color:var(--teal);margin-bottom:10px;line-height:1.2}
+.ti .sub{font-family:'Poppins',sans-serif;font-weight:400;font-size:1.1rem;color:var(--dark);margin-bottom:28px}
+.gb{display:inline-block;background:var(--light-blue);border-radius:12px;padding:16px 32px;font-family:'Poppins',sans-serif;font-weight:500;color:var(--teal);font-size:1rem}
+
+/* Concept intro */
+.ci{text-align:center;padding:60px 0}
+.cw{font-family:'Poppins',sans-serif;font-weight:700;font-size:3.2rem;color:var(--teal);margin-bottom:10px}
+.cs{font-family:'Open Sans',sans-serif;font-size:1rem;color:var(--gray)}
+
+/* MC */
+.mco{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.mc{font-family:'Poppins',sans-serif;font-weight:500;font-size:.95rem;padding:13px 18px;border-radius:10px;border:2px solid #E5E7EB;background:var(--white);cursor:pointer;transition:all .2s;text-align:left}
+.mc:hover:not(.lk){border-color:var(--teal);background:var(--blue-pale)}
+.mc.ok{border-color:var(--success);background:#F0FDF4}
+.mc.no{border-color:var(--error);background:#FEF2F2}
+.mc.lk{cursor:default;pointer-events:none}
+.fb{margin-top:10px;font-family:'Open Sans',sans-serif;font-weight:600;font-size:.93rem;padding:10px 14px;border-radius:8px;display:none}
+.fb.show{display:block}
+.fb.fok{background:#F0FDF4;color:var(--success)}
+.fb.fno{background:#FEF2F2;color:var(--error)}
+
+/* Paragraph box */
+.para-box{border-radius:12px;padding:20px 24px;margin:14px 0;font-family:'Poppins',sans-serif;font-size:.95rem;line-height:1.8}
+.para-boring{background:#F3F4F6;border:2px solid #D1D5DB;color:#6B7280}
+.para-varied{background:var(--blue-pale);border:2px solid var(--teal);color:var(--dark)}
+.para-label{font-family:'Open Sans',sans-serif;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+
+/* Color code activity */
+.cc-sentence{padding:10px 14px;border-radius:8px;margin-bottom:8px;font-family:'Poppins',sans-serif;font-size:.92rem;line-height:1.6;cursor:pointer;border:2px solid #E5E7EB;background:var(--white);transition:all .2s;display:flex;align-items:center;gap:10px}
+.cc-sentence:hover:not(.cc-done){border-color:var(--teal)}
+.cc-sentence .cc-dot{width:14px;height:14px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;transition:all .2s}
+.cc-sentence.cc-done{pointer-events:none}
+.cc-sentence.cc-decl{border-color:var(--green-border);background:var(--green-bg)}.cc-sentence.cc-decl .cc-dot{background:var(--green-border);border-color:var(--green-border)}
+.cc-sentence.cc-inter{border-color:var(--teal);background:var(--light-blue)}.cc-sentence.cc-inter .cc-dot{background:var(--teal);border-color:var(--teal)}
+.cc-sentence.cc-excl{border-color:var(--coral);background:var(--coral-pale)}.cc-sentence.cc-excl .cc-dot{background:var(--coral);border-color:var(--coral)}
+.cc-sentence.cc-imper{border-color:var(--orange-border);background:var(--orange-bg)}.cc-sentence.cc-imper .cc-dot{background:var(--orange-border);border-color:var(--orange-border)}
+.cc-sentence.cc-wrong{border-color:var(--error);background:#FEF2F2}
+
+/* Colour pen toolbar */
+.pen-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pen-btn{font-family:'Open Sans',sans-serif;font-weight:600;font-size:.78rem;padding:6px 14px;border-radius:20px;border:2px solid #ddd;background:var(--white);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.pen-btn .dot{width:10px;height:10px;border-radius:50%}
+.pen-btn:hover{transform:translateY(-1px)}
+.pen-btn.pen-active{box-shadow:0 0 0 2px var(--dark);font-weight:700}
+.pen-decl .dot{background:var(--green-border)}.pen-decl.pen-active{border-color:var(--green-border);background:var(--green-bg)}
+.pen-inter .dot{background:var(--teal)}.pen-inter.pen-active{border-color:var(--teal);background:var(--light-blue)}
+.pen-excl .dot{background:var(--coral)}.pen-excl.pen-active{border-color:var(--coral);background:var(--coral-pale)}
+.pen-imper .dot{background:var(--orange-border)}.pen-imper.pen-active{border-color:var(--orange-border);background:var(--orange-bg)}
+
+/* Sentence transform */
+.tf-item{margin-bottom:16px;padding:16px;background:var(--blue-pale);border-radius:12px;border:2px solid transparent;transition:all .2s}
+.tf-item.tf-ok{border-color:var(--success);background:#F0FDF4}
+.tf-item.tf-bad{border-color:var(--error);background:#FEF2F2}
+.tf-original{font-family:'Poppins',sans-serif;font-weight:600;font-size:.95rem;color:var(--dark);margin-bottom:4px}
+.tf-prompt{font-family:'Open Sans',sans-serif;font-size:.85rem;color:var(--gray);margin-bottom:8px}
+.tf-btns{display:flex;gap:6px;flex-wrap:wrap}
+.tf-btn{font-family:'Open Sans',sans-serif;font-weight:600;font-size:.78rem;padding:5px 12px;border-radius:8px;border:2px solid #ddd;background:var(--white);cursor:pointer;transition:all .15s}
+.tf-btn:hover:not(.tf-lk){border-color:var(--teal)}
+.tf-btn.tf-sel{border-color:var(--teal);background:var(--light-blue);color:var(--teal);font-weight:700}
+.tf-btn.tf-lk{cursor:default;pointer-events:none}
+.tf-btn.tf-right{border-color:var(--success);background:#F0FDF4;color:#166534}
+.tf-btn.tf-wrong{border-color:var(--error);background:#FEF2F2;color:#991B1B}
+
+/* Tricky box */
+.tbox{background:#FEF9E7;padding:15px 18px;border-radius:12px;border-left:4px solid var(--yellow);margin-bottom:12px}
+.tbox .th{font-family:'Poppins',sans-serif;font-weight:600;color:var(--dark-gold);margin-bottom:5px;font-size:.95rem}
+.tbox .tb{font-family:'Poppins',sans-serif;font-size:.92rem;line-height:1.6;color:var(--dark)}
+
+/* Review cards */
+.rv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.rv-card{border-radius:12px;padding:18px;cursor:pointer;transition:all .3s;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'Poppins',sans-serif;font-weight:500;font-size:.92rem}
+.rv-teal{background:var(--light-blue);color:var(--teal);border:2px solid var(--teal)}
+.rv-coral{background:var(--coral-pale);color:var(--coral);border:2px solid var(--coral)}
+.rv-gold{background:#FEF9E7;color:var(--dark-gold);border:2px solid var(--yellow)}
+.rv-blue{background:var(--blue-pale);color:var(--teal);border:2px solid var(--light-blue)}
+.rv-card .rv-q{font-weight:600}.rv-card .rv-a{display:none;font-weight:400;font-size:.85rem;color:var(--dark);margin-top:8px}
+.rv-card .rv-tap{font-size:.72rem;opacity:.45;margin-top:6px}
+.rv-card.flipped .rv-q{font-size:.78rem;opacity:.55;margin-bottom:4px}
+.rv-card.flipped .rv-a{display:block}.rv-card.flipped .rv-tap{display:none}
+
+/* Celeb */
+.celeb{text-align:center;padding:30px 0}
+.celeb .trophy{font-size:3.5rem;margin-bottom:12px}
+.celeb h2{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.9rem;color:var(--teal);margin-bottom:10px}
+.celeb .cm{font-family:'Poppins',sans-serif;font-size:1.05rem;color:var(--dark);margin-bottom:22px}
+.stats-row{display:flex;gap:14px;justify-content:center;margin:18px 0;flex-wrap:wrap}
+.stat-box{background:var(--blue-pale);border-radius:12px;padding:16px 24px;text-align:center;min-width:110px}
+.stat-box .sv{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.7rem;color:var(--teal)}
+.stat-box .sl{font-family:'Open Sans',sans-serif;font-size:.78rem;color:var(--gray);margin-top:3px}
+.restart{font-family:'Open Sans',sans-serif;font-weight:600;font-size:1rem;padding:12px 30px;border-radius:10px;border:2px solid var(--coral);background:var(--white);color:var(--coral);cursor:pointer;transition:all .2s;margin-top:14px}
+.restart:hover{background:var(--coral-pale)}
+
+/* Action btn */
+.abtn{font-family:'Open Sans',sans-serif;font-weight:600;padding:10px 26px;border-radius:8px;border:none;background:var(--teal);color:var(--white);cursor:pointer;font-size:.93rem;margin-top:10px;transition:all .2s}
+.abtn:hover{background:#2d6570}
+.afb{margin-top:10px;font-weight:600;font-size:.93rem;font-family:'Open Sans',sans-serif}
+.afb.aok{color:var(--teal)}.afb.aerr{color:var(--coral)}
+
+/* Confetti */
+.confetti-bit{position:fixed;z-index:200;pointer-events:none}
+
+/* Responsive */
+@media(max-width:700px){.slide{padding:24px 16px}.ti h1{font-size:1.7rem}.cw{font-size:2.4rem}.rv-grid{grid-template-columns:1fr}}
+@media(max-width:500px){.slide{padding:18px 12px}.ti h1{font-size:1.4rem}.nb{padding:8px 14px;font-size:13px}.tf-btns,.pen-bar{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="pf"></div></div>
+<div class="star-counter" id="sb"><span class="si" id="si">⭐</span><span id="sn">0</span></div>
+
+<div id="sw">
+
+  <!-- S1 — Title -->
+  <div class="slide" id="s1">
+    <div class="ti">
+      <div class="brand">Structured Steps to Writing</div>
+      <div class="ul">Unit 3: Sentence Variety &amp; Types &bull; Lesson 2</div>
+      <h1>Writing Different Sentence Types</h1>
+      <div class="sub">Mixing sentence types creates variety in writing.</div>
+      <div class="gb">🎯 I can write all four sentence types and use them together to make my writing more interesting.</div>
+    </div>
+  </div>
+
+  <!-- S2 — Concept Intro -->
+  <div class="slide" id="s2">
+    <div class="ci">
+      <span class="pl pl-learn">Learn</span>
+      <div class="cw">Sentence Variety</div>
+      <div class="cs">Writing with all four sentence types to keep readers engaged</div>
+    </div>
+  </div>
+
+  <!-- S3 — Review (Lesson 1 recap) -->
+  <div class="slide" id="s3">
+    <span class="pl pl-learn">Review</span>
+    <div class="st">Quick Review</div>
+    <div class="ss">Let's recall the four sentence types from Lesson 1.</div>
+    <p class="tx" style="margin-bottom:14px;">Which sentence type gives a command or request?</p>
+    <div class="mco" id="mc1">
+      <div class="mc" data-ok="0" onclick="doMC(this,'mc1','fb1')">A) Declarative — makes a statement</div>
+      <div class="mc" data-ok="0" onclick="doMC(this,'mc1','fb1')">B) Interrogative — asks a question</div>
+      <div class="mc" data-ok="0" onclick="doMC(this,'mc1','fb1')">C) Exclamatory — shows strong feeling</div>
+      <div class="mc" data-ok="1" onclick="doMC(this,'mc1','fb1')">D) Imperative — gives a command or request</div>
+    </div>
+    <div class="fb" id="fb1"></div>
+  </div>
+
+  <!-- S4 — Boring vs. Varied Comparison -->
+  <div class="slide" id="s4">
+    <span class="pl pl-learn">Learn</span>
+    <div class="st">Why Variety Matters</div>
+    <p class="tx" style="margin-bottom:10px;">Compare these two paragraphs about the same topic:</p>
+    <div class="para-label" style="color:var(--error);">❌ BORING — All Declarative</div>
+    <div class="para-box para-boring">Dogs are great pets. Dogs are loyal and friendly. Dogs need exercise every day. Dogs can learn many tricks. Dogs make people happy.</div>
+    <div class="para-label" style="color:var(--teal);margin-top:14px;">✓ VARIED — Mixed Sentence Types</div>
+    <div class="para-box para-varied">Have you ever had a dog? Dogs are amazing pets! They are loyal, friendly, and always happy to see you. Take your dog for a walk every day. Did you know they can learn over 100 tricks? A dog will bring so much joy into your life.</div>
+    <p class="tx" style="margin-top:14px;font-size:.9rem;color:var(--gray);">Same topic, but the varied paragraph uses interrogative, exclamatory, declarative, and imperative sentences to keep the reader engaged.</p>
+  </div>
+
+  <!-- S5 — Writing Strategies -->
+  <div class="slide" id="s5">
+    <span class="pl pl-learn">Learn</span>
+    <div class="st">Strategies for Each Type</div>
+    <p class="tx" style="margin-bottom:14px;">Use these tips when writing each sentence type:</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="background:var(--green-bg);padding:12px 16px;border-radius:10px;border-left:4px solid var(--green-border);">
+        <span style="font-family:'Poppins',sans-serif;font-weight:700;color:var(--green);font-size:.82rem;">📢 DECLARATIVE:</span>
+        <span class="tx" style="font-size:.9rem;"> State facts, share information, or give opinions. Most sentences in your writing will be declarative.</span>
+      </div>
+      <div style="background:var(--light-blue);padding:12px 16px;border-radius:10px;border-left:4px solid var(--teal);">
+        <span style="font-family:'Poppins',sans-serif;font-weight:700;color:var(--teal);font-size:.82rem;">❓ INTERROGATIVE:</span>
+        <span class="tx" style="font-size:.9rem;"> Ask your reader a question to pull them in. Great for openings and transitions.</span>
+      </div>
+      <div style="background:var(--coral-pale);padding:12px 16px;border-radius:10px;border-left:4px solid var(--coral);">
+        <span style="font-family:'Poppins',sans-serif;font-weight:700;color:var(--coral);font-size:.82rem;">😲 EXCLAMATORY:</span>
+        <span class="tx" style="font-size:.9rem;"> Show genuine excitement or surprise. Use sparingly — too many loses their impact.</span>
+      </div>
+      <div style="background:var(--orange-bg);padding:12px 16px;border-radius:10px;border-left:4px solid var(--orange-border);">
+        <span style="font-family:'Poppins',sans-serif;font-weight:700;color:var(--orange);font-size:.82rem;">👑 IMPERATIVE:</span>
+        <span class="tx" style="font-size:.9rem;"> Give advice or instructions. Works well in persuasive and informational writing.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6 — Quick Check MC -->
+  <div class="slide" id="s6">
+    <span class="pl pl-learn">Quick Check</span>
+    <div class="st">Check Your Understanding</div>
+    <p class="tx" style="margin-bottom:12px;">A student wrote this paragraph. What is the main problem?</p>
+    <div class="para-box para-boring" style="font-size:.9rem;margin-bottom:14px;">"The Rocky Mountains are beautiful. The mountains are very tall. Many animals live in the mountains. People visit the mountains every year. The mountains have snow on top."</div>
+    <div class="mco" id="mc2">
+      <div class="mc" data-ok="0" onclick="doMC(this,'mc2','fb2')">A) The sentences are too short</div>
+      <div class="mc" data-ok="0" onclick="doMC(this,'mc2','fb2')">B) The spelling is wrong</div>
+      <div class="mc" data-ok="1" onclick="doMC(this,'mc2','fb2')">C) Every sentence is the same type — all declarative</div>
+      <div class="mc" data-ok="0" onclick="doMC(this,'mc2','fb2')">D) The topic is not interesting enough</div>
+    </div>
+    <div class="fb" id="fb2"></div>
+  </div>
+
+  <!-- S7 — Practice: Colour-Code the Paragraph -->
+  <div class="slide" id="s7">
+    <span class="pl pl-practice">Practice</span>
+    <div class="st">Colour-Code the Paragraph</div>
+    <div class="dir">Select a colour pen below, then click each sentence to label its type. All 8 sentences must be tagged.</div>
+    <div class="pen-bar" id="penBar">
+      <button class="pen-btn pen-decl" data-type="decl" onclick="pickPen(this)"><span class="dot"></span> Declarative</button>
+      <button class="pen-btn pen-inter" data-type="inter" onclick="pickPen(this)"><span class="dot"></span> Interrogative</button>
+      <button class="pen-btn pen-excl" data-type="excl" onclick="pickPen(this)"><span class="dot"></span> Exclamatory</button>
+      <button class="pen-btn pen-imper" data-type="imper" onclick="pickPen(this)"><span class="dot"></span> Imperative</button>
+    </div>
+    <div id="ccBox"></div>
+    <button class="abtn" onclick="checkCC()">Check My Answers</button>
+    <div class="afb" id="ccFB"></div>
+  </div>
+
+  <!-- S8 — Practice: Sentence Transformation -->
+  <div class="slide" id="s8">
+    <span class="pl pl-practice">Practice</span>
+    <div class="st">Sentence Transformation</div>
+    <div class="dir">Each sentence has been rewritten. Select which type the new version is.</div>
+    <div id="tfBox"></div>
+    <button class="abtn" onclick="checkTF()">Check My Answers</button>
+    <div class="afb" id="tfFB"></div>
+  </div>
+
+  <!-- S9 — Tricky Concepts -->
+  <div class="slide" id="s9">
+    <span class="pl pl-learn">Tricky Concepts</span>
+    <div class="st">Tips for Great Variety</div>
+    <div style="margin-top:14px;">
+      <div class="tbox">
+        <div class="th">Don't Overdo Exclamatory Sentences</div>
+        <div class="tb">If every sentence ends with an exclamation point, none of them feel special. Save exclamatory sentences for moments of genuine strong feeling.</div>
+      </div>
+      <div class="tbox">
+        <div class="th">Use Questions to Hook Your Reader</div>
+        <div class="tb">Starting a paragraph with an interrogative sentence is a powerful way to grab your reader's attention and make them want to keep reading.</div>
+      </div>
+      <div class="tbox">
+        <div class="th">Most Sentences Will Be Declarative</div>
+        <div class="tb">That is perfectly fine. The goal is not to use every type equally — it is to break up the pattern so your writing flows naturally.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S10 — Review Cards -->
+  <div class="slide" id="s10">
+    <span class="pl pl-review">Review</span>
+    <div class="st">Review What You Learned</div>
+    <div class="dir">Click each card to reveal the answer.</div>
+    <div class="rv-grid" id="rvGrid"></div>
+  </div>
+
+  <!-- S11 — Celebration -->
+  <div class="slide" id="s11">
+    <div class="celeb">
+      <div class="trophy">🏆</div>
+      <h2>Great Work!</h2>
+      <div class="cm">You can now write with sentence variety to keep readers engaged.</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv" id="eS">0</div><div class="sl">Stars Earned</div></div>
+        <div class="stat-box"><div class="sv" id="eA">0</div><div class="sl">Activities</div></div>
+        <div class="stat-box"><div class="sv" id="eP">0%</div><div class="sl">Accuracy</div></div>
+      </div>
+      <button class="restart" onclick="startOver()">🔄 Start Over</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-bar">
+  <button class="nb bk" id="bB" onclick="go(-1)">← Back</button>
+  <span class="sc" id="sC">1 / 11</span>
+  <button class="nb nx" id="bN" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+(function(){
+  var TOTAL=11,cur=1,stars=0,acts=0,hits=0,tries=0;
+  var ccDone=false,tfDone=false,activePen=null;
+
+  /* ── Data ── */
+  var CC_DATA=[
+    {text:"Have you ever been to the Vancouver Aquarium?",type:"inter"},
+    {text:"It is one of the most popular attractions in British Columbia.",type:"decl"},
+    {text:"The jellyfish exhibit is absolutely stunning!",type:"excl"},
+    {text:"Walk through the underwater tunnel slowly so you can see everything.",type:"imper"},
+    {text:"Thousands of sea creatures live in the aquarium's tanks.",type:"decl"},
+    {text:"What is your favourite marine animal?",type:"inter"},
+    {text:"Be sure to check the schedule for feeding times.",type:"imper"},
+    {text:"You will not believe how colourful the tropical fish are!",type:"excl"}
+  ];
+
+  var TF_DATA=[
+    {orig:"The Ottawa Senators play at the Canadian Tire Centre.",origType:"Declarative",newSent:"Do the Ottawa Senators play at the Canadian Tire Centre?",answer:"inter"},
+    {orig:"You should try the butter tarts at the bakery.",origType:"Imperative",newSent:"The butter tarts at the bakery are absolutely incredible!",answer:"excl"},
+    {orig:"Does the library open on Saturdays?",origType:"Interrogative",newSent:"The library opens on Saturdays.",answer:"decl"},
+    {orig:"The sunset over Lake Huron was gorgeous!",origType:"Exclamatory",newSent:"Watch the sunset over Lake Huron.",answer:"imper"},
+    {orig:"My neighbour has a very friendly golden retriever.",origType:"Declarative",newSent:"Have you met my neighbour's golden retriever?",answer:"inter"}
+  ];
+
+  var RV_DATA=[
+    {q:"Why does sentence variety matter?",a:"Using all four types keeps readers interested. Writing with only one type sounds flat and repetitive.",c:"rv-teal"},
+    {q:"Which type is best for starting a paragraph?",a:"Interrogative sentences are great openers — they hook the reader with a question.",c:"rv-coral"},
+    {q:"Should you use exclamatory sentences a lot?",a:"No. Use them sparingly for genuine strong feeling. Too many loses their impact.",c:"rv-gold"},
+    {q:"Will most sentences be declarative?",a:"Yes, and that is fine. The goal is to break up the pattern with other types, not to use every type equally.",c:"rv-blue"},
+    {q:"What should you do after writing a paragraph?",a:"Check for variety. If every sentence is the same type, revise some to different types.",c:"rv-teal"}
+  ];
+
+  var TYPES={decl:"📢 Declarative",inter:"❓ Interrogative",excl:"😲 Exclamatory",imper:"👑 Imperative"};
+
+  /* ── Nav ── */
+  function show(n){
+    for(var i=1;i<=TOTAL;i++){var e=document.getElementById('s'+i);e.style.display='none';e.classList.remove('active')}
+    var el=document.getElementById('s'+n);el.style.display='block';el.classList.add('active');
+    cur=n;
+    document.getElementById('pf').style.width=((n/TOTAL)*100)+'%';
+    document.getElementById('sC').textContent=n+' / '+TOTAL;
+    document.getElementById('bB').disabled=(n===1);
+    document.getElementById('bN').disabled=(n===TOTAL);
+    document.getElementById('sw').scrollTop=0;
+    if(n===TOTAL)showCeleb();
+  }
+  window.go=function(d){var nx=cur+d;if(nx>=1&&nx<=TOTAL)show(nx)};
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();window.go(1)}
+    if(e.key==='ArrowLeft'){e.preventDefault();window.go(-1)}
+  });
+
+  /* ── Stars ── */
+  function earn(n){stars+=n;document.getElementById('sn').textContent=stars;var b=document.getElementById('sb');b.classList.remove('anim');void b.offsetWidth;b.classList.add('anim')}
+
+  /* ── MC ── */
+  window.doMC=function(el,gId,fId){
+    var g=document.getElementById(gId);if(g.dataset.done==='1')return;g.dataset.done='1';
+    var opts=g.querySelectorAll('.mc'),fb=document.getElementById(fId),ok=el.getAttribute('data-ok')==='1';
+    opts.forEach(function(o){o.classList.add('lk');if(o.getAttribute('data-ok')==='1')o.classList.add('ok')});
+    if(ok){el.classList.add('ok');fb.textContent='✓ Correct!';fb.className='fb show fok';earn(1);hits++}
+    else{el.classList.add('no');fb.textContent='✗ Not quite. The correct answer is highlighted.';fb.className='fb show fno'}
+    tries++;
+  };
+
+  /* ── Colour-Code Activity ── */
+  function buildCC(){
+    var box=document.getElementById('ccBox');box.innerHTML='';
+    CC_DATA.forEach(function(item,i){
+      var div=document.createElement('div');
+      div.className='cc-sentence';div.dataset.type=item.type;div.dataset.idx=i;div.dataset.tagged='';
+      div.innerHTML='<span class="cc-dot"></span><span>'+item.text+'</span>';
+      div.addEventListener('click',function(){
+        if(ccDone||!activePen)return;
+        div.className='cc-sentence cc-'+activePen;
+        div.dataset.tagged=activePen;
+      });
+      box.appendChild(div);
+    });
+  }
+
+  window.pickPen=function(btn){
+    document.querySelectorAll('.pen-btn').forEach(function(b){b.classList.remove('pen-active')});
+    btn.classList.add('pen-active');
+    activePen=btn.dataset.type;
+  };
+
+  window.checkCC=function(){
+    if(ccDone)return;
+    var items=document.querySelectorAll('.cc-sentence');
+    var allTagged=true;
+    items.forEach(function(it){if(!it.dataset.tagged)allTagged=false});
+    if(!allTagged){
+      var fb=document.getElementById('ccFB');
+      fb.textContent='Please tag all sentences before checking. Select a pen colour, then click each sentence.';
+      fb.className='afb aerr';return;
+    }
+    ccDone=true;
+    var right=0,total=CC_DATA.length;
+    var typeMap={decl:'decl',inter:'inter',excl:'excl',imper:'imper'};
+    items.forEach(function(it){
+      var correct=it.dataset.type;var tagged=it.dataset.tagged;
+      it.classList.add('cc-done');
+      if(tagged===correct){right++}
+      else{it.classList.add('cc-wrong')}
+    });
+    hits+=right;tries+=total;acts++;
+    var fb=document.getElementById('ccFB');
+    if(right===total){fb.textContent='✓ Perfect! You colour-coded all '+total+' sentences correctly.';fb.className='afb aok';earn(3);confetti()}
+    else{fb.textContent='You got '+right+' out of '+total+' correct. Incorrect ones are outlined in red.';fb.className='afb aerr';earn(1)}
+  };
+
+  /* ── Sentence Transformation ── */
+  function buildTF(){
+    var box=document.getElementById('tfBox');box.innerHTML='';
+    var allTypes=['decl','inter','excl','imper'];
+
+    TF_DATA.forEach(function(item,i){
+      var div=document.createElement('div');div.className='tf-item';div.dataset.ans=item.answer;
+      var orig=document.createElement('div');orig.className='tf-original';
+      orig.textContent='Original ('+item.origType+'): "'+item.orig+'"';
+      var prompt=document.createElement('div');prompt.className='tf-prompt';
+      prompt.textContent='Rewritten as: "'+item.newSent+'" — What type is this?';
+      var btns=document.createElement('div');btns.className='tf-btns';
+
+      allTypes.forEach(function(t){
+        var b=document.createElement('button');b.className='tf-btn';b.textContent=TYPES[t];b.dataset.type=t;
+        b.addEventListener('click',function(){
+          if(tfDone)return;
+          btns.querySelectorAll('.tf-btn').forEach(function(x){x.classList.remove('tf-sel')});
+          b.classList.add('tf-sel');
+        });
+        btns.appendChild(b);
+      });
+      div.appendChild(orig);div.appendChild(prompt);div.appendChild(btns);
+      box.appendChild(div);
+    });
+  }
+
+  window.checkTF=function(){
+    if(tfDone)return;
+    var items=document.querySelectorAll('.tf-item');
+    var allDone=true;
+    items.forEach(function(it){if(!it.querySelector('.tf-btn.tf-sel'))allDone=false});
+    if(!allDone){
+      var fb=document.getElementById('tfFB');
+      fb.textContent='Please select a type for every sentence before checking.';
+      fb.className='afb aerr';return;
+    }
+    tfDone=true;
+    var right=0,total=TF_DATA.length;
+    items.forEach(function(it){
+      var ans=it.dataset.ans;var sel=it.querySelector('.tf-btn.tf-sel');
+      it.querySelectorAll('.tf-btn').forEach(function(b){b.classList.add('tf-lk')});
+      if(sel.dataset.type===ans){sel.classList.add('tf-right');it.classList.add('tf-ok');right++}
+      else{sel.classList.add('tf-wrong');it.classList.add('tf-bad');
+        it.querySelectorAll('.tf-btn').forEach(function(b){if(b.dataset.type===ans)b.classList.add('tf-right')})
+      }
+    });
+    hits+=right;tries+=total;acts++;
+    var fb=document.getElementById('tfFB');
+    if(right===total){fb.textContent='✓ Outstanding! All '+total+' transformations identified correctly.';fb.className='afb aok';earn(2);confetti()}
+    else{fb.textContent='You got '+right+' out of '+total+' correct. Correct answers are in green.';fb.className='afb aerr';earn(1)}
+  };
+
+  /* ── Review Cards ── */
+  function buildRV(){
+    var grid=document.getElementById('rvGrid');grid.innerHTML='';
+    RV_DATA.forEach(function(card){
+      var d=document.createElement('div');d.className='rv-card '+card.c;
+      d.innerHTML='<div class="rv-q">'+card.q+'</div><div class="rv-a">'+card.a+'</div><div class="rv-tap">Click to reveal</div>';
+      d.addEventListener('click',function(){d.classList.toggle('flipped')});
+      grid.appendChild(d);
+    });
+  }
+
+  /* ── Celeb ── */
+  function showCeleb(){
+    document.getElementById('eS').textContent=stars;
+    document.getElementById('eA').textContent=acts;
+    var pct=tries>0?Math.round((hits/tries)*100):0;
+    document.getElementById('eP').textContent=pct+'%';
+    confetti();
+  }
+
+  /* ── Confetti ── */
+  function confetti(){
+    var cols=['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#66BB6A','#FB8C00'];
+    for(var i=0;i<55;i++){
+      var p=document.createElement('div');p.className='confetti-bit';
+      var sz=Math.random()*8+5;p.style.width=sz+'px';p.style.height=sz+'px';
+      p.style.background=cols[Math.floor(Math.random()*cols.length)];
+      p.style.borderRadius=Math.random()>.5?'50%':'2px';
+      p.style.left=Math.random()*100+'vw';p.style.top='-12px';
+      document.body.appendChild(p);
+      var dur=Math.random()*2000+1400,drift=(Math.random()-.5)*200;
+      p.animate([
+        {transform:'translateY(0) translateX(0) rotate(0deg)',opacity:1},
+        {transform:'translateY(100vh) translateX('+drift+'px) rotate('+(Math.random()*720)+'deg)',opacity:0}
+      ],{duration:dur,easing:'cubic-bezier(0.25,0.46,0.45,0.94)'}).onfinish=(function(el){return function(){el.remove()}})(p);
+    }
+  }
+
+  /* ── Start Over ── */
+  window.startOver=function(){
+    stars=0;acts=0;hits=0;tries=0;ccDone=false;tfDone=false;activePen=null;
+    document.getElementById('sn').textContent='0';
+    ['mc1','mc2'].forEach(function(id){var g=document.getElementById(id);g.dataset.done='0';g.querySelectorAll('.mc').forEach(function(o){o.className='mc'})});
+    ['fb1','fb2'].forEach(function(id){var el=document.getElementById(id);el.className='fb';el.textContent=''});
+    document.querySelectorAll('.pen-btn').forEach(function(b){b.classList.remove('pen-active')});
+    document.getElementById('ccFB').textContent='';document.getElementById('ccFB').className='afb';
+    buildCC();
+    document.getElementById('tfFB').textContent='';document.getElementById('tfFB').className='afb';
+    buildTF();
+    document.querySelectorAll('.rv-card').forEach(function(c){c.classList.remove('flipped')});
+    show(1);
+  };
+
+  /* ── Init ── */
+  buildCC();buildTF();buildRV();show(1);
+})();
+</script>
+</body>
+</html>

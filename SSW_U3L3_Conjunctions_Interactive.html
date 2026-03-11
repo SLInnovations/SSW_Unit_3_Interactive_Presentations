@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 3: Conjunctions (FANBOYS)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral: #E66B5D;
+  --coral-pale: #FDF0EE;
+  --teal: #3A7D8C;
+  --light-blue: #D7ECF0;
+  --blue-pale: #EBF5F8;
+  --yellow: #F3D25B;
+  --yellow-dark: #9E7F0A;
+  --white: #FFFFFF;
+  --dark: #1A1A2E;
+  --gray: #6B7280;
+  --success: #22C55E;
+  --error: #EF4444;
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Open Sans', sans-serif; background: #F8FAFC; color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar { height: 6px; background: #E5E7EB; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--coral)); transition: width 0.4s ease; }
+
+/* ═══ STAR COUNTER ═══ */
+.star-counter { position: fixed; top: 16px; right: 20px; z-index: 100; background: var(--white); border-radius: 24px; padding: 6px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 16px; color: var(--yellow-dark); display: flex; align-items: center; gap: 6px; }
+.star-counter .star-icon { font-size: 20px; }
+.star-counter.animate .star-icon { animation: starPop 0.5s ease; }
+@keyframes starPop { 0%{transform:scale(1)} 50%{transform:scale(1.5)} 100%{transform:scale(1)} }
+
+/* ═══ SLIDE CONTAINER ═══ */
+.slide-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 20px 100px; }
+.slide { display: none; max-width: 900px; width: 100%; min-height: 480px; background: var(--white); border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 48px; animation: fadeIn 0.4s ease; }
+.slide.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══ SLIDE TYPOGRAPHY ═══ */
+.slide-header { margin-bottom: 10px; }
+.phase-label { display: inline-block; font-family: 'Open Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; }
+.slide-title { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+.slide-subtitle { font-family: 'Poppins', sans-serif; font-size: 16px; color: var(--gray); margin-bottom: 24px; }
+.slide-text { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.7; color: var(--dark); }
+
+/* ═══ NAVIGATION ═══ */
+.nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid #E5E7EB; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 100; }
+.nav-btn { font-family: 'Open Sans', sans-serif; font-size: 15px; font-weight: 600; border: none; border-radius: 12px; padding: 10px 24px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.nav-btn.prev { background: var(--blue-pale); color: var(--teal); }
+.nav-btn.prev:hover:not(:disabled) { background: var(--light-blue); }
+.nav-btn.next { background: var(--coral); color: var(--white); }
+.nav-btn.next:hover:not(:disabled) { background: #D45A4D; }
+.slide-counter { font-family: 'Open Sans', sans-serif; font-size: 13px; color: var(--gray); }
+
+/* ═══ TITLE SLIDE ═══ */
+.title-slide { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 480px; }
+.title-brand { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; color: var(--teal); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.title-unit { font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--gray); margin-bottom: 20px; }
+.title-main { font-family: 'Poppins', sans-serif; font-size: 36px; font-weight: 700; color: var(--dark); margin-bottom: 8px; line-height: 1.2; }
+.title-sub { font-family: 'Poppins', sans-serif; font-size: 18px; color: var(--coral); margin-bottom: 28px; }
+.title-goal { background: var(--blue-pale); border-radius: var(--radius); padding: 16px 28px; font-family: 'Poppins', sans-serif; font-size: 15px; color: var(--teal); max-width: 600px; }
+.title-goal strong { font-weight: 600; }
+
+/* ═══ CONCEPT INTRO ═══ */
+.concept-intro { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 480px; }
+.concept-word { font-family: 'Poppins', sans-serif; font-size: 64px; font-weight: 700; color: var(--teal); margin-bottom: 12px; }
+.concept-tag { font-family: 'Poppins', sans-serif; font-size: 20px; color: var(--coral); }
+
+/* ═══ MULTIPLE CHOICE ═══ */
+.mc-options { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.mc-opt { font-family: 'Poppins', sans-serif; font-size: 15px; padding: 14px 20px; border: 2px solid #E5E7EB; border-radius: var(--radius); cursor: pointer; transition: all 0.2s; background: var(--white); text-align: left; }
+.mc-opt:hover:not(.disabled) { border-color: var(--teal); background: var(--blue-pale); }
+.mc-opt.selected { border-color: var(--teal); background: var(--light-blue); font-weight: 600; }
+.mc-opt.correct { border-color: var(--success); background: #F0FDF4; }
+.mc-opt.incorrect { border-color: var(--error); background: #FEF2F2; opacity: 0.6; }
+.mc-opt.disabled { cursor: default; }
+.mc-feedback { margin-top: 14px; font-family: 'Poppins', sans-serif; font-size: 14px; padding: 12px 18px; border-radius: var(--radius); display: none; }
+.mc-feedback.show { display: block; }
+.mc-feedback.success { background: #F0FDF4; color: #166534; }
+.mc-feedback.retry { background: #FEF2F2; color: #991B1B; }
+
+/* ═══ CONCEPT CARDS ═══ */
+.concept-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.concept-card { border-radius: var(--radius); padding: 20px; text-align: center; }
+.concept-card .cc-icon { font-size: 28px; margin-bottom: 8px; }
+.concept-card .cc-label { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.concept-card .cc-desc { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.5; }
+.concept-card .cc-examples { font-family: 'Poppins', sans-serif; font-size: 13px; margin-top: 8px; font-weight: 600; }
+
+/* ═══ STRATEGY DISPLAY ═══ */
+.strategy-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.strategy-row { display: flex; align-items: center; gap: 14px; padding: 12px 18px; border-radius: var(--radius); background: var(--blue-pale); }
+.strategy-letter { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: var(--coral); min-width: 40px; text-align: center; }
+.strategy-word { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 600; color: var(--teal); min-width: 60px; }
+.strategy-meaning { font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--gray); }
+
+/* ═══ DRAG WORD SORT ═══ */
+.sort-bank { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px; background: var(--blue-pale); border-radius: var(--radius); margin-bottom: 16px; min-height: 52px; justify-content: center; }
+.sort-word { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; padding: 8px 18px; border-radius: 24px; background: var(--white); border: 2px solid #E5E7EB; cursor: grab; user-select: none; transition: all 0.2s; }
+.sort-word:active { cursor: grabbing; transform: scale(1.05); }
+.sort-word.placed { opacity: 0.9; }
+.sort-word.correct { border-color: var(--success); background: #F0FDF4; }
+.sort-word.incorrect { border-color: var(--error); background: #FEF2F2; }
+.sort-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+.sort-zone { border: 2px dashed #CBD5E1; border-radius: var(--radius); min-height: 100px; padding: 10px; display: flex; flex-direction: column; gap: 8px; align-items: center; transition: all 0.2s; }
+.sort-zone.drag-over { border-color: var(--teal); background: var(--blue-pale); }
+.sort-zone-header { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; padding: 4px 14px; border-radius: 20px; width: 100%; text-align: center; }
+.szh-add { background: #DBEAFE; color: #1E40AF; }
+.szh-contrast { background: var(--coral-pale); color: var(--coral); }
+.szh-choice { background: #FEF3C7; color: var(--yellow-dark); }
+.szh-cause { background: #D1FAE5; color: #065F46; }
+.sort-controls { display: flex; gap: 10px; justify-content: center; }
+.sort-check-btn, .sort-reset-btn { font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600; border: none; border-radius: var(--radius); padding: 10px 24px; cursor: pointer; transition: all 0.2s; }
+.sort-check-btn { background: var(--teal); color: var(--white); }
+.sort-check-btn:hover { background: #2E6470; }
+.sort-reset-btn { background: #F3F4F6; color: var(--gray); }
+.sort-reset-btn:hover { background: #E5E7EB; }
+.sort-feedback { font-family: 'Poppins', sans-serif; font-size: 14px; padding: 12px 18px; border-radius: var(--radius); margin-top: 12px; text-align: center; display: none; }
+.sort-feedback.show { display: block; }
+.sort-feedback.success { background: #F0FDF4; color: #166534; }
+.sort-feedback.retry { background: #FEF2F2; color: #991B1B; }
+
+/* ═══ CONJUNCTION FILL ═══ */
+.conj-exercise { margin-top: 16px; }
+.conj-sentence { font-family: 'Poppins', sans-serif; font-size: 15px; background: var(--blue-pale); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; line-height: 1.8; }
+.conj-blank { display: inline-block; min-width: 90px; border-bottom: 2px solid var(--teal); text-align: center; margin: 0 4px; cursor: pointer; position: relative; font-weight: 600; color: var(--teal); }
+.conj-choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; justify-content: center; }
+.conj-choice { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 20px; border: 2px solid #E5E7EB; background: var(--white); cursor: pointer; transition: all 0.2s; }
+.conj-choice:hover:not(.disabled) { border-color: var(--coral); background: var(--coral-pale); }
+.conj-choice.selected { border-color: var(--coral); background: var(--coral-pale); }
+.conj-choice.disabled { cursor: default; opacity: 0.5; }
+.conj-result { display: inline-block; margin-left: 8px; font-size: 16px; }
+.conj-controls { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+.conj-check-btn { font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600; border: none; border-radius: var(--radius); padding: 10px 24px; cursor: pointer; background: var(--coral); color: var(--white); transition: all 0.2s; }
+.conj-check-btn:hover { background: #D45A4D; }
+.conj-feedback { font-family: 'Poppins', sans-serif; font-size: 14px; padding: 12px 18px; border-radius: var(--radius); margin-top: 12px; text-align: center; display: none; }
+.conj-feedback.show { display: block; }
+.conj-feedback.success { background: #F0FDF4; color: #166534; }
+.conj-feedback.retry { background: #FEF2F2; color: #991B1B; }
+
+/* ═══ TRICKY CONCEPTS ═══ */
+.tricky-card { background: #FEF3C7; border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+.tricky-title { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: var(--yellow-dark); margin-bottom: 8px; }
+.tricky-text { font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.7; }
+.tricky-example { font-family: 'Poppins', sans-serif; font-size: 14px; background: var(--white); border-radius: 10px; padding: 12px 16px; margin-top: 10px; line-height: 1.6; }
+
+/* ═══ REVIEW CARDS ═══ */
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+.review-card { border-radius: var(--radius); padding: 20px; cursor: pointer; transition: all 0.3s; min-height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.review-card .rc-q { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; }
+.review-card .rc-a { font-family: 'Poppins', sans-serif; font-size: 14px; display: none; line-height: 1.6; }
+.review-card.flipped .rc-q { display: none; }
+.review-card.flipped .rc-a { display: block; }
+.rc-teal { background: var(--blue-pale); color: var(--teal); }
+.rc-teal.flipped { background: var(--light-blue); }
+.rc-coral { background: var(--coral-pale); color: var(--coral); }
+.rc-coral.flipped { background: #FADCD8; }
+.rc-yellow { background: #FEF3C7; color: var(--yellow-dark); }
+.rc-yellow.flipped { background: #FDE68A; }
+.rc-blue { background: #DBEAFE; color: #1E40AF; }
+.rc-blue.flipped { background: #BFDBFE; }
+
+/* ═══ CELEBRATION ═══ */
+.celebration { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 480px; }
+.celeb-emoji { font-size: 64px; margin-bottom: 16px; }
+.celeb-title { font-family: 'Poppins', sans-serif; font-size: 32px; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+.celeb-sub { font-family: 'Poppins', sans-serif; font-size: 16px; color: var(--gray); margin-bottom: 24px; }
+.celeb-stats { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.celeb-stat { background: var(--blue-pale); border-radius: var(--radius); padding: 16px 24px; text-align: center; min-width: 120px; }
+.celeb-stat-val { font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 700; color: var(--teal); }
+.celeb-stat-label { font-family: 'Poppins', sans-serif; font-size: 12px; color: var(--gray); margin-top: 4px; }
+.start-over-btn { font-family: 'Open Sans', sans-serif; font-size: 15px; font-weight: 600; border: none; border-radius: var(--radius); padding: 12px 32px; cursor: pointer; background: var(--coral); color: var(--white); transition: all 0.2s; }
+.start-over-btn:hover { background: #D45A4D; }
+
+/* ═══ CONFETTI ═══ */
+.confetti-piece { position: fixed; width: 10px; height: 10px; z-index: 1000; pointer-events: none; animation: confettiFall 2.5s ease-out forwards; }
+@keyframes confettiFall { 0%{opacity:1;transform:translateY(0) rotate(0deg)} 100%{opacity:0;transform:translateY(100vh) rotate(720deg)} }
+
+/* ═══ COPYRIGHT ═══ */
+.copyright { text-align: center; font-size: 11px; color: #999; padding: 8px; font-family: 'Open Sans', sans-serif; position: fixed; bottom: 60px; left: 0; right: 0; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 700px) {
+  .slide { padding: 28px 20px; }
+  .slide-title { font-size: 22px; }
+  .concept-word { font-size: 44px; }
+  .title-main { font-size: 28px; }
+  .sort-zones { grid-template-columns: 1fr; }
+  .review-grid { grid-template-columns: 1fr; }
+  .concept-cards { grid-template-columns: 1fr; }
+  .celeb-stats { flex-direction: column; align-items: center; }
+}
+@media (max-width: 500px) {
+  .slide { padding: 20px 14px; }
+  .slide-title { font-size: 19px; }
+  .concept-word { font-size: 36px; }
+  .strategy-row { flex-direction: column; text-align: center; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- STAR COUNTER -->
+<div class="star-counter" id="starCounter"><span class="star-icon">⭐</span><span id="starCount">0</span></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="1">
+  <div class="title-slide">
+    <div class="title-brand">Structured Steps to Writing</div>
+    <div class="title-unit">Unit 3: Sentence Variety &amp; Types &bull; Lesson 3</div>
+    <div class="title-main">Conjunctions</div>
+    <div class="title-sub">The FANBOYS — Connecting Words</div>
+    <div class="title-goal"><strong>Today's Goal:</strong> I can identify and use the seven coordinating conjunctions (FANBOYS) to connect words, phrases, and ideas in my writing.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: CONCEPT INTRO -->
+<div class="slide" data-slide="2">
+  <div class="concept-intro">
+    <div class="concept-word">Conjunctions</div>
+    <div class="concept-tag">Connecting words that join ideas together</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: REVIEW (Lesson 2 — Writing Sentence Types) -->
+<div class="slide" data-slide="3">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Review: Sentence Types</div>
+  <div class="slide-subtitle">Let's remember what we learned in Lesson 2.</div>
+  <div class="slide-text" style="margin-bottom:14px;">Which sentence type gives a command or makes a request?</div>
+  <div class="mc-options" id="mc1">
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">A) Declarative — makes a statement</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">B) Interrogative — asks a question</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',true)">C) Imperative — gives a command</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">D) Exclamatory — shows strong feeling</div>
+  </div>
+  <div class="mc-feedback" id="mc1Fb"></div>
+</div>
+
+<!-- SLIDE 4: WHAT IS A CONJUNCTION? -->
+<div class="slide" data-slide="4">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">What Is a Conjunction?</div>
+  <div class="slide-subtitle">Conjunctions are connecting words.</div>
+  <div class="slide-text" style="margin-bottom:18px;">A <strong style="color:var(--coral);">conjunction</strong> is a word that <strong>connects</strong> (joins) words, phrases, or sentences.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="background:var(--coral-pale);border-radius:var(--radius);padding:20px;">
+      <div style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:var(--coral);margin-bottom:8px;">Without a conjunction:</div>
+      <div style="font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7;">"I like dogs. I like cats."<br><span style="font-size:13px;color:var(--gray);">Two separate ideas — a bit choppy</span></div>
+    </div>
+    <div style="background:#D1FAE5;border-radius:var(--radius);padding:20px;">
+      <div style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;color:#065F46;margin-bottom:8px;">With a conjunction:</div>
+      <div style="font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7;">"I like dogs <strong style="color:var(--teal);">and</strong> cats."<br><span style="font-size:13px;color:var(--gray);">Ideas connected smoothly</span></div>
+    </div>
+  </div>
+  <div style="margin-top:18px;background:var(--blue-pale);border-radius:var(--radius);padding:16px;text-align:center;">
+    <span style="font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--teal);">Conjunctions can connect: words, phrases, or whole sentences.</span>
+  </div>
+</div>
+
+<!-- SLIDE 5: FANBOYS STRATEGY DISPLAY -->
+<div class="slide" data-slide="5">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Meet the FANBOYS</div>
+  <div class="slide-subtitle">Seven coordinating conjunctions — one easy acronym.</div>
+  <div class="strategy-grid">
+    <div class="strategy-row"><span class="strategy-letter">F</span><span class="strategy-word">For</span><span class="strategy-meaning">= because, since (gives a reason)</span></div>
+    <div class="strategy-row"><span class="strategy-letter">A</span><span class="strategy-word">And</span><span class="strategy-meaning">= also, in addition (adds information)</span></div>
+    <div class="strategy-row"><span class="strategy-letter">N</span><span class="strategy-word">Nor</span><span class="strategy-meaning">= and not, neither (negative addition)</span></div>
+    <div class="strategy-row"><span class="strategy-letter">B</span><span class="strategy-word">But</span><span class="strategy-meaning">= however, on the other hand (shows contrast)</span></div>
+    <div class="strategy-row"><span class="strategy-letter">O</span><span class="strategy-word">Or</span><span class="strategy-meaning">= alternative, choice (gives options)</span></div>
+    <div class="strategy-row"><span class="strategy-letter">Y</span><span class="strategy-word">Yet</span><span class="strategy-meaning">= but, despite that (unexpected contrast)</span></div>
+    <div class="strategy-row"><span class="strategy-letter">S</span><span class="strategy-word">So</span><span class="strategy-meaning">= therefore, as a result (shows result)</span></div>
+  </div>
+</div>
+
+<!-- SLIDE 6: CONJUNCTION JOBS — CONCEPT CARDS -->
+<div class="slide" data-slide="6">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Each Conjunction Has a Job</div>
+  <div class="slide-subtitle">The conjunction you choose changes the meaning.</div>
+  <div class="concept-cards">
+    <div class="concept-card" style="background:#DBEAFE;">
+      <div class="cc-icon">➕</div>
+      <div class="cc-label" style="color:#1E40AF;">Adding Information</div>
+      <div class="cc-desc" style="color:#1E40AF;">Puts ideas together</div>
+      <div class="cc-examples">AND</div>
+    </div>
+    <div class="concept-card" style="background:var(--coral-pale);">
+      <div class="cc-icon">↔️</div>
+      <div class="cc-label" style="color:var(--coral);">Showing Contrast</div>
+      <div class="cc-desc" style="color:var(--coral);">Something different or unexpected</div>
+      <div class="cc-examples">BUT, YET</div>
+    </div>
+    <div class="concept-card" style="background:#FEF3C7;">
+      <div class="cc-icon">🔀</div>
+      <div class="cc-label" style="color:var(--yellow-dark);">Giving a Choice</div>
+      <div class="cc-desc" style="color:var(--yellow-dark);">Pick one option or the other</div>
+      <div class="cc-examples">OR, NOR</div>
+    </div>
+    <div class="concept-card" style="background:#D1FAE5;">
+      <div class="cc-icon">➡️</div>
+      <div class="cc-label" style="color:#065F46;">Cause &amp; Result</div>
+      <div class="cc-desc" style="color:#065F46;">One thing leads to another</div>
+      <div class="cc-examples">FOR, SO</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: QUICK CHECK -->
+<div class="slide" data-slide="7">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Check</div>
+  <div class="slide-subtitle">Let's see if you've got it.</div>
+  <div class="slide-text" style="margin-bottom:14px;">In the sentence <em>"I studied hard, <strong>but</strong> the test was still difficult,"</em> what job is the conjunction doing?</div>
+  <div class="mc-options" id="mc2">
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">A) Adding information</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',true)">B) Showing contrast</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">C) Giving a choice</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">D) Showing cause and result</div>
+  </div>
+  <div class="mc-feedback" id="mc2Fb"></div>
+</div>
+
+<!-- SLIDE 8: DRAG SORT — Conjunctions by Job -->
+<div class="slide" data-slide="8">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Sort the Conjunctions</div>
+  <div class="slide-subtitle">Drag each FANBOYS conjunction to its correct category.</div>
+  <div class="sort-bank" id="sortBank"></div>
+  <div class="sort-zones" id="sortZones">
+    <div class="sort-zone" data-zone="add"><div class="sort-zone-header szh-add">➕ Adding</div></div>
+    <div class="sort-zone" data-zone="contrast"><div class="sort-zone-header szh-contrast">↔️ Contrast</div></div>
+    <div class="sort-zone" data-zone="choice"><div class="sort-zone-header szh-choice">🔀 Choice</div></div>
+    <div class="sort-zone" data-zone="cause"><div class="sort-zone-header szh-cause">➡️ Cause / Result</div></div>
+  </div>
+  <div class="sort-controls">
+    <button class="sort-reset-btn" onclick="resetSort()">Reset</button>
+    <button class="sort-check-btn" onclick="checkSort()">Check My Work</button>
+  </div>
+  <div class="sort-feedback" id="sortFeedback"></div>
+</div>
+
+<!-- SLIDE 9: CHOOSE THE CONJUNCTION -->
+<div class="slide" data-slide="9">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Choose the Best Conjunction</div>
+  <div class="slide-subtitle">Select a conjunction, then click the blank to place it.</div>
+  <div class="conj-choices" id="conjChoices"></div>
+  <div class="conj-exercise" id="conjExercise"></div>
+  <div class="conj-controls"><button class="conj-check-btn" onclick="checkConj()">Check My Work</button></div>
+  <div class="conj-feedback" id="conjFeedback"></div>
+</div>
+
+<!-- SLIDE 10: TRICKY CONCEPTS -->
+<div class="slide" data-slide="10">
+  <div class="slide-header"><span class="phase-label" style="background:#FEF3C7;color:var(--yellow-dark);">Tricky</span></div>
+  <div class="slide-title" style="color:var(--yellow-dark);">Tricky Conjunctions</div>
+  <div class="slide-subtitle">Watch out for these common mix-ups.</div>
+  <div class="tricky-card">
+    <div class="tricky-title">🤔 BUT vs. YET — What's the Difference?</div>
+    <div class="tricky-text">Both show contrast, but <strong>YET</strong> has a stronger sense of surprise.</div>
+    <div class="tricky-example">
+      "He is small <strong>but</strong> strong." — Simple contrast.<br>
+      "The hike was exhausting, <strong>yet</strong> everyone wanted to go again." — Surprising contrast.
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">🤔 FOR vs. SO — Cause or Result?</div>
+    <div class="tricky-text"><strong>FOR</strong> gives the reason (looks backward). <strong>SO</strong> gives the result (looks forward).</div>
+    <div class="tricky-example">
+      "She brought an umbrella, <strong>for</strong> it looked like rain." — The reason she brought it.<br>
+      "It started raining, <strong>so</strong> she opened her umbrella." — The result of the rain.
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">🤔 NOR — The Tricky One</div>
+    <div class="tricky-text"><strong>NOR</strong> is used in negative sentences to mean "and not." The word order flips after NOR.</div>
+    <div class="tricky-example">
+      "She doesn't like broccoli, <strong>nor</strong> does she like spinach."<br>
+      <span style="font-size:12px;color:var(--gray);">Notice: "does she" flips to question order after NOR.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: REVIEW CARDS -->
+<div class="slide" data-slide="11">
+  <div class="slide-header"><span class="phase-label" style="background:var(--blue-pale);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Review — Click to Reveal</div>
+  <div class="slide-subtitle">Click each card to check your understanding.</div>
+  <div class="review-grid" id="reviewGrid"></div>
+</div>
+
+<!-- SLIDE 12: CELEBRATION -->
+<div class="slide" data-slide="12">
+  <div class="celebration" id="celebSlide">
+    <div class="celeb-emoji">🎉</div>
+    <div class="celeb-title">Lesson Complete!</div>
+    <div class="celeb-sub">You now know the FANBOYS conjunctions — connecting words that make your writing flow.</div>
+    <div class="celeb-stats" id="celebStats"></div>
+    <button class="start-over-btn" onclick="startOver()">Start Over</button>
+  </div>
+</div>
+
+</div><!-- end slide-container -->
+
+<div class="copyright">© 2026 Structured Steps to Writing. All rights reserved.</div>
+
+<!-- NAVIGATION -->
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="slideNum">1 / 12</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA OBJECT — All lesson-specific content
+// ═══════════════════════════════════════
+const L = {
+  sortWords: {
+    add: ["And"],
+    contrast: ["But", "Yet"],
+    choice: ["Or", "Nor"],
+    cause: ["For", "So"]
+  },
+  conjSentences: [
+    { text: "I wanted to call you, ___ I lost your number.", answer: "but", hint: "Something prevented the call — that's a contrast." },
+    { text: "We need milk ___ eggs from the store.", answer: "and", hint: "We need both items — we're adding information." },
+    { text: "She was nervous, ___ she still gave a great presentation.", answer: "yet", hint: "She succeeded despite being nervous — that's surprising." },
+    { text: "Hurry up, ___ we will be late.", answer: "or", hint: "Two alternatives: hurry or be late." },
+    { text: "He did not study, ___ he failed the quiz.", answer: "so", hint: "Not studying caused the failing — that's a result." }
+  ],
+  review: [
+    { q: "What is a conjunction?", a: "A word that connects (joins) words, phrases, or sentences.", color: "rc-teal" },
+    { q: "What does FANBOYS stand for?", a: "For, And, Nor, But, Or, Yet, So — the 7 coordinating conjunctions.", color: "rc-coral" },
+    { q: "Which conjunctions show contrast?", a: "BUT and YET — they signal something different or unexpected.", color: "rc-yellow" },
+    { q: "Which conjunctions show cause and result?", a: "FOR (gives the reason) and SO (gives the result).", color: "rc-blue" },
+    { q: "Do you need a comma when connecting two words?", a: "No. Commas are only needed when a conjunction connects two complete sentences.", color: "rc-teal" }
+  ]
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let currentSlide = 1;
+const totalSlides = 12;
+let stars = 0;
+let activitiesCompleted = 0;
+let mcAnswered = {};
+let sortChecked = false;
+let conjChecked = false;
+let selectedConj = null;
+let conjAnswers = {};
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showSlide(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector(`[data-slide="${n}"]`);
+  if (target) target.classList.add('active');
+  document.getElementById('prevBtn').disabled = (n === 1);
+  document.getElementById('nextBtn').disabled = (n === totalSlides);
+  document.getElementById('slideNum').textContent = `${n} / ${totalSlides}`;
+  document.getElementById('progressFill').style.width = `${(n / totalSlides) * 100}%`;
+  if (n === totalSlides) showCelebration();
+}
+function changeSlide(dir) { const next = currentSlide + dir; if (next >= 1 && next <= totalSlides) { currentSlide = next; showSlide(currentSlide); } }
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+});
+
+// ═══════════════════════════════════════
+// STARS & CONFETTI
+// ═══════════════════════════════════════
+function addStars(n) {
+  stars += n;
+  const el = document.getElementById('starCount');
+  el.textContent = stars;
+  const c = document.getElementById('starCounter');
+  c.classList.remove('animate');
+  void c.offsetWidth;
+  c.classList.add('animate');
+}
+function fireConfetti() {
+  const colors = ['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#22C55E','#A855F7'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100+'vw';
+    p.style.top = '-10px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.borderRadius = Math.random()>0.5?'50%':'2px';
+    p.style.width = (6+Math.random()*8)+'px';
+    p.style.height = (6+Math.random()*8)+'px';
+    p.style.animationDuration = (2+Math.random()*2)+'s';
+    p.style.animationDelay = Math.random()*0.5+'s';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 4000);
+  }
+}
+
+// ═══════════════════════════════════════
+// MULTIPLE CHOICE
+// ═══════════════════════════════════════
+function checkMC(el, id, correct) {
+  if (mcAnswered[id]) return;
+  mcAnswered[id] = true;
+  const opts = document.querySelectorAll(`#${id} .mc-opt`);
+  opts.forEach(o => {
+    o.classList.add('disabled');
+    if (o === el) o.classList.add(correct ? 'correct' : 'incorrect');
+    if (o.onclick && o !== el) {
+      // find the correct one
+      const txt = o.getAttribute('onclick');
+      if (txt && txt.includes('true')) o.classList.add('correct');
+    }
+  });
+  // Manually mark correct option
+  opts.forEach(o => {
+    const oc = o.getAttribute('onclick');
+    if (oc && oc.includes('true')) o.classList.add('correct');
+  });
+  const fb = document.getElementById(id+'Fb');
+  fb.textContent = correct ? 'That\'s right! Great job.' : 'Not quite. The correct answer is highlighted above.';
+  fb.className = 'mc-feedback show ' + (correct ? 'success' : 'retry');
+  if (correct) { addStars(1); activitiesCompleted++; }
+}
+
+// ═══════════════════════════════════════
+// DRAG WORD SORT
+// ═══════════════════════════════════════
+function initSort() {
+  const bank = document.getElementById('sortBank');
+  const allWords = [];
+  Object.entries(L.sortWords).forEach(([cat, words]) => {
+    words.forEach(w => allWords.push({ word: w, correct: cat }));
+  });
+  // Shuffle
+  for (let i = allWords.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [allWords[i],allWords[j]]=[allWords[j],allWords[i]]; }
+  allWords.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'sort-word';
+    el.textContent = item.word;
+    el.draggable = true;
+    el.dataset.correct = item.correct;
+    el.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain',''); window._dragEl = el; });
+    // Touch support
+    el.addEventListener('touchstart', onTs, {passive:false});
+    bank.appendChild(el);
+  });
+  document.querySelectorAll('.sort-zone').forEach(z => {
+    z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag-over'); });
+    z.addEventListener('dragleave', () => z.classList.remove('drag-over'));
+    z.addEventListener('drop', e => {
+      e.preventDefault(); z.classList.remove('drag-over');
+      if (window._dragEl) { z.appendChild(window._dragEl); window._dragEl.classList.add('placed'); window._dragEl = null; }
+    });
+  });
+  // Allow drag back to bank
+  bank.addEventListener('dragover', e => e.preventDefault());
+  bank.addEventListener('drop', e => {
+    e.preventDefault();
+    if (window._dragEl) { bank.appendChild(window._dragEl); window._dragEl.classList.remove('placed','correct','incorrect'); window._dragEl = null; }
+  });
+}
+
+// Touch drag support
+let touchT=null, touchC=null;
+function onTs(e) {
+  e.preventDefault();
+  touchT = e.target.closest('.sort-word'); if (!touchT) return;
+  touchC = touchT.cloneNode(true);
+  touchC.style.cssText='position:fixed;z-index:999;pointer-events:none;opacity:0.8;transform:scale(1.05);';
+  document.body.appendChild(touchC);
+  document.addEventListener('touchmove', onTm, {passive:false});
+  document.addEventListener('touchend', onTe);
+}
+function onTm(e) {
+  e.preventDefault();
+  if (!touchC) return;
+  const t = e.touches[0];
+  touchC.style.left = (t.clientX-50)+'px';
+  touchC.style.top = (t.clientY-25)+'px';
+}
+function onTe(e) {
+  if (!touchT||!touchC) return;
+  document.body.removeChild(touchC);
+  const t = e.changedTouches[0];
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  const z = el?.closest('.sort-zone');
+  const bank = document.getElementById('sortBank');
+  if (z) { z.appendChild(touchT); touchT.classList.add('placed'); }
+  else { bank.appendChild(touchT); touchT.classList.remove('placed','correct','incorrect'); }
+  touchT=null; touchC=null;
+  document.removeEventListener('touchmove', onTm);
+  document.removeEventListener('touchend', onTe);
+}
+
+function checkSort() {
+  let ok = true;
+  document.querySelectorAll('.sort-word.placed').forEach(el => {
+    const z = el.closest('.sort-zone');
+    if (!z) return;
+    if (z.dataset.zone === el.dataset.correct) { el.classList.add('correct'); el.classList.remove('incorrect'); }
+    else { el.classList.add('incorrect'); el.classList.remove('correct'); ok = false; }
+  });
+  const fb = document.getElementById('sortFeedback');
+  const unplaced = document.querySelectorAll('#sortBank .sort-word').length;
+  if (unplaced > 0) { fb.textContent = `${unplaced} conjunction${unplaced>1?'s':''} still in the bank.`; fb.className='sort-feedback show retry'; }
+  else if (ok) { fb.textContent='All correct! You know your FANBOYS. ⭐'; fb.className='sort-feedback show success'; if(!sortChecked){addStars(3);activitiesCompleted++;sortChecked=true;} fireConfetti(); }
+  else { fb.textContent='Some conjunctions are in the wrong category. Try again.'; fb.className='sort-feedback show retry'; }
+}
+function resetSort() {
+  const bank = document.getElementById('sortBank');
+  document.querySelectorAll('.sort-word').forEach(el => { bank.appendChild(el); el.classList.remove('placed','correct','incorrect'); });
+  document.getElementById('sortFeedback').className='sort-feedback';
+}
+
+// ═══════════════════════════════════════
+// CONJUNCTION FILL EXERCISE
+// ═══════════════════════════════════════
+function initConj() {
+  const choices = document.getElementById('conjChoices');
+  const fanboys = ['for','and','nor','but','or','yet','so'];
+  fanboys.forEach(c => {
+    const btn = document.createElement('div');
+    btn.className = 'conj-choice';
+    btn.textContent = c.charAt(0).toUpperCase() + c.slice(1);
+    btn.dataset.val = c;
+    btn.onclick = () => selectConj(btn);
+    choices.appendChild(btn);
+  });
+
+  const container = document.getElementById('conjExercise');
+  L.conjSentences.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'conj-sentence';
+    div.id = 'conjS'+i;
+    const parts = s.text.split('___');
+    div.innerHTML = parts[0] + `<span class="conj-blank" id="conjB${i}" onclick="placeConj(${i})">&nbsp;&nbsp;&nbsp;</span>` + (parts[1]||'') + `<span class="conj-result" id="conjR${i}"></span>`;
+    container.appendChild(div);
+  });
+}
+function selectConj(btn) {
+  document.querySelectorAll('.conj-choice').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedConj = btn.dataset.val;
+}
+function placeConj(i) {
+  if (conjChecked) return;
+  if (!selectedConj) return;
+  const blank = document.getElementById('conjB'+i);
+  blank.textContent = selectedConj.charAt(0).toUpperCase() + selectedConj.slice(1);
+  conjAnswers[i] = selectedConj;
+}
+function checkConj() {
+  if (conjChecked) return;
+  let allFilled = true, allCorrect = true;
+  L.conjSentences.forEach((s, i) => {
+    const res = document.getElementById('conjR'+i);
+    const blank = document.getElementById('conjB'+i);
+    if (!conjAnswers[i]) { allFilled = false; return; }
+    if (conjAnswers[i] === s.answer) {
+      res.textContent = '✓';
+      res.style.color = 'var(--success)';
+      blank.style.color = 'var(--success)';
+      blank.style.borderColor = 'var(--success)';
+    } else {
+      res.textContent = '✗';
+      res.style.color = 'var(--error)';
+      blank.style.color = 'var(--error)';
+      blank.style.borderColor = 'var(--error)';
+      allCorrect = false;
+      // Show hint
+      const sentence = document.getElementById('conjS'+i);
+      let hint = sentence.querySelector('.conj-hint');
+      if (!hint) {
+        hint = document.createElement('div');
+        hint.className = 'conj-hint';
+        hint.style.cssText = 'font-size:12px;color:var(--gray);margin-top:6px;font-style:italic;';
+        hint.textContent = '💡 ' + s.hint + ' Try: ' + s.answer.charAt(0).toUpperCase() + s.answer.slice(1);
+        sentence.appendChild(hint);
+      }
+    }
+  });
+  const fb = document.getElementById('conjFeedback');
+  if (!allFilled) { fb.textContent='Fill in all the blanks first. Select a conjunction above, then click a blank to place it.'; fb.className='conj-feedback show retry'; return; }
+  if (allCorrect) {
+    fb.textContent='All correct! You chose the perfect conjunctions. ⭐';
+    fb.className='conj-feedback show success';
+    if(!conjChecked){addStars(2);activitiesCompleted++;conjChecked=true;}
+    fireConfetti();
+    document.querySelectorAll('.conj-choice').forEach(c => c.classList.add('disabled'));
+  } else {
+    fb.textContent='Some need another look. Read the hints and try adjusting your answers, then check again.';
+    fb.className='conj-feedback show retry';
+    // Allow retry — don't set conjChecked
+  }
+}
+
+// ═══════════════════════════════════════
+// REVIEW CARDS
+// ═══════════════════════════════════════
+function initReview() {
+  const grid = document.getElementById('reviewGrid');
+  L.review.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'review-card ' + r.color;
+    card.innerHTML = `<div><div class="rc-q">${r.q}</div><div class="rc-a">${r.a}</div></div>`;
+    card.onclick = () => card.classList.toggle('flipped');
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════
+// CELEBRATION
+// ═══════════════════════════════════════
+function showCelebration() {
+  const stats = document.getElementById('celebStats');
+  stats.innerHTML = `
+    <div class="celeb-stat"><div class="celeb-stat-val">${stars}</div><div class="celeb-stat-label">Stars Earned</div></div>
+    <div class="celeb-stat"><div class="celeb-stat-val">${activitiesCompleted}</div><div class="celeb-stat-label">Activities Completed</div></div>
+  `;
+  setTimeout(fireConfetti, 400);
+}
+
+// ═══════════════════════════════════════
+// START OVER
+// ═══════════════════════════════════════
+function startOver() {
+  stars = 0; activitiesCompleted = 0; mcAnswered = {}; sortChecked = false;
+  conjChecked = false; selectedConj = null; conjAnswers = {};
+  document.getElementById('starCount').textContent = '0';
+  // Reset MC
+  ['mc1','mc2'].forEach(id => {
+    document.querySelectorAll(`#${id} .mc-opt`).forEach(o => {
+      o.classList.remove('correct','incorrect','disabled','selected');
+    });
+    const fb = document.getElementById(id+'Fb');
+    fb.className = 'mc-feedback';
+    fb.textContent = '';
+  });
+  // Reset sort
+  resetSort();
+  // Reset conjunction fill
+  document.querySelectorAll('.conj-choice').forEach(c => { c.classList.remove('selected','disabled'); });
+  L.conjSentences.forEach((s,i) => {
+    const blank = document.getElementById('conjB'+i);
+    blank.textContent = '\u00a0\u00a0\u00a0';
+    blank.style.color = '';
+    blank.style.borderColor = '';
+    const res = document.getElementById('conjR'+i);
+    res.textContent = '';
+    res.style.color = '';
+    const sentence = document.getElementById('conjS'+i);
+    const hint = sentence.querySelector('.conj-hint');
+    if (hint) hint.remove();
+  });
+  document.getElementById('conjFeedback').className = 'conj-feedback';
+  // Reset review cards
+  document.querySelectorAll('.review-card').forEach(c => c.classList.remove('flipped'));
+  // Go to slide 1
+  currentSlide = 1;
+  showSlide(1);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+initSort();
+initConj();
+initReview();
+showSlide(1);
+</script>
+</body>
+</html>

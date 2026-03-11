@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 4: Compound Sentences</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral: #E66B5D;
+  --coral-pale: #FDF0EE;
+  --teal: #3A7D8C;
+  --light-blue: #D7ECF0;
+  --blue-pale: #EBF5F8;
+  --yellow: #F3D25B;
+  --yellow-dark: #9E7F0A;
+  --white: #FFFFFF;
+  --dark: #1A1A2E;
+  --gray: #6B7280;
+  --success: #22C55E;
+  --error: #EF4444;
+  --radius: 14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#F8FAFC;color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar{height:6px;background:#E5E7EB;position:fixed;top:0;left:0;right:0;z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--coral));transition:width .4s ease}
+
+/* ═══ STAR COUNTER ═══ */
+.star-counter{position:fixed;top:16px;right:20px;z-index:100;background:var(--white);border-radius:24px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:var(--yellow-dark);display:flex;align-items:center;gap:6px}
+.star-counter .star-icon{font-size:20px}
+.star-counter.animate .star-icon{animation:starPop .5s ease}
+@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+/* ═══ SLIDE CONTAINER ═══ */
+.slide-container{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px 100px}
+.slide{display:none;max-width:900px;width:100%;min-height:480px;background:var(--white);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:48px;animation:fadeIn .4s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ SLIDE TYPOGRAPHY ═══ */
+.slide-header{margin-bottom:10px}
+.phase-label{display:inline-block;font-family:'Open Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.slide-title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.slide-subtitle{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px}
+.slide-text{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7;color:var(--dark)}
+
+/* ═══ NAVIGATION ═══ */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid #E5E7EB;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.nav-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;padding:10px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.prev{background:var(--blue-pale);color:var(--teal)}
+.nav-btn.prev:hover:not(:disabled){background:var(--light-blue)}
+.nav-btn.next{background:var(--coral);color:var(--white)}
+.nav-btn.next:hover:not(:disabled){background:#D45A4D}
+.slide-counter{font-family:'Open Sans',sans-serif;font-size:13px;color:var(--gray)}
+
+/* ═══ TITLE SLIDE ═══ */
+.title-slide{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.title-brand{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.title-unit{font-family:'Poppins',sans-serif;font-size:14px;color:var(--gray);margin-bottom:20px}
+.title-main{font-family:'Poppins',sans-serif;font-size:36px;font-weight:700;color:var(--dark);margin-bottom:8px;line-height:1.2}
+.title-sub{font-family:'Poppins',sans-serif;font-size:18px;color:var(--coral);margin-bottom:28px}
+.title-goal{background:var(--blue-pale);border-radius:var(--radius);padding:16px 28px;font-family:'Poppins',sans-serif;font-size:15px;color:var(--teal);max-width:620px}
+.title-goal strong{font-weight:600}
+
+/* ═══ CONCEPT INTRO ═══ */
+.concept-intro{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.concept-word{font-family:'Poppins',sans-serif;font-size:56px;font-weight:700;color:var(--teal);margin-bottom:12px}
+.concept-tag{font-family:'Poppins',sans-serif;font-size:20px;color:var(--coral)}
+
+/* ═══ MULTIPLE CHOICE ═══ */
+.mc-options{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.mc-opt{font-family:'Poppins',sans-serif;font-size:15px;padding:14px 20px;border:2px solid #E5E7EB;border-radius:var(--radius);cursor:pointer;transition:all .2s;background:var(--white);text-align:left}
+.mc-opt:hover:not(.disabled){border-color:var(--teal);background:var(--blue-pale)}
+.mc-opt.correct{border-color:var(--success);background:#F0FDF4}
+.mc-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}
+.mc-opt.disabled{cursor:default}
+.mc-feedback{margin-top:14px;font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);display:none}
+.mc-feedback.show{display:block}
+.mc-feedback.success{background:#F0FDF4;color:#166534}
+.mc-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* ═══ FORMULA DISPLAY ═══ */
+.formula-box{background:var(--blue-pale);border-radius:var(--radius);padding:20px;text-align:center;margin:18px 0}
+.formula-parts{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.formula-part{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;padding:10px 16px;border-radius:10px}
+.fp-clause{background:var(--light-blue);color:var(--teal)}
+.fp-comma{background:#FEF3C7;color:var(--yellow-dark);font-size:20px;padding:6px 10px}
+.fp-conj{background:var(--coral-pale);color:var(--coral)}
+.fp-plus{color:var(--gray);font-size:18px;font-weight:700}
+
+/* ═══ EXAMPLE BOXES ═══ */
+.example-box{border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.ex-label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.ex-sentence{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7}
+
+/* ═══ COMMA TEST ═══ */
+.comma-test-box{background:#FEF3C7;border-radius:var(--radius);padding:20px;margin:16px 0}
+.ct-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;color:var(--yellow-dark);margin-bottom:10px}
+.ct-steps{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.8}
+.ct-step{margin-bottom:6px}
+
+/* ═══ SENTENCE BUILDER ═══ */
+.builder-prompt{font-family:'Poppins',sans-serif;font-size:14px;color:var(--gray);margin-bottom:12px}
+.builder-pairs{display:flex;flex-direction:column;gap:16px}
+.builder-pair{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.bp-sentences{font-family:'Poppins',sans-serif;font-size:14px;margin-bottom:10px;line-height:1.6}
+.bp-label{font-size:12px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.bp-input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bp-text{font-family:'Poppins',sans-serif;font-size:14px;color:var(--dark)}
+.bp-select{font-family:'Poppins',sans-serif;font-size:14px;padding:6px 12px;border:2px solid #CBD5E1;border-radius:8px;background:var(--white);cursor:pointer;min-width:80px}
+.bp-select:focus{border-color:var(--teal);outline:none}
+.bp-result{font-size:16px;margin-left:6px}
+.builder-controls{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.builder-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.builder-check-btn:hover{background:#D45A4D}
+.builder-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.builder-feedback.show{display:block}
+.builder-feedback.success{background:#F0FDF4;color:#166534}
+.builder-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* ═══ ERROR FINDER ═══ */
+.error-exercise{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.error-item{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.error-sentence{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7;margin-bottom:8px}
+.error-type-label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--gray);margin-bottom:4px}
+.error-choices{display:flex;gap:8px;flex-wrap:wrap}
+.error-choice{font-family:'Poppins',sans-serif;font-size:13px;padding:6px 14px;border:2px solid #CBD5E1;border-radius:20px;background:var(--white);cursor:pointer;transition:all .2s}
+.error-choice:hover:not(.disabled){border-color:var(--coral);background:var(--coral-pale)}
+.error-choice.selected{border-color:var(--coral);background:var(--coral-pale);font-weight:600}
+.error-choice.correct{border-color:var(--success);background:#F0FDF4}
+.error-choice.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}
+.error-choice.disabled{cursor:default}
+.error-explain{font-family:'Poppins',sans-serif;font-size:13px;color:var(--gray);margin-top:8px;display:none;font-style:italic}
+.error-explain.show{display:block}
+.error-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.error-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--teal);color:var(--white);transition:all .2s}
+.error-check-btn:hover{background:#2E6470}
+.error-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.error-feedback.show{display:block}
+.error-feedback.success{background:#F0FDF4;color:#166534}
+.error-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* ═══ TRICKY CONCEPTS ═══ */
+.tricky-card{background:#FEF3C7;border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.tricky-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--yellow-dark);margin-bottom:8px}
+.tricky-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.7}
+.tricky-example{font-family:'Poppins',sans-serif;font-size:14px;background:var(--white);border-radius:10px;padding:12px 16px;margin-top:10px;line-height:1.6}
+
+/* ═══ REVIEW CARDS ═══ */
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.review-card{border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .3s;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center}
+.review-card .rc-q{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600}
+.review-card .rc-a{font-family:'Poppins',sans-serif;font-size:14px;display:none;line-height:1.6}
+.review-card.flipped .rc-q{display:none}
+.review-card.flipped .rc-a{display:block}
+.rc-teal{background:var(--blue-pale);color:var(--teal)}
+.rc-teal.flipped{background:var(--light-blue)}
+.rc-coral{background:var(--coral-pale);color:var(--coral)}
+.rc-coral.flipped{background:#FADCD8}
+.rc-yellow{background:#FEF3C7;color:var(--yellow-dark)}
+.rc-yellow.flipped{background:#FDE68A}
+.rc-blue{background:#DBEAFE;color:#1E40AF}
+.rc-blue.flipped{background:#BFDBFE}
+
+/* ═══ CELEBRATION ═══ */
+.celebration{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.celeb-emoji{font-size:64px;margin-bottom:16px}
+.celeb-title{font-family:'Poppins',sans-serif;font-size:32px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.celeb-sub{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px;max-width:500px}
+.celeb-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.celeb-stat{background:var(--blue-pale);border-radius:var(--radius);padding:16px 24px;text-align:center;min-width:120px}
+.celeb-stat-val{font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--teal)}
+.celeb-stat-label{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:4px}
+.start-over-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);padding:12px 32px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.start-over-btn:hover{background:#D45A4D}
+
+/* ═══ CONFETTI ═══ */
+.confetti-piece{position:fixed;width:10px;height:10px;z-index:1000;pointer-events:none;animation:confettiFall 2.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+
+/* ═══ COPYRIGHT ═══ */
+.copyright{text-align:center;font-size:11px;color:#999;padding:8px;font-family:'Open Sans',sans-serif;position:fixed;bottom:60px;left:0;right:0}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .slide{padding:28px 20px}
+  .slide-title{font-size:22px}
+  .concept-word{font-size:40px}
+  .title-main{font-size:28px}
+  .review-grid{grid-template-columns:1fr}
+  .formula-parts{gap:6px}
+  .formula-part{font-size:12px;padding:8px 12px}
+  .celeb-stats{flex-direction:column;align-items:center}
+}
+@media(max-width:500px){
+  .slide{padding:20px 14px}
+  .slide-title{font-size:19px}
+  .concept-word{font-size:32px}
+  .formula-parts{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- STAR COUNTER -->
+<div class="star-counter" id="starCounter"><span class="star-icon">⭐</span><span id="starCount">0</span></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="1">
+  <div class="title-slide">
+    <div class="title-brand">Structured Steps to Writing</div>
+    <div class="title-unit">Unit 3: Sentence Variety &amp; Types &bull; Lesson 4</div>
+    <div class="title-main">Compound Sentences</div>
+    <div class="title-sub">Joining Two Complete Sentences</div>
+    <div class="title-goal"><strong>Today's Goal:</strong> I can join two complete sentences (independent clauses) into one compound sentence using a comma and a FANBOYS conjunction.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: CONCEPT INTRO -->
+<div class="slide" data-slide="2">
+  <div class="concept-intro">
+    <div class="concept-word">Compound<br>Sentences</div>
+    <div class="concept-tag">Two complete ideas, joined into one</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: REVIEW (Lesson 3 — Conjunctions) -->
+<div class="slide" data-slide="3">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Review: FANBOYS</div>
+  <div class="slide-subtitle">Let's remember what we learned in Lesson 3.</div>
+  <div class="slide-text" style="margin-bottom:14px;">Which FANBOYS conjunction shows a <strong>contrast</strong> or something unexpected?</div>
+  <div class="mc-options" id="mc1">
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">A) And — adds information</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">B) So — shows a result</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',true)">C) But — shows contrast</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">D) Or — gives a choice</div>
+  </div>
+  <div class="mc-feedback" id="mc1Fb"></div>
+</div>
+
+<!-- SLIDE 4: WHAT IS A COMPOUND SENTENCE? -->
+<div class="slide" data-slide="4">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">What Is a Compound Sentence?</div>
+  <div class="slide-subtitle">Two complete sentences joined together.</div>
+  <div class="slide-text" style="margin-bottom:14px;">A <strong style="color:var(--coral);">compound sentence</strong> is two <strong>independent clauses</strong> (complete sentences) joined with a <strong>comma</strong> and a <strong>FANBOYS conjunction</strong>.</div>
+  <div class="formula-box">
+    <div style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--teal);margin-bottom:8px;">THE FORMULA</div>
+    <div class="formula-parts">
+      <span class="formula-part fp-clause">Independent Clause</span>
+      <span class="fp-plus">+</span>
+      <span class="formula-part fp-comma">,</span>
+      <span class="fp-plus">+</span>
+      <span class="formula-part fp-conj">FANBOYS</span>
+      <span class="fp-plus">+</span>
+      <span class="formula-part fp-clause">Independent Clause</span>
+    </div>
+  </div>
+  <div class="example-box" style="background:#D1FAE5;">
+    <div class="ex-label" style="color:#065F46;">Example</div>
+    <div class="ex-sentence">
+      <span style="color:var(--teal);font-weight:600;">The sun was shining</span><span style="color:var(--yellow-dark);font-weight:700;font-size:18px;">,</span> <span style="color:var(--coral);font-weight:600;">but</span> <span style="color:var(--teal);font-weight:600;">the wind was cold.</span>
+    </div>
+    <div style="font-family:'Poppins',sans-serif;font-size:13px;color:var(--gray);margin-top:6px;">Two complete sentences joined with <strong>, but</strong></div>
+  </div>
+</div>
+
+<!-- SLIDE 5: THE COMMA RULE & COMMA TEST -->
+<div class="slide" data-slide="5">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">The Comma Rule</div>
+  <div class="slide-subtitle">When do you need a comma before a conjunction?</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+    <div class="example-box" style="background:#D1FAE5;">
+      <div class="ex-label" style="color:#065F46;">✓ Comma Needed</div>
+      <div class="ex-sentence">"I was hungry<span style="color:var(--yellow-dark);font-weight:700;font-size:18px;">,</span> <strong style="color:var(--coral);">so</strong> I made a sandwich."</div>
+      <div style="font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:6px;">Both parts are complete sentences.</div>
+    </div>
+    <div class="example-box" style="background:var(--coral-pale);">
+      <div class="ex-label" style="color:var(--coral);">✗ No Comma Needed</div>
+      <div class="ex-sentence">"I was hungry <strong style="color:var(--coral);">and</strong> tired."</div>
+      <div style="font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:6px;">"Tired" alone is NOT a complete sentence.</div>
+    </div>
+  </div>
+  <div class="comma-test-box">
+    <div class="ct-title">🔍 The Comma Test</div>
+    <div class="ct-steps">
+      <div class="ct-step"><strong>Step 1:</strong> Find the conjunction.</div>
+      <div class="ct-step"><strong>Step 2:</strong> Cover everything BEFORE the conjunction.</div>
+      <div class="ct-step"><strong>Step 3:</strong> Is what's LEFT a complete sentence?</div>
+      <div class="ct-step"><strong>If YES →</strong> Use a comma before the conjunction.</div>
+      <div class="ct-step"><strong>If NO →</strong> No comma needed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: QUICK CHECK -->
+<div class="slide" data-slide="6">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Check</div>
+  <div class="slide-subtitle">Use the comma test.</div>
+  <div class="slide-text" style="margin-bottom:14px;">Which sentence is a correctly punctuated compound sentence?</div>
+  <div class="mc-options" id="mc2">
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">A) "I like hockey, and soccer." — comma with just words</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">B) "She was tired she went to bed." — missing comma and conjunction</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',true)">C) "The movie was long, but it was exciting." — two complete sentences joined correctly</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">D) "He studied hard, he passed." — comma without conjunction</div>
+  </div>
+  <div class="mc-feedback" id="mc2Fb"></div>
+</div>
+
+<!-- SLIDE 7: SENTENCE BUILDER — Combine Pairs -->
+<div class="slide" data-slide="7">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Build Compound Sentences</div>
+  <div class="slide-subtitle">Choose the best conjunction to combine each pair.</div>
+  <div class="builder-pairs" id="builderPairs"></div>
+  <div class="builder-controls"><button class="builder-check-btn" onclick="checkBuilder()">Check My Work</button></div>
+  <div class="builder-feedback" id="builderFeedback"></div>
+</div>
+
+<!-- SLIDE 8: ERROR FINDER -->
+<div class="slide" data-slide="8">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Find the Error</div>
+  <div class="slide-subtitle">Each sentence has a punctuation problem. Identify the error type.</div>
+  <div class="error-exercise" id="errorExercise"></div>
+  <div class="error-controls"><button class="error-check-btn" onclick="checkErrors()">Check My Work</button></div>
+  <div class="error-feedback" id="errorFeedback"></div>
+</div>
+
+<!-- SLIDE 9: TRICKY CONCEPTS -->
+<div class="slide" data-slide="9">
+  <div class="slide-header"><span class="phase-label" style="background:#FEF3C7;color:var(--yellow-dark);">Tricky</span></div>
+  <div class="slide-title" style="color:var(--yellow-dark);">Common Mistakes</div>
+  <div class="slide-subtitle">Three errors to watch out for.</div>
+  <div class="tricky-card">
+    <div class="tricky-title">🚫 Mistake 1: Forgetting the Comma</div>
+    <div class="tricky-example">
+      <span style="color:var(--error);">✗</span> "I was tired <strong>but</strong> I kept working."<br>
+      <span style="color:var(--success);">✓</span> "I was tired<strong>,</strong> <strong>but</strong> I kept working."
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">🚫 Mistake 2: Comma Splice (No Conjunction)</div>
+    <div class="tricky-example">
+      <span style="color:var(--error);">✗</span> "I was tired, I kept working."<br>
+      <span style="color:var(--success);">✓</span> "I was tired<strong>, but</strong> I kept working."<br>
+      <span style="font-size:12px;color:var(--gray);">A comma alone cannot join two complete sentences.</span>
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">🚫 Mistake 3: Unnecessary Comma</div>
+    <div class="tricky-example">
+      <span style="color:var(--error);">✗</span> "I like dogs<strong>,</strong> and cats."<br>
+      <span style="color:var(--success);">✓</span> "I like dogs and cats."<br>
+      <span style="font-size:12px;color:var(--gray);">"Cats" is not a complete sentence, so no comma is needed.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: REVIEW CARDS -->
+<div class="slide" data-slide="10">
+  <div class="slide-header"><span class="phase-label" style="background:var(--blue-pale);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Review — Click to Reveal</div>
+  <div class="slide-subtitle">Click each card to check your understanding.</div>
+  <div class="review-grid" id="reviewGrid"></div>
+</div>
+
+<!-- SLIDE 11: CELEBRATION -->
+<div class="slide" data-slide="11">
+  <div class="celebration" id="celebSlide">
+    <div class="celeb-emoji">🎉</div>
+    <div class="celeb-title">Lesson Complete!</div>
+    <div class="celeb-sub">You can now build compound sentences by joining two complete ideas with a comma and a FANBOYS conjunction.</div>
+    <div class="celeb-stats" id="celebStats"></div>
+    <button class="start-over-btn" onclick="startOver()">Start Over</button>
+  </div>
+</div>
+
+</div><!-- end slide-container -->
+
+<div class="copyright">© 2026 Structured Steps to Writing. All rights reserved.</div>
+
+<!-- NAVIGATION -->
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="slideNum">1 / 11</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA OBJECT
+// ═══════════════════════════════════════
+const L = {
+  builderPairs: [
+    { s1: "I love pizza.", s2: "My brother prefers tacos.", answer: "but", alsoAccept: ["yet"], relationship: "Contrast — different preferences" },
+    { s1: "We could go swimming.", s2: "We could go hiking.", answer: "or", alsoAccept: [], relationship: "Choice — pick one activity" },
+    { s1: "She studied all night.", s2: "She passed the exam.", answer: "so", alsoAccept: ["and"], relationship: "Result — studying caused passing" },
+    { s1: "The alarm went off.", s2: "I hit the snooze button.", answer: "so", alsoAccept: ["and"], relationship: "Result — alarm caused action" }
+  ],
+  errorItems: [
+    { sentence: "I wanted to help I didn't know how.", errorType: "run-on", explain: "Run-on sentence — two complete sentences with no comma or conjunction. Fix: \"I wanted to help, but I didn't know how.\"" },
+    { sentence: "She plays piano, and violin.", errorType: "unnecessary-comma", explain: "Unnecessary comma — \"violin\" is not a complete sentence, so no comma is needed. Fix: \"She plays piano and violin.\"" },
+    { sentence: "The test was hard, we all passed.", errorType: "comma-splice", explain: "Comma splice — a comma alone cannot join two complete sentences. Fix: \"The test was hard, but we all passed.\"" },
+    { sentence: "We wanted to go outside but it was raining.", errorType: "missing-comma", explain: "Missing comma — both parts are complete sentences, so a comma is needed before \"but.\" Fix: \"We wanted to go outside, but it was raining.\"" }
+  ],
+  errorTypes: [
+    { id: "run-on", label: "Run-on (no comma or conjunction)" },
+    { id: "comma-splice", label: "Comma splice (no conjunction)" },
+    { id: "missing-comma", label: "Missing comma" },
+    { id: "unnecessary-comma", label: "Unnecessary comma" }
+  ],
+  review: [
+    { q: "What is a compound sentence?", a: "Two independent clauses (complete sentences) joined with a comma and a FANBOYS conjunction.", color: "rc-teal" },
+    { q: "What is the compound sentence formula?", a: "Independent Clause + , + FANBOYS + Independent Clause", color: "rc-coral" },
+    { q: "What is the Comma Test?", a: "Cover everything before the conjunction. Is what's left a complete sentence? If yes, use a comma.", color: "rc-yellow" },
+    { q: "What is a comma splice?", a: "Using a comma to join two sentences WITHOUT a conjunction. You need the conjunction too.", color: "rc-blue" },
+    { q: "When do you NOT need a comma before a conjunction?", a: "When the conjunction is just connecting words or short phrases — not two complete sentences.", color: "rc-teal" }
+  ]
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let currentSlide = 1;
+const totalSlides = 11;
+let stars = 0;
+let activitiesCompleted = 0;
+let mcAnswered = {};
+let builderChecked = false;
+let errorsChecked = false;
+let errorSelections = {};
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showSlide(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector(`[data-slide="${n}"]`);
+  if (target) target.classList.add('active');
+  document.getElementById('prevBtn').disabled = (n === 1);
+  document.getElementById('nextBtn').disabled = (n === totalSlides);
+  document.getElementById('slideNum').textContent = `${n} / ${totalSlides}`;
+  document.getElementById('progressFill').style.width = `${(n / totalSlides) * 100}%`;
+  if (n === totalSlides) showCelebration();
+}
+function changeSlide(dir) {
+  const next = currentSlide + dir;
+  if (next >= 1 && next <= totalSlides) { currentSlide = next; showSlide(currentSlide); }
+}
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+});
+
+// ═══════════════════════════════════════
+// STARS & CONFETTI
+// ═══════════════════════════════════════
+function addStars(n) {
+  stars += n;
+  document.getElementById('starCount').textContent = stars;
+  const c = document.getElementById('starCounter');
+  c.classList.remove('animate'); void c.offsetWidth; c.classList.add('animate');
+}
+function fireConfetti() {
+  const colors = ['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#22C55E','#A855F7'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100+'vw';
+    p.style.top = '-10px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.borderRadius = Math.random()>.5?'50%':'2px';
+    p.style.width = (6+Math.random()*8)+'px';
+    p.style.height = (6+Math.random()*8)+'px';
+    p.style.animationDuration = (2+Math.random()*2)+'s';
+    p.style.animationDelay = Math.random()*.5+'s';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 4000);
+  }
+}
+
+// ═══════════════════════════════════════
+// MULTIPLE CHOICE
+// ═══════════════════════════════════════
+function checkMC(el, id, correct) {
+  if (mcAnswered[id]) return;
+  mcAnswered[id] = true;
+  const opts = document.querySelectorAll(`#${id} .mc-opt`);
+  opts.forEach(o => {
+    o.classList.add('disabled');
+    if (o === el) o.classList.add(correct ? 'correct' : 'incorrect');
+    const oc = o.getAttribute('onclick');
+    if (oc && oc.includes('true')) o.classList.add('correct');
+  });
+  const fb = document.getElementById(id+'Fb');
+  fb.textContent = correct ? 'That\'s right!' : 'Not quite. The correct answer is highlighted.';
+  fb.className = 'mc-feedback show ' + (correct ? 'success' : 'retry');
+  if (correct) { addStars(1); activitiesCompleted++; }
+}
+
+// ═══════════════════════════════════════
+// SENTENCE BUILDER
+// ═══════════════════════════════════════
+function initBuilder() {
+  const container = document.getElementById('builderPairs');
+  const fanboys = ['for','and','nor','but','or','yet','so'];
+  L.builderPairs.forEach((pair, i) => {
+    const div = document.createElement('div');
+    div.className = 'builder-pair';
+    div.innerHTML = `
+      <div class="bp-label">Pair ${i+1}</div>
+      <div class="bp-sentences">"${pair.s1}" + "${pair.s2}"</div>
+      <div class="bp-input-row">
+        <span class="bp-text">${pair.s1.replace(/\.$/, '')}</span>
+        <span class="bp-text">,</span>
+        <select class="bp-select" id="bpSel${i}">
+          <option value="">Choose...</option>
+          ${fanboys.map(f => `<option value="${f}">${f}</option>`).join('')}
+        </select>
+        <span class="bp-text">${pair.s2.charAt(0).toLowerCase() + pair.s2.slice(1)}</span>
+        <span class="bp-result" id="bpRes${i}"></span>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+function checkBuilder() {
+  if (builderChecked) return;
+  let allFilled = true, allCorrect = true;
+  L.builderPairs.forEach((pair, i) => {
+    const sel = document.getElementById('bpSel'+i);
+    const res = document.getElementById('bpRes'+i);
+    const val = sel.value;
+    if (!val) { allFilled = false; return; }
+    const acceptable = [pair.answer, ...pair.alsoAccept];
+    if (acceptable.includes(val)) {
+      res.textContent = '✓'; res.style.color = 'var(--success)';
+      sel.style.borderColor = 'var(--success)';
+    } else {
+      res.textContent = '✗'; res.style.color = 'var(--error)';
+      sel.style.borderColor = 'var(--error)';
+      allCorrect = false;
+    }
+  });
+  const fb = document.getElementById('builderFeedback');
+  if (!allFilled) { fb.textContent = 'Choose a conjunction for each pair first.'; fb.className = 'builder-feedback show retry'; return; }
+  if (allCorrect) {
+    fb.textContent = 'All correct! Great compound sentences. ⭐';
+    fb.className = 'builder-feedback show success';
+    if (!builderChecked) { addStars(2); activitiesCompleted++; builderChecked = true; }
+    fireConfetti();
+    document.querySelectorAll('.bp-select').forEach(s => s.disabled = true);
+  } else {
+    fb.textContent = 'Some need another look. Think about the relationship between the two ideas.';
+    fb.className = 'builder-feedback show retry';
+  }
+}
+
+// ═══════════════════════════════════════
+// ERROR FINDER
+// ═══════════════════════════════════════
+function initErrors() {
+  const container = document.getElementById('errorExercise');
+  L.errorItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'error-item';
+    div.innerHTML = `
+      <div class="error-sentence">${i+1}. "${item.sentence}"</div>
+      <div class="error-type-label">What's the problem?</div>
+      <div class="error-choices" id="errChoices${i}">
+        ${L.errorTypes.map(t => `<div class="error-choice" data-type="${t.id}" onclick="selectError(${i},'${t.id}')">${t.label}</div>`).join('')}
+      </div>
+      <div class="error-explain" id="errExplain${i}">${item.explain}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+function selectError(idx, type) {
+  if (errorsChecked) return;
+  const choices = document.querySelectorAll(`#errChoices${idx} .error-choice`);
+  choices.forEach(c => c.classList.remove('selected'));
+  const selected = document.querySelector(`#errChoices${idx} [data-type="${type}"]`);
+  if (selected) selected.classList.add('selected');
+  errorSelections[idx] = type;
+}
+function checkErrors() {
+  if (errorsChecked) return;
+  let allFilled = true, allCorrect = true;
+  L.errorItems.forEach((item, i) => {
+    if (!errorSelections[i]) { allFilled = false; return; }
+    const choices = document.querySelectorAll(`#errChoices${i} .error-choice`);
+    choices.forEach(c => {
+      c.classList.add('disabled');
+      if (c.dataset.type === item.errorType) c.classList.add('correct');
+      if (c.classList.contains('selected') && c.dataset.type !== item.errorType) c.classList.add('incorrect');
+    });
+    if (errorSelections[i] !== item.errorType) allCorrect = false;
+    document.getElementById('errExplain'+i).classList.add('show');
+  });
+  const fb = document.getElementById('errorFeedback');
+  if (!allFilled) { fb.textContent = 'Select an error type for each sentence first.'; fb.className = 'error-feedback show retry'; return; }
+  if (allCorrect) {
+    fb.textContent = 'All correct! You can spot compound sentence errors like a pro. ⭐';
+    fb.className = 'error-feedback show success';
+    if (!errorsChecked) { addStars(2); activitiesCompleted++; errorsChecked = true; }
+    fireConfetti();
+  } else {
+    fb.textContent = 'Some answers need another look. Check the explanations above.';
+    fb.className = 'error-feedback show retry';
+    errorsChecked = true; activitiesCompleted++;
+  }
+}
+
+// ═══════════════════════════════════════
+// REVIEW CARDS
+// ═══════════════════════════════════════
+function initReview() {
+  const grid = document.getElementById('reviewGrid');
+  L.review.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'review-card ' + r.color;
+    card.innerHTML = `<div><div class="rc-q">${r.q}</div><div class="rc-a">${r.a}</div></div>`;
+    card.onclick = () => card.classList.toggle('flipped');
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════
+// CELEBRATION
+// ═══════════════════════════════════════
+function showCelebration() {
+  const stats = document.getElementById('celebStats');
+  stats.innerHTML = `
+    <div class="celeb-stat"><div class="celeb-stat-val">${stars}</div><div class="celeb-stat-label">Stars Earned</div></div>
+    <div class="celeb-stat"><div class="celeb-stat-val">${activitiesCompleted}</div><div class="celeb-stat-label">Activities Completed</div></div>
+  `;
+  setTimeout(fireConfetti, 400);
+}
+
+// ═══════════════════════════════════════
+// START OVER
+// ═══════════════════════════════════════
+function startOver() {
+  stars = 0; activitiesCompleted = 0; mcAnswered = {};
+  builderChecked = false; errorsChecked = false; errorSelections = {};
+  document.getElementById('starCount').textContent = '0';
+  // Reset MC
+  ['mc1','mc2'].forEach(id => {
+    document.querySelectorAll(`#${id} .mc-opt`).forEach(o => o.classList.remove('correct','incorrect','disabled'));
+    const fb = document.getElementById(id+'Fb');
+    fb.className = 'mc-feedback'; fb.textContent = '';
+  });
+  // Reset builder
+  const bp = document.getElementById('builderPairs');
+  bp.innerHTML = '';
+  initBuilder();
+  document.getElementById('builderFeedback').className = 'builder-feedback';
+  // Reset errors
+  const ee = document.getElementById('errorExercise');
+  ee.innerHTML = '';
+  initErrors();
+  document.getElementById('errorFeedback').className = 'error-feedback';
+  // Reset review
+  document.querySelectorAll('.review-card').forEach(c => c.classList.remove('flipped'));
+  // Go to slide 1
+  currentSlide = 1;
+  showSlide(1);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+initBuilder();
+initErrors();
+initReview();
+showSlide(1);
+</script>
+</body>
+</html>

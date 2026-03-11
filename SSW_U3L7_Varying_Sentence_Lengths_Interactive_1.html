@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 7: Varying Sentence Lengths</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--coral:#E66B5D;--coral-pale:#FDF0EE;--teal:#3A7D8C;--light-blue:#D7ECF0;--blue-pale:#EBF5F8;--yellow:#F3D25B;--yellow-dark:#9E7F0A;--white:#FFFFFF;--dark:#1A1A2E;--gray:#6B7280;--success:#22C55E;--error:#EF4444;--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#F8FAFC;color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+.progress-bar{height:6px;background:#E5E7EB;position:fixed;top:0;left:0;right:0;z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--coral));transition:width .4s ease}
+.star-counter{position:fixed;top:16px;right:20px;z-index:100;background:var(--white);border-radius:24px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:var(--yellow-dark);display:flex;align-items:center;gap:6px}
+.star-counter .star-icon{font-size:20px}
+.star-counter.animate .star-icon{animation:starPop .5s ease}
+@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+.slide-container{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px 100px}
+.slide{display:none;max-width:900px;width:100%;min-height:480px;background:var(--white);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:48px;animation:fadeIn .4s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.slide-header{margin-bottom:10px}
+.phase-label{display:inline-block;font-family:'Open Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.slide-title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.slide-subtitle{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px}
+.slide-text{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid #E5E7EB;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.nav-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;padding:10px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.prev{background:var(--blue-pale);color:var(--teal)}.nav-btn.prev:hover:not(:disabled){background:var(--light-blue)}
+.nav-btn.next{background:var(--coral);color:var(--white)}.nav-btn.next:hover:not(:disabled){background:#D45A4D}
+.slide-counter{font-family:'Open Sans',sans-serif;font-size:13px;color:var(--gray)}
+.title-slide{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.title-brand{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.title-unit{font-family:'Poppins',sans-serif;font-size:14px;color:var(--gray);margin-bottom:20px}
+.title-main{font-family:'Poppins',sans-serif;font-size:36px;font-weight:700;color:var(--dark);margin-bottom:8px;line-height:1.2}
+.title-sub{font-family:'Poppins',sans-serif;font-size:18px;color:var(--coral);margin-bottom:28px}
+.title-goal{background:var(--blue-pale);border-radius:var(--radius);padding:16px 28px;font-family:'Poppins',sans-serif;font-size:15px;color:var(--teal);max-width:620px}
+.title-goal strong{font-weight:600}
+.concept-intro{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.concept-word{font-family:'Poppins',sans-serif;font-size:52px;font-weight:700;color:var(--teal);margin-bottom:12px;line-height:1.2}
+.concept-tag{font-family:'Poppins',sans-serif;font-size:20px;color:var(--coral)}
+.mc-options{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.mc-opt{font-family:'Poppins',sans-serif;font-size:15px;padding:14px 20px;border:2px solid #E5E7EB;border-radius:var(--radius);cursor:pointer;transition:all .2s;background:var(--white);text-align:left}
+.mc-opt:hover:not(.disabled){border-color:var(--teal);background:var(--blue-pale)}
+.mc-opt.correct{border-color:var(--success);background:#F0FDF4}.mc-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.mc-opt.disabled{cursor:default}
+.mc-feedback{margin-top:14px;font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);display:none}
+.mc-feedback.show{display:block}.mc-feedback.success{background:#F0FDF4;color:#166534}.mc-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Compare */
+.compare-box{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-side{border-radius:var(--radius);padding:20px}
+.compare-label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.compare-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.8}
+
+/* Length guide */
+.length-guide{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+.lg-card{border-radius:var(--radius);padding:18px;text-align:center}
+.lg-label{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;margin-bottom:4px}
+.lg-range{font-family:'Poppins',sans-serif;font-size:12px;margin-bottom:8px}
+.lg-uses{font-family:'Poppins',sans-serif;font-size:12px;line-height:1.5;text-align:left}
+
+/* Length ID */
+.len-exercise{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.len-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--blue-pale);border-radius:var(--radius);padding:12px 16px}
+.len-sentence{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.5}
+.len-word-count{font-family:'Poppins',sans-serif;font-size:11px;color:var(--gray)}
+.len-btns{display:flex;gap:6px}
+.len-btn{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;padding:6px 12px;border:2px solid #CBD5E1;border-radius:16px;background:var(--white);cursor:pointer;transition:all .2s;min-width:32px;text-align:center}
+.len-btn:hover:not(.disabled){border-color:var(--teal)}
+.len-btn.selected{border-color:var(--teal);background:var(--light-blue);font-weight:700}
+.len-btn.correct{border-color:var(--success);background:#F0FDF4}.len-btn.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.len-btn.disabled{cursor:default}
+.len-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.len-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.len-check-btn:hover{background:#D45A4D}
+.len-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.len-feedback.show{display:block}.len-feedback.success{background:#F0FDF4;color:#166534}.len-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Pick best revision */
+.rev-exercise{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+.rev-item{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.rev-original{font-family:'Poppins',sans-serif;font-size:13px;color:var(--gray);margin-bottom:10px;font-style:italic}
+.rev-original-label{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.rev-options{display:flex;flex-direction:column;gap:8px}
+.rev-opt{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 16px;border:2px solid #CBD5E1;border-radius:var(--radius);background:var(--white);cursor:pointer;transition:all .2s;text-align:left;line-height:1.6}
+.rev-opt:hover:not(.disabled){border-color:var(--coral);background:var(--coral-pale)}
+.rev-opt.selected{border-color:var(--coral);background:var(--coral-pale);font-weight:600}
+.rev-opt.correct{border-color:var(--success);background:#F0FDF4}.rev-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.rev-opt.disabled{cursor:default}
+.rev-explain{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:6px;display:none;font-style:italic}
+.rev-explain.show{display:block}
+.rev-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.rev-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--teal);color:var(--white);transition:all .2s}
+.rev-check-btn:hover{background:#2E6470}
+.rev-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.rev-feedback.show{display:block}.rev-feedback.success{background:#F0FDF4;color:#166534}.rev-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+.tricky-card{background:#FEF3C7;border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.tricky-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--yellow-dark);margin-bottom:8px}
+.tricky-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.7}
+.tricky-example{font-family:'Poppins',sans-serif;font-size:14px;background:var(--white);border-radius:10px;padding:12px 16px;margin-top:10px;line-height:1.6}
+
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.review-card{border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .3s;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center}
+.review-card .rc-q{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600}
+.review-card .rc-a{font-family:'Poppins',sans-serif;font-size:14px;display:none;line-height:1.6}
+.review-card.flipped .rc-q{display:none}.review-card.flipped .rc-a{display:block}
+.rc-teal{background:var(--blue-pale);color:var(--teal)}.rc-teal.flipped{background:var(--light-blue)}
+.rc-coral{background:var(--coral-pale);color:var(--coral)}.rc-coral.flipped{background:#FADCD8}
+.rc-yellow{background:#FEF3C7;color:var(--yellow-dark)}.rc-yellow.flipped{background:#FDE68A}
+.rc-blue{background:#DBEAFE;color:#1E40AF}.rc-blue.flipped{background:#BFDBFE}
+
+.celebration{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.celeb-emoji{font-size:64px;margin-bottom:16px}
+.celeb-title{font-family:'Poppins',sans-serif;font-size:32px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.celeb-sub{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px;max-width:520px}
+.celeb-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.celeb-stat{background:var(--blue-pale);border-radius:var(--radius);padding:16px 24px;text-align:center;min-width:120px}
+.celeb-stat-val{font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--teal)}
+.celeb-stat-label{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:4px}
+.start-over-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);padding:12px 32px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.start-over-btn:hover{background:#D45A4D}
+.confetti-piece{position:fixed;width:10px;height:10px;z-index:1000;pointer-events:none;animation:confettiFall 2.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+.copyright{text-align:center;font-size:11px;color:#999;padding:8px;font-family:'Open Sans',sans-serif;position:fixed;bottom:60px;left:0;right:0}
+@media(max-width:700px){.slide{padding:28px 20px}.slide-title{font-size:22px}.concept-word{font-size:36px}.title-main{font-size:28px}.review-grid{grid-template-columns:1fr}.compare-box{grid-template-columns:1fr}.length-guide{grid-template-columns:1fr}.celeb-stats{flex-direction:column;align-items:center}}
+@media(max-width:500px){.slide{padding:20px 14px}.slide-title{font-size:19px}.concept-word{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="star-counter" id="starCounter"><span class="star-icon">⭐</span><span id="starCount">0</span></div>
+<div class="slide-container" id="slideContainer">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="1">
+  <div class="title-slide">
+    <div class="title-brand">Structured Steps to Writing</div>
+    <div class="title-unit">Unit 3: Sentence Variety &amp; Types &bull; Lesson 7</div>
+    <div class="title-main">Varying Sentence Lengths</div>
+    <div class="title-sub">Short Sentences = Punch. Long Sentences = Flow. Mix = Great Writing.</div>
+    <div class="title-goal"><strong>Today's Goal:</strong> I can use a mix of short, medium, and long sentences to create rhythm and flow in my writing.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: CONCEPT INTRO -->
+<div class="slide" data-slide="2">
+  <div class="concept-intro">
+    <div class="concept-word">Sentence<br>Lengths</div>
+    <div class="concept-tag">Like music — the mix of notes creates the rhythm.</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: REVIEW (Lesson 6) -->
+<div class="slide" data-slide="3">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Review: Sentence Beginnings</div>
+  <div class="slide-subtitle">From Lesson 6.</div>
+  <div class="slide-text" style="margin-bottom:14px;">"<strong>After the game,</strong> the team went out for pizza." — What type of beginning is this?</div>
+  <div class="mc-options" id="mc1">
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">A) Subject</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">B) Adverb</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',true)">C) Where/When phrase</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">D) Adjective / Describing phrase</div>
+  </div>
+  <div class="mc-feedback" id="mc1Fb"></div>
+</div>
+
+<!-- SLIDE 4: THE PROBLEM — All Same Length -->
+<div class="slide" data-slide="4">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Same Length = Flat Rhythm</div>
+  <div class="slide-subtitle">Neither all-short nor all-long sounds great.</div>
+  <div class="compare-box">
+    <div class="compare-side" style="background:var(--coral-pale);">
+      <div class="compare-label" style="color:var(--coral);">✗ All Short</div>
+      <div class="compare-text">"The fire truck came. The sirens were loud. People gathered. Firefighters jumped out. They grabbed hoses. Water sprayed everywhere."</div>
+    </div>
+    <div class="compare-side" style="background:var(--coral-pale);">
+      <div class="compare-label" style="color:var(--coral);">✗ All Long</div>
+      <div class="compare-text">"The bright red fire truck raced down the street with its sirens blaring loudly, and all the people who were nearby gathered on the sidewalk to watch the firefighters who quickly jumped out and grabbed the large hoses and sprayed water everywhere."</div>
+    </div>
+  </div>
+  <div style="background:#D1FAE5;border-radius:var(--radius);padding:16px;margin-top:10px;">
+    <div class="compare-label" style="color:#065F46;">✓ Mixed Lengths</div>
+    <div class="compare-text">"The fire truck raced down the street, its sirens screaming. People gathered on the sidewalk to watch. The firefighters jumped out immediately, grabbed the heavy hoses, and began spraying powerful streams of water in every direction. <strong>The crowd stepped back.</strong> Within minutes, the fire was under control."</div>
+  </div>
+</div>
+
+<!-- SLIDE 5: SHORT vs MEDIUM vs LONG -->
+<div class="slide" data-slide="5">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">When to Use Each Length</div>
+  <div class="slide-subtitle">Each length has a purpose.</div>
+  <div class="length-guide">
+    <div class="lg-card" style="background:var(--coral-pale);">
+      <div class="lg-label" style="color:var(--coral);">Short (1–6 words)</div>
+      <div class="lg-range" style="color:var(--coral);">Punch &amp; Drama</div>
+      <div class="lg-uses" style="color:var(--coral);">• Dramatic emphasis<br>• Tension or suspense<br>• A powerful pause<br>• Contrast after a long sentence<br><br><em>"It was over."</em></div>
+    </div>
+    <div class="lg-card" style="background:var(--blue-pale);">
+      <div class="lg-label" style="color:var(--teal);">Medium (7–14 words)</div>
+      <div class="lg-range" style="color:var(--teal);">Clarity &amp; Balance</div>
+      <div class="lg-uses" style="color:var(--teal);">• Everyday information<br>• Clear, comfortable pacing<br>• Transitions between ideas<br>• The backbone of most writing<br><br><em>"The crowd cheered as the team scored the final goal."</em></div>
+    </div>
+    <div class="lg-card" style="background:#FEF3C7;">
+      <div class="lg-label" style="color:var(--yellow-dark);">Long (15+ words)</div>
+      <div class="lg-range" style="color:var(--yellow-dark);">Flow &amp; Detail</div>
+      <div class="lg-uses" style="color:var(--yellow-dark);">• Rich description<br>• Complex explanations<br>• Action sequences<br>• Combining related ideas<br><br><em>"The firefighters jumped out, grabbed the heavy hoses, and began spraying powerful streams of water in every direction."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: QUICK CHECK -->
+<div class="slide" data-slide="6">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Check</div>
+  <div class="slide-subtitle">Think about rhythm and purpose.</div>
+  <div class="slide-text" style="margin-bottom:14px;">When should you use a <strong>short sentence</strong> in your writing?</div>
+  <div class="mc-options" id="mc2">
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">A) To describe a scene with lots of detail</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">B) To explain something complex</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',true)">C) To create drama, emphasis, or a powerful pause</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">D) To combine several related ideas smoothly</div>
+  </div>
+  <div class="mc-feedback" id="mc2Fb"></div>
+</div>
+
+<!-- SLIDE 7: PRACTICE — Label the Lengths -->
+<div class="slide" data-slide="7">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Label the Lengths</div>
+  <div class="slide-subtitle">Is each sentence Short (S), Medium (M), or Long (L)?</div>
+  <div class="len-exercise" id="lenExercise"></div>
+  <div class="len-controls"><button class="len-check-btn" onclick="checkLen()">Check My Work</button></div>
+  <div class="len-feedback" id="lenFeedback"></div>
+</div>
+
+<!-- SLIDE 8: PRACTICE — Pick the Best Revision -->
+<div class="slide" data-slide="8">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Pick the Best Revision</div>
+  <div class="slide-subtitle">Which version has the best rhythm and length variety?</div>
+  <div class="rev-exercise" id="revExercise"></div>
+  <div class="rev-controls"><button class="rev-check-btn" onclick="checkRev()">Check My Work</button></div>
+  <div class="rev-feedback" id="revFeedback"></div>
+</div>
+
+<!-- SLIDE 9: TRICKY -->
+<div class="slide" data-slide="9">
+  <div class="slide-header"><span class="phase-label" style="background:#FEF3C7;color:var(--yellow-dark);">Tricky</span></div>
+  <div class="slide-title" style="color:var(--yellow-dark);">The Secret Weapon</div>
+  <div class="slide-subtitle">One powerful technique for maximum impact.</div>
+  <div class="tricky-card">
+    <div class="tricky-title">💥 Short After Long = Maximum Punch</div>
+    <div class="tricky-text">A short sentence right after a long one creates the most dramatic contrast. The reader's brain is flowing along with the long sentence, and then — the short one hits hard.</div>
+    <div class="tricky-example">
+      "The crowd surged forward as the band walked onto the stage, the lights flashing in every colour while the speakers vibrated with the opening chord." <strong>The concert had begun.</strong><br><br>
+      <span style="font-size:12px;color:var(--gray);">The long sentence builds energy. The short one drops the moment. That is rhythm.</span>
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">⚠️ Don't Count Words — Listen</div>
+    <div class="tricky-text">You don't need to count every word. Instead, <strong>read your writing aloud</strong>. If it sounds like a flat hum with no highs or lows, you need more variety. Trust your ear.</div>
+  </div>
+</div>
+
+<!-- SLIDE 10: REVIEW CARDS -->
+<div class="slide" data-slide="10">
+  <div class="slide-header"><span class="phase-label" style="background:var(--blue-pale);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Review — Click to Reveal</div>
+  <div class="slide-subtitle">Click each card to check your understanding.</div>
+  <div class="review-grid" id="reviewGrid"></div>
+</div>
+
+<!-- SLIDE 11: CELEBRATION -->
+<div class="slide" data-slide="11">
+  <div class="celebration">
+    <div class="celeb-emoji">🎉</div>
+    <div class="celeb-title">Lesson Complete!</div>
+    <div class="celeb-sub">You now have a COMPLETE sentence variety toolkit: types, conjunctions, compound sentences, combining, varied beginnings, and varied lengths. Next up — putting it all together.</div>
+    <div class="celeb-stats" id="celebStats"></div>
+    <button class="start-over-btn" onclick="startOver()">Start Over</button>
+  </div>
+</div>
+
+</div>
+<div class="copyright">© 2026 Structured Steps to Writing. All rights reserved.</div>
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="slideNum">1 / 11</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+const L={
+  lenItems:[
+    {sentence:"The old house stood at the end of the street.",words:9,answer:"M"},
+    {sentence:"It was empty.",words:3,answer:"S"},
+    {sentence:"Broken windows stared out like dark eyes, and the overgrown yard was full of weeds that had grown waist-high over the summer.",words:22,answer:"L"},
+    {sentence:"Nobody went near it.",words:4,answer:"S"},
+    {sentence:"Some said it was haunted, but most people simply avoided it because the crumbling walls and sagging roof made it look dangerous.",words:21,answer:"L"},
+    {sentence:"One day, a moving truck appeared in the driveway.",words:9,answer:"M"}
+  ],
+  revItems:[
+    {
+      original:'"The game was exciting. The players ran fast. The crowd was loud. The team won."',
+      options:[
+        {text:'"The game was really very exciting and all the players ran extremely fast and the crowd was incredibly loud and then the team won."',correct:false,explain:'This just combines everything into one breathless sentence.'},
+        {text:'"The game was intense from start to finish, with players sprinting up and down the field while the crowd roared from the stands. The team won. Nobody was surprised."',correct:true,explain:'Long sentence builds energy, then two short ones deliver the punchline.'},
+        {text:'"The game was exciting. The players were fast. The crowd was really loud. The team won the game."',correct:false,explain:'Still all the same medium length — no rhythm change.'}
+      ]
+    },
+    {
+      original:'"She studied. She read her notes. She did practice questions. She went to bed. She felt ready."',
+      options:[
+        {text:'"She studied hard all evening, reading her notes twice and working through every practice question until she was sure she understood. Finally, she went to bed. She was ready."',correct:true,explain:'One long sentence shows the effort, then short ones land the confidence.'},
+        {text:'"She studied and read her notes and did practice questions and then went to bed and felt ready."',correct:false,explain:'One long run-on — no rhythm or contrast.'},
+        {text:'"She studied for hours. She read all her notes carefully. She did many practice questions. She went to bed late. She felt quite ready."',correct:false,explain:'All medium-length — still no variety.'}
+      ]
+    }
+  ],
+  review:[
+    {q:"What do short sentences do?",a:"Create punch, drama, emphasis, and powerful pauses. Best used after long sentences for contrast.",color:"rc-coral"},
+    {q:"What do long sentences do?",a:"Create flow, build detail, show action sequences, and combine related ideas smoothly.",color:"rc-teal"},
+    {q:"What is the secret weapon?",a:"A short sentence right after a long one. The contrast creates maximum dramatic impact.",color:"rc-yellow"},
+    {q:"What are the three length categories?",a:"Short = 1–6 words. Medium = 7–14 words. Long = 15+ words. A good paragraph mixes all three.",color:"rc-blue"},
+    {q:"How do you check your sentence lengths?",a:"Read your writing aloud. If it sounds flat with no highs or lows, you need more length variety.",color:"rc-teal"}
+  ]
+};
+
+let currentSlide=1;const totalSlides=11;
+let stars=0,activitiesCompleted=0,mcAnswered={};
+let lenChecked=false,revChecked=false,lenSelections={},revSelections={};
+
+function showSlide(n){document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));const t=document.querySelector(`[data-slide="${n}"]`);if(t)t.classList.add('active');document.getElementById('prevBtn').disabled=(n===1);document.getElementById('nextBtn').disabled=(n===totalSlides);document.getElementById('slideNum').textContent=`${n} / ${totalSlides}`;document.getElementById('progressFill').style.width=`${(n/totalSlides)*100}%`;if(n===totalSlides)showCelebration();}
+function changeSlide(d){const n=currentSlide+d;if(n>=1&&n<=totalSlides){currentSlide=n;showSlide(n);}}
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();changeSlide(1);}if(e.key==='ArrowLeft'){e.preventDefault();changeSlide(-1);}});
+
+function addStars(n){stars+=n;document.getElementById('starCount').textContent=stars;const c=document.getElementById('starCounter');c.classList.remove('animate');void c.offsetWidth;c.classList.add('animate');}
+function fireConfetti(){const colors=['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#22C55E','#A855F7'];for(let i=0;i<60;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'vw';p.style.top='-10px';p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.borderRadius=Math.random()>.5?'50%':'2px';p.style.width=(6+Math.random()*8)+'px';p.style.height=(6+Math.random()*8)+'px';p.style.animationDuration=(2+Math.random()*2)+'s';p.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),4000);}}
+
+function checkMC(el,id,correct){if(mcAnswered[id])return;mcAnswered[id]=true;document.querySelectorAll(`#${id} .mc-opt`).forEach(o=>{o.classList.add('disabled');if(o===el)o.classList.add(correct?'correct':'incorrect');const oc=o.getAttribute('onclick');if(oc&&oc.includes('true'))o.classList.add('correct');});const fb=document.getElementById(id+'Fb');fb.textContent=correct?'That\'s right!':'Not quite. The correct answer is highlighted.';fb.className='mc-feedback show '+(correct?'success':'retry');if(correct){addStars(1);activitiesCompleted++;}}
+
+function initLen(){
+  const c=document.getElementById('lenExercise');
+  L.lenItems.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='len-item';
+    d.innerHTML=`<div><div class="len-sentence">${item.sentence}</div><div class="len-word-count">(${item.words} words)</div></div><div class="len-btns" id="lenBtns${i}">${['S','M','L'].map(l=>`<div class="len-btn" data-val="${l}" onclick="selectLen(${i},'${l}')">${l}</div>`).join('')}</div>`;
+    c.appendChild(d);
+  });
+}
+function selectLen(i,val){if(lenChecked)return;document.querySelectorAll(`#lenBtns${i} .len-btn`).forEach(b=>b.classList.remove('selected'));document.querySelector(`#lenBtns${i} [data-val="${val}"]`).classList.add('selected');lenSelections[i]=val;}
+function checkLen(){
+  if(lenChecked)return;let allFilled=true,allCorrect=true;
+  L.lenItems.forEach((item,i)=>{if(!lenSelections[i]){allFilled=false;return;}document.querySelectorAll(`#lenBtns${i} .len-btn`).forEach(b=>{b.classList.add('disabled');if(b.dataset.val===item.answer)b.classList.add('correct');if(b.classList.contains('selected')&&b.dataset.val!==item.answer)b.classList.add('incorrect');});if(lenSelections[i]!==item.answer)allCorrect=false;});
+  const fb=document.getElementById('lenFeedback');
+  if(!allFilled){fb.textContent='Label every sentence first.';fb.className='len-feedback show retry';return;}
+  lenChecked=true;
+  if(allCorrect){fb.textContent='All correct! You can spot short, medium, and long sentences. ⭐';fb.className='len-feedback show success';addStars(2);activitiesCompleted++;fireConfetti();}
+  else{fb.textContent='Some need another look. Check the word counts and try to remember: S = 1–6, M = 7–14, L = 15+.';fb.className='len-feedback show retry';activitiesCompleted++;}
+}
+
+function initRev(){
+  const c=document.getElementById('revExercise');
+  L.revItems.forEach((item,i)=>{
+    const shuffled=item.options.map((o,oi)=>({...o,idx:oi})).sort(()=>Math.random()-.5);
+    const d=document.createElement('div');d.className='rev-item';
+    d.innerHTML=`<div class="rev-original-label">Original (all same length):</div><div class="rev-original">${item.original}</div><div class="rev-options" id="revOpts${i}">${shuffled.map((o,si)=>`<div class="rev-opt" data-correct="${o.correct}" data-explain="${o.explain}" onclick="selectRev(${i},this)">${o.text}</div>`).join('')}</div><div class="rev-explain" id="revExp${i}"></div>`;
+    c.appendChild(d);
+  });
+}
+function selectRev(i,el){if(revChecked)return;document.querySelectorAll(`#revOpts${i} .rev-opt`).forEach(o=>o.classList.remove('selected'));el.classList.add('selected');revSelections[i]=el;}
+function checkRev(){
+  if(revChecked)return;let allFilled=true,allCorrect=true;
+  L.revItems.forEach((item,i)=>{
+    if(!revSelections[i]){allFilled=false;return;}
+    document.querySelectorAll(`#revOpts${i} .rev-opt`).forEach(o=>{o.classList.add('disabled');if(o.dataset.correct==='true')o.classList.add('correct');if(o.classList.contains('selected')&&o.dataset.correct!=='true')o.classList.add('incorrect');});
+    if(revSelections[i].dataset.correct!=='true')allCorrect=false;
+    const exp=document.getElementById('revExp'+i);
+    exp.textContent=revSelections[i].dataset.explain;exp.classList.add('show');
+  });
+  const fb=document.getElementById('revFeedback');
+  if(!allFilled){fb.textContent='Choose a version for each set first.';fb.className='rev-feedback show retry';return;}
+  revChecked=true;
+  if(allCorrect){fb.textContent='All correct! You have a great ear for rhythm. ⭐';fb.className='rev-feedback show success';addStars(2);activitiesCompleted++;fireConfetti();}
+  else{fb.textContent='Check the explanations to see why the best version works.';fb.className='rev-feedback show retry';activitiesCompleted++;}
+}
+
+function initReview(){const g=document.getElementById('reviewGrid');L.review.forEach(r=>{const c=document.createElement('div');c.className='review-card '+r.color;c.innerHTML=`<div><div class="rc-q">${r.q}</div><div class="rc-a">${r.a}</div></div>`;c.onclick=()=>c.classList.toggle('flipped');g.appendChild(c);});}
+function showCelebration(){document.getElementById('celebStats').innerHTML=`<div class="celeb-stat"><div class="celeb-stat-val">${stars}</div><div class="celeb-stat-label">Stars Earned</div></div><div class="celeb-stat"><div class="celeb-stat-val">${activitiesCompleted}</div><div class="celeb-stat-label">Activities Completed</div></div>`;setTimeout(fireConfetti,400);}
+
+function startOver(){
+  stars=0;activitiesCompleted=0;mcAnswered={};lenChecked=false;revChecked=false;lenSelections={};revSelections={};
+  document.getElementById('starCount').textContent='0';
+  ['mc1','mc2'].forEach(id=>{document.querySelectorAll(`#${id} .mc-opt`).forEach(o=>o.classList.remove('correct','incorrect','disabled'));const fb=document.getElementById(id+'Fb');fb.className='mc-feedback';fb.textContent='';});
+  document.getElementById('lenExercise').innerHTML='';initLen();document.getElementById('lenFeedback').className='len-feedback';
+  document.getElementById('revExercise').innerHTML='';initRev();document.getElementById('revFeedback').className='rev-feedback';
+  document.querySelectorAll('.review-card').forEach(c=>c.classList.remove('flipped'));
+  currentSlide=1;showSlide(1);
+}
+
+initLen();initRev();initReview();showSlide(1);
+</script>
+</body>
+</html>

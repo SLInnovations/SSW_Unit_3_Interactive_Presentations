@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 5: Sentence Combining</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--coral:#E66B5D;--coral-pale:#FDF0EE;--teal:#3A7D8C;--light-blue:#D7ECF0;--blue-pale:#EBF5F8;--yellow:#F3D25B;--yellow-dark:#9E7F0A;--white:#FFFFFF;--dark:#1A1A2E;--gray:#6B7280;--success:#22C55E;--error:#EF4444;--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#F8FAFC;color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+
+.progress-bar{height:6px;background:#E5E7EB;position:fixed;top:0;left:0;right:0;z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--coral));transition:width .4s ease}
+
+.star-counter{position:fixed;top:16px;right:20px;z-index:100;background:var(--white);border-radius:24px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:var(--yellow-dark);display:flex;align-items:center;gap:6px}
+.star-counter .star-icon{font-size:20px}
+.star-counter.animate .star-icon{animation:starPop .5s ease}
+@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+.slide-container{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px 100px}
+.slide{display:none;max-width:900px;width:100%;min-height:480px;background:var(--white);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:48px;animation:fadeIn .4s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.slide-header{margin-bottom:10px}
+.phase-label{display:inline-block;font-family:'Open Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.slide-title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.slide-subtitle{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px}
+.slide-text{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7;color:var(--dark)}
+
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid #E5E7EB;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.nav-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;padding:10px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.prev{background:var(--blue-pale);color:var(--teal)}
+.nav-btn.prev:hover:not(:disabled){background:var(--light-blue)}
+.nav-btn.next{background:var(--coral);color:var(--white)}
+.nav-btn.next:hover:not(:disabled){background:#D45A4D}
+.slide-counter{font-family:'Open Sans',sans-serif;font-size:13px;color:var(--gray)}
+
+/* Title */
+.title-slide{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.title-brand{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.title-unit{font-family:'Poppins',sans-serif;font-size:14px;color:var(--gray);margin-bottom:20px}
+.title-main{font-family:'Poppins',sans-serif;font-size:36px;font-weight:700;color:var(--dark);margin-bottom:8px;line-height:1.2}
+.title-sub{font-family:'Poppins',sans-serif;font-size:18px;color:var(--coral);margin-bottom:28px}
+.title-goal{background:var(--blue-pale);border-radius:var(--radius);padding:16px 28px;font-family:'Poppins',sans-serif;font-size:15px;color:var(--teal);max-width:620px}
+.title-goal strong{font-weight:600}
+
+/* Concept Intro */
+.concept-intro{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.concept-word{font-family:'Poppins',sans-serif;font-size:56px;font-weight:700;color:var(--teal);margin-bottom:12px}
+.concept-tag{font-family:'Poppins',sans-serif;font-size:20px;color:var(--coral)}
+
+/* MC */
+.mc-options{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.mc-opt{font-family:'Poppins',sans-serif;font-size:15px;padding:14px 20px;border:2px solid #E5E7EB;border-radius:var(--radius);cursor:pointer;transition:all .2s;background:var(--white);text-align:left}
+.mc-opt:hover:not(.disabled){border-color:var(--teal);background:var(--blue-pale)}
+.mc-opt.correct{border-color:var(--success);background:#F0FDF4}
+.mc-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}
+.mc-opt.disabled{cursor:default}
+.mc-feedback{margin-top:14px;font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);display:none}
+.mc-feedback.show{display:block}
+.mc-feedback.success{background:#F0FDF4;color:#166534}
+.mc-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Before/After Compare */
+.compare-box{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-side{border-radius:var(--radius);padding:20px}
+.compare-label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.compare-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.8}
+
+/* Strategy Cards */
+.strategy-cards{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.strat-card{border-radius:var(--radius);padding:18px;display:grid;grid-template-columns:50px 1fr;gap:14px;align-items:start}
+.strat-num{font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;color:var(--white);background:var(--teal);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.strat-content{}
+.strat-name{font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;margin-bottom:4px}
+.strat-example{font-family:'Poppins',sans-serif;font-size:13px;line-height:1.6;color:var(--gray)}
+.strat-example strong{color:var(--dark)}
+
+/* Strategy ID Exercise */
+.strat-exercise{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.strat-item{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.strat-sentences{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.6;margin-bottom:10px}
+.strat-options{display:flex;gap:8px;flex-wrap:wrap}
+.strat-opt{font-family:'Poppins',sans-serif;font-size:13px;padding:6px 14px;border:2px solid #CBD5E1;border-radius:20px;background:var(--white);cursor:pointer;transition:all .2s}
+.strat-opt:hover:not(.disabled){border-color:var(--teal);background:var(--light-blue)}
+.strat-opt.selected{border-color:var(--teal);background:var(--light-blue);font-weight:600}
+.strat-opt.correct{border-color:var(--success);background:#F0FDF4}
+.strat-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}
+.strat-opt.disabled{cursor:default}
+.strat-explain{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:6px;display:none;font-style:italic}
+.strat-explain.show{display:block}
+.strat-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.strat-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.strat-check-btn:hover{background:#D45A4D}
+.strat-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.strat-feedback.show{display:block}
+.strat-feedback.success{background:#F0FDF4;color:#166534}
+.strat-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Sentence Combiner */
+.combiner-exercise{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+.combiner-item{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.combiner-label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--teal);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.combiner-original{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.6;margin-bottom:10px;color:var(--dark)}
+.combiner-hint{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-bottom:8px;font-style:italic}
+.combiner-options{display:flex;flex-direction:column;gap:8px}
+.combiner-opt{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 16px;border:2px solid #CBD5E1;border-radius:var(--radius);background:var(--white);cursor:pointer;transition:all .2s;text-align:left}
+.combiner-opt:hover:not(.disabled){border-color:var(--coral);background:var(--coral-pale)}
+.combiner-opt.selected{border-color:var(--coral);background:var(--coral-pale);font-weight:600}
+.combiner-opt.correct{border-color:var(--success);background:#F0FDF4}
+.combiner-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}
+.combiner-opt.disabled{cursor:default}
+.combiner-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.combiner-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--teal);color:var(--white);transition:all .2s}
+.combiner-check-btn:hover{background:#2E6470}
+.combiner-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.combiner-feedback.show{display:block}
+.combiner-feedback.success{background:#F0FDF4;color:#166534}
+.combiner-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Tricky */
+.tricky-card{background:#FEF3C7;border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.tricky-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--yellow-dark);margin-bottom:8px}
+.tricky-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.7}
+.tricky-example{font-family:'Poppins',sans-serif;font-size:14px;background:var(--white);border-radius:10px;padding:12px 16px;margin-top:10px;line-height:1.6}
+
+/* Review Cards */
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.review-card{border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .3s;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center}
+.review-card .rc-q{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600}
+.review-card .rc-a{font-family:'Poppins',sans-serif;font-size:14px;display:none;line-height:1.6}
+.review-card.flipped .rc-q{display:none}
+.review-card.flipped .rc-a{display:block}
+.rc-teal{background:var(--blue-pale);color:var(--teal)}.rc-teal.flipped{background:var(--light-blue)}
+.rc-coral{background:var(--coral-pale);color:var(--coral)}.rc-coral.flipped{background:#FADCD8}
+.rc-yellow{background:#FEF3C7;color:var(--yellow-dark)}.rc-yellow.flipped{background:#FDE68A}
+.rc-blue{background:#DBEAFE;color:#1E40AF}.rc-blue.flipped{background:#BFDBFE}
+
+/* Celebration */
+.celebration{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.celeb-emoji{font-size:64px;margin-bottom:16px}
+.celeb-title{font-family:'Poppins',sans-serif;font-size:32px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.celeb-sub{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px;max-width:500px}
+.celeb-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.celeb-stat{background:var(--blue-pale);border-radius:var(--radius);padding:16px 24px;text-align:center;min-width:120px}
+.celeb-stat-val{font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--teal)}
+.celeb-stat-label{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:4px}
+.start-over-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);padding:12px 32px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.start-over-btn:hover{background:#D45A4D}
+
+.confetti-piece{position:fixed;width:10px;height:10px;z-index:1000;pointer-events:none;animation:confettiFall 2.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+
+.copyright{text-align:center;font-size:11px;color:#999;padding:8px;font-family:'Open Sans',sans-serif;position:fixed;bottom:60px;left:0;right:0}
+
+@media(max-width:700px){
+  .slide{padding:28px 20px}.slide-title{font-size:22px}.concept-word{font-size:40px}.title-main{font-size:28px}
+  .review-grid{grid-template-columns:1fr}.compare-box{grid-template-columns:1fr}
+  .celeb-stats{flex-direction:column;align-items:center}
+  .strat-card{grid-template-columns:40px 1fr;gap:10px}
+}
+@media(max-width:500px){.slide{padding:20px 14px}.slide-title{font-size:19px}.concept-word{font-size:32px}}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="star-counter" id="starCounter"><span class="star-icon">⭐</span><span id="starCount">0</span></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="1">
+  <div class="title-slide">
+    <div class="title-brand">Structured Steps to Writing</div>
+    <div class="title-unit">Unit 3: Sentence Variety &amp; Types &bull; Lesson 5</div>
+    <div class="title-main">Sentence Combining</div>
+    <div class="title-sub">Turning Choppy into Smooth</div>
+    <div class="title-goal"><strong>Today's Goal:</strong> I can combine short, choppy sentences into longer, smoother sentences using three combining strategies.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: CONCEPT INTRO -->
+<div class="slide" data-slide="2">
+  <div class="concept-intro">
+    <div class="concept-word">Sentence<br>Combining</div>
+    <div class="concept-tag">Short + Short = Choppy. Combined = Smooth.</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: REVIEW (Lesson 4 — Compound Sentences) -->
+<div class="slide" data-slide="3">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Review: Compound Sentences</div>
+  <div class="slide-subtitle">Let's remember what we learned in Lesson 4.</div>
+  <div class="slide-text" style="margin-bottom:14px;">What goes <strong>before</strong> the FANBOYS conjunction when you join two complete sentences?</div>
+  <div class="mc-options" id="mc1">
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">A) A period</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',true)">B) A comma</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">C) A semicolon</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">D) Nothing — just the conjunction</div>
+  </div>
+  <div class="mc-feedback" id="mc1Fb"></div>
+</div>
+
+<!-- SLIDE 4: WHAT IS CHOPPY WRITING? — Before/After -->
+<div class="slide" data-slide="4">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">What Is Choppy Writing?</div>
+  <div class="slide-subtitle">Too many short sentences in a row sounds robotic.</div>
+  <div class="compare-box">
+    <div class="compare-side" style="background:var(--coral-pale);">
+      <div class="compare-label" style="color:var(--coral);">✗ Choppy</div>
+      <div class="compare-text">"I went to the store. I bought apples. I bought bananas. I bought milk. I came home. I put the groceries away."</div>
+    </div>
+    <div class="compare-side" style="background:#D1FAE5;">
+      <div class="compare-label" style="color:#065F46;">✓ Smooth</div>
+      <div class="compare-text">"I went to the store and bought apples, bananas, and milk. Then I came home and put the groceries away."</div>
+    </div>
+  </div>
+  <div style="background:var(--blue-pale);border-radius:var(--radius);padding:14px;text-align:center;margin-top:10px;">
+    <span style="font-family:'Poppins',sans-serif;font-size:14px;color:var(--teal);font-weight:600;">Same information, much better flow. Good writers combine related ideas.</span>
+  </div>
+</div>
+
+<!-- SLIDE 5: THREE STRATEGIES -->
+<div class="slide" data-slide="5">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Three Combining Strategies</div>
+  <div class="slide-subtitle">Choose the right tool for the job.</div>
+  <div class="strategy-cards">
+    <div class="strat-card" style="background:var(--blue-pale);">
+      <div class="strat-num">1</div>
+      <div class="strat-content">
+        <div class="strat-name" style="color:var(--teal);">Use a Conjunction</div>
+        <div class="strat-example">"I was tired. I kept working." →<br><strong>"I was tired, but I kept working."</strong><br>Join two complete ideas with comma + FANBOYS.</div>
+      </div>
+    </div>
+    <div class="strat-card" style="background:var(--coral-pale);">
+      <div class="strat-num" style="background:var(--coral);">2</div>
+      <div class="strat-content">
+        <div class="strat-name" style="color:var(--coral);">Combine Repeated Parts</div>
+        <div class="strat-example">"I bought apples. I bought bananas." →<br><strong>"I bought apples and bananas."</strong><br>Remove the repeated words, connect with AND.</div>
+      </div>
+    </div>
+    <div class="strat-card" style="background:#FEF3C7;">
+      <div class="strat-num" style="background:var(--yellow-dark);">3</div>
+      <div class="strat-content">
+        <div class="strat-name" style="color:var(--yellow-dark);">Move Details into One Sentence</div>
+        <div class="strat-example">"The dog was big. The dog was brown. The dog barked." →<br><strong>"The big, brown dog barked."</strong><br>Combine descriptions into one sentence.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: QUICK CHECK -->
+<div class="slide" data-slide="6">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Check</div>
+  <div class="slide-subtitle">Which strategy fits best?</div>
+  <div class="slide-text" style="margin-bottom:14px;">"The cat was fluffy. The cat was orange." — What is the best way to combine these?</div>
+  <div class="mc-options" id="mc2">
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">A) Use a conjunction: "The cat was fluffy, and the cat was orange."</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">B) Combine repeated parts: "The cat was fluffy and orange."</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',true)">C) Move details into one sentence: "The fluffy, orange cat..."</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">D) Leave them as two sentences.</div>
+  </div>
+  <div class="mc-feedback" id="mc2Fb"></div>
+</div>
+
+<!-- SLIDE 7: PRACTICE — Identify the Strategy -->
+<div class="slide" data-slide="7">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Which Strategy?</div>
+  <div class="slide-subtitle">Read each pair and choose the best combining strategy.</div>
+  <div class="strat-exercise" id="stratExercise"></div>
+  <div class="strat-controls"><button class="strat-check-btn" onclick="checkStrat()">Check My Work</button></div>
+  <div class="strat-feedback" id="stratFeedback"></div>
+</div>
+
+<!-- SLIDE 8: PRACTICE — Choose the Best Combined Sentence -->
+<div class="slide" data-slide="8">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Pick the Smoothest Version</div>
+  <div class="slide-subtitle">Choose the best combined sentence for each group.</div>
+  <div class="combiner-exercise" id="combinerExercise"></div>
+  <div class="combiner-controls"><button class="combiner-check-btn" onclick="checkCombiner()">Check My Work</button></div>
+  <div class="combiner-feedback" id="combinerFeedback"></div>
+</div>
+
+<!-- SLIDE 9: TRICKY — When NOT to Combine -->
+<div class="slide" data-slide="9">
+  <div class="slide-header"><span class="phase-label" style="background:#FEF3C7;color:var(--yellow-dark);">Tricky</span></div>
+  <div class="slide-title" style="color:var(--yellow-dark);">When NOT to Combine</div>
+  <div class="slide-subtitle">Sometimes short sentences are powerful on purpose.</div>
+  <div class="tricky-card">
+    <div class="tricky-title">🎯 Short Sentences Create Impact</div>
+    <div class="tricky-example">
+      <strong>Powerful:</strong> "The room fell silent. Everyone stared. Nobody moved."<br><br>
+      <span style="color:var(--error);">Weaker:</span> "The room fell silent, and everyone stared, and nobody moved."<br><br>
+      <span style="font-size:12px;color:var(--gray);">The short sentences create tension and drama. Combining them removes the impact.</span>
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">⚖️ The Balance Rule</div>
+    <div class="tricky-text">Good writing uses a <strong>mix</strong> of sentence lengths. Combine to fix choppiness, but keep short sentences when they add emphasis or drama. Not every sentence needs to be long.</div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">🚫 Watch Out for Over-Combining</div>
+    <div class="tricky-example">
+      <span style="color:var(--error);">Too much:</span> "I went to the store and bought apples and bananas and milk and then I came home and put everything away and started making dinner."<br><br>
+      <span style="font-size:12px;color:var(--gray);">This sentence tries to do too much. Break it into 2 or 3 sentences instead.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: REVIEW CARDS -->
+<div class="slide" data-slide="10">
+  <div class="slide-header"><span class="phase-label" style="background:var(--blue-pale);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Review — Click to Reveal</div>
+  <div class="slide-subtitle">Click each card to check your understanding.</div>
+  <div class="review-grid" id="reviewGrid"></div>
+</div>
+
+<!-- SLIDE 11: CELEBRATION -->
+<div class="slide" data-slide="11">
+  <div class="celebration" id="celebSlide">
+    <div class="celeb-emoji">🎉</div>
+    <div class="celeb-title">Lesson Complete!</div>
+    <div class="celeb-sub">You can now turn choppy writing into smooth, flowing sentences using three combining strategies.</div>
+    <div class="celeb-stats" id="celebStats"></div>
+    <button class="start-over-btn" onclick="startOver()">Start Over</button>
+  </div>
+</div>
+
+</div>
+
+<div class="copyright">© 2026 Structured Steps to Writing. All rights reserved.</div>
+
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="slideNum">1 / 11</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA OBJECT
+// ═══════════════════════════════════════
+const L = {
+  stratItems: [
+    { sentences: '"We wanted to leave early. The traffic was terrible."', answer: 'conjunction', explain: 'Two complete, related ideas — join with a conjunction: "We wanted to leave early, for the traffic was terrible."' },
+    { sentences: '"She likes to read books. She likes to write stories."', answer: 'repeated', explain: '"She likes to" is repeated — combine the different parts: "She likes to read books and write stories."' },
+    { sentences: '"The house was old. The house was beautiful. The house stood on the corner."', answer: 'details', explain: 'Multiple descriptions of the same noun — move details: "The old, beautiful house stood on the corner."' },
+    { sentences: '"He plays guitar. He plays drums. He plays piano."', answer: 'repeated', explain: '"He plays" is repeated three times — combine: "He plays guitar, drums, and piano."' },
+    { sentences: '"The weather was cold. We still went for a walk."', answer: 'conjunction', explain: 'Contrasting complete ideas — join with a conjunction: "The weather was cold, but we still went for a walk."' }
+  ],
+  combinerItems: [
+    {
+      original: '"My sister is smart. My sister is funny."',
+      options: [
+        { text: '"My sister is smart, and my sister is funny."', correct: false },
+        { text: '"My smart sister is funny."', correct: false },
+        { text: '"My sister is smart and funny."', correct: true }
+      ]
+    },
+    {
+      original: '"The students studied hard. They passed the test."',
+      options: [
+        { text: '"The students studied hard, so they passed the test."', correct: true },
+        { text: '"The students studied hard they passed the test."', correct: false },
+        { text: '"The hard students passed the studying test."', correct: false }
+      ]
+    },
+    {
+      original: '"She packed her lunch. She packed her water bottle. She packed her notebook."',
+      options: [
+        { text: '"She packed her lunch, and she packed her water bottle, and she packed her notebook."', correct: false },
+        { text: '"She packed her lunch, her water bottle, and her notebook."', correct: true },
+        { text: '"She packed her lunch she packed everything."', correct: false }
+      ]
+    }
+  ],
+  review: [
+    { q: "What causes choppy writing?", a: "Too many short, simple sentences in a row — especially when they repeat words.", color: "rc-teal" },
+    { q: "What are the three combining strategies?", a: "1) Use a conjunction, 2) Combine repeated parts, 3) Move details into one sentence.", color: "rc-coral" },
+    { q: "When should you NOT combine?", a: "When short sentences are powerful on purpose — they create tension, emphasis, or drama.", color: "rc-yellow" },
+    { q: "What is over-combining?", a: "Joining too many ideas into one long, confusing sentence. A mix of lengths sounds best.", color: "rc-blue" },
+    { q: "How do you combine repeated parts?", a: "Keep the shared words once and connect the different parts with AND or OR.", color: "rc-teal" }
+  ]
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let currentSlide = 1;
+const totalSlides = 11;
+let stars = 0;
+let activitiesCompleted = 0;
+let mcAnswered = {};
+let stratChecked = false;
+let combinerChecked = false;
+let stratSelections = {};
+let combinerSelections = {};
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showSlide(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  const t = document.querySelector(`[data-slide="${n}"]`);
+  if (t) t.classList.add('active');
+  document.getElementById('prevBtn').disabled = (n === 1);
+  document.getElementById('nextBtn').disabled = (n === totalSlides);
+  document.getElementById('slideNum').textContent = `${n} / ${totalSlides}`;
+  document.getElementById('progressFill').style.width = `${(n / totalSlides) * 100}%`;
+  if (n === totalSlides) showCelebration();
+}
+function changeSlide(dir) { const next = currentSlide + dir; if (next >= 1 && next <= totalSlides) { currentSlide = next; showSlide(currentSlide); } }
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+});
+
+// ═══════════════════════════════════════
+// STARS & CONFETTI
+// ═══════════════════════════════════════
+function addStars(n) { stars += n; document.getElementById('starCount').textContent = stars; const c = document.getElementById('starCounter'); c.classList.remove('animate'); void c.offsetWidth; c.classList.add('animate'); }
+function fireConfetti() {
+  const colors = ['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#22C55E','#A855F7'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div'); p.className = 'confetti-piece';
+    p.style.left = Math.random()*100+'vw'; p.style.top = '-10px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.borderRadius = Math.random()>.5?'50%':'2px';
+    p.style.width = (6+Math.random()*8)+'px'; p.style.height = (6+Math.random()*8)+'px';
+    p.style.animationDuration = (2+Math.random()*2)+'s'; p.style.animationDelay = Math.random()*.5+'s';
+    document.body.appendChild(p); setTimeout(()=>p.remove(), 4000);
+  }
+}
+
+// ═══════════════════════════════════════
+// MULTIPLE CHOICE
+// ═══════════════════════════════════════
+function checkMC(el, id, correct) {
+  if (mcAnswered[id]) return;
+  mcAnswered[id] = true;
+  document.querySelectorAll(`#${id} .mc-opt`).forEach(o => {
+    o.classList.add('disabled');
+    if (o === el) o.classList.add(correct ? 'correct' : 'incorrect');
+    const oc = o.getAttribute('onclick');
+    if (oc && oc.includes('true')) o.classList.add('correct');
+  });
+  const fb = document.getElementById(id+'Fb');
+  fb.textContent = correct ? 'That\'s right!' : 'Not quite. The correct answer is highlighted.';
+  fb.className = 'mc-feedback show ' + (correct ? 'success' : 'retry');
+  if (correct) { addStars(1); activitiesCompleted++; }
+}
+
+// ═══════════════════════════════════════
+// STRATEGY IDENTIFICATION
+// ═══════════════════════════════════════
+function initStrat() {
+  const container = document.getElementById('stratExercise');
+  const labels = { conjunction: '1. Use a Conjunction', repeated: '2. Combine Repeated Parts', details: '3. Move Details' };
+  L.stratItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'strat-item';
+    div.innerHTML = `
+      <div class="strat-sentences">${item.sentences}</div>
+      <div class="strat-options" id="stratOpts${i}">
+        ${Object.entries(labels).map(([k,v]) => `<div class="strat-opt" data-val="${k}" onclick="selectStrat(${i},'${k}')">${v}</div>`).join('')}
+      </div>
+      <div class="strat-explain" id="stratExp${i}">${item.explain}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+function selectStrat(i, val) {
+  if (stratChecked) return;
+  document.querySelectorAll(`#stratOpts${i} .strat-opt`).forEach(o => o.classList.remove('selected'));
+  document.querySelector(`#stratOpts${i} [data-val="${val}"]`).classList.add('selected');
+  stratSelections[i] = val;
+}
+function checkStrat() {
+  if (stratChecked) return;
+  let allFilled = true, allCorrect = true;
+  L.stratItems.forEach((item, i) => {
+    if (!stratSelections[i]) { allFilled = false; return; }
+    document.querySelectorAll(`#stratOpts${i} .strat-opt`).forEach(o => {
+      o.classList.add('disabled');
+      if (o.dataset.val === item.answer) o.classList.add('correct');
+      if (o.classList.contains('selected') && o.dataset.val !== item.answer) o.classList.add('incorrect');
+    });
+    if (stratSelections[i] !== item.answer) allCorrect = false;
+    document.getElementById('stratExp'+i).classList.add('show');
+  });
+  const fb = document.getElementById('stratFeedback');
+  if (!allFilled) { fb.textContent = 'Select a strategy for each pair first.'; fb.className = 'strat-feedback show retry'; return; }
+  stratChecked = true;
+  if (allCorrect) {
+    fb.textContent = 'All correct! You know exactly which strategy to use. ⭐';
+    fb.className = 'strat-feedback show success';
+    addStars(2); activitiesCompleted++;
+    fireConfetti();
+  } else {
+    fb.textContent = 'Some need another look. Check the explanations above.';
+    fb.className = 'strat-feedback show retry';
+    activitiesCompleted++;
+  }
+}
+
+// ═══════════════════════════════════════
+// COMBINER — Pick Best Combined Sentence
+// ═══════════════════════════════════════
+function initCombiner() {
+  const container = document.getElementById('combinerExercise');
+  L.combinerItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'combiner-item';
+    // Shuffle options
+    const shuffled = item.options.map((o, oi) => ({...o, idx: oi})).sort(() => Math.random() - 0.5);
+    div.innerHTML = `
+      <div class="combiner-label">Original</div>
+      <div class="combiner-original">${item.original}</div>
+      <div class="combiner-hint">Which combined version is best?</div>
+      <div class="combiner-options" id="combOpts${i}">
+        ${shuffled.map(o => `<div class="combiner-opt" data-correct="${o.correct}" onclick="selectCombiner(${i},this)">${o.text}</div>`).join('')}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+function selectCombiner(i, el) {
+  if (combinerChecked) return;
+  document.querySelectorAll(`#combOpts${i} .combiner-opt`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  combinerSelections[i] = el;
+}
+function checkCombiner() {
+  if (combinerChecked) return;
+  let allFilled = true, allCorrect = true;
+  L.combinerItems.forEach((item, i) => {
+    if (!combinerSelections[i]) { allFilled = false; return; }
+    document.querySelectorAll(`#combOpts${i} .combiner-opt`).forEach(o => {
+      o.classList.add('disabled');
+      if (o.dataset.correct === 'true') o.classList.add('correct');
+      if (o.classList.contains('selected') && o.dataset.correct !== 'true') o.classList.add('incorrect');
+    });
+    if (combinerSelections[i].dataset.correct !== 'true') allCorrect = false;
+  });
+  const fb = document.getElementById('combinerFeedback');
+  if (!allFilled) { fb.textContent = 'Choose the best version for each group first.'; fb.className = 'combiner-feedback show retry'; return; }
+  combinerChecked = true;
+  if (allCorrect) {
+    fb.textContent = 'All correct! You picked the smoothest versions. ⭐';
+    fb.className = 'combiner-feedback show success';
+    addStars(2); activitiesCompleted++;
+    fireConfetti();
+  } else {
+    fb.textContent = 'Some need another look. The best answers are highlighted in green.';
+    fb.className = 'combiner-feedback show retry';
+    activitiesCompleted++;
+  }
+}
+
+// ═══════════════════════════════════════
+// REVIEW CARDS
+// ═══════════════════════════════════════
+function initReview() {
+  const grid = document.getElementById('reviewGrid');
+  L.review.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'review-card ' + r.color;
+    card.innerHTML = `<div><div class="rc-q">${r.q}</div><div class="rc-a">${r.a}</div></div>`;
+    card.onclick = () => card.classList.toggle('flipped');
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════
+// CELEBRATION
+// ═══════════════════════════════════════
+function showCelebration() {
+  document.getElementById('celebStats').innerHTML = `
+    <div class="celeb-stat"><div class="celeb-stat-val">${stars}</div><div class="celeb-stat-label">Stars Earned</div></div>
+    <div class="celeb-stat"><div class="celeb-stat-val">${activitiesCompleted}</div><div class="celeb-stat-label">Activities Completed</div></div>
+  `;
+  setTimeout(fireConfetti, 400);
+}
+
+// ═══════════════════════════════════════
+// START OVER
+// ═══════════════════════════════════════
+function startOver() {
+  stars = 0; activitiesCompleted = 0; mcAnswered = {};
+  stratChecked = false; combinerChecked = false;
+  stratSelections = {}; combinerSelections = {};
+  document.getElementById('starCount').textContent = '0';
+  ['mc1','mc2'].forEach(id => {
+    document.querySelectorAll(`#${id} .mc-opt`).forEach(o => o.classList.remove('correct','incorrect','disabled'));
+    const fb = document.getElementById(id+'Fb'); fb.className = 'mc-feedback'; fb.textContent = '';
+  });
+  // Rebuild strategy exercise
+  document.getElementById('stratExercise').innerHTML = '';
+  initStrat();
+  document.getElementById('stratFeedback').className = 'strat-feedback';
+  // Rebuild combiner
+  document.getElementById('combinerExercise').innerHTML = '';
+  initCombiner();
+  document.getElementById('combinerFeedback').className = 'combiner-feedback';
+  // Reset review
+  document.querySelectorAll('.review-card').forEach(c => c.classList.remove('flipped'));
+  currentSlide = 1; showSlide(1);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+initStrat();
+initCombiner();
+initReview();
+showSlide(1);
+</script>
+</body>
+</html>

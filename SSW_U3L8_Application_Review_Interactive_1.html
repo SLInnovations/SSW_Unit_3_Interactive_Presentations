@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 8: Application & Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--coral:#E66B5D;--coral-pale:#FDF0EE;--teal:#3A7D8C;--light-blue:#D7ECF0;--blue-pale:#EBF5F8;--yellow:#F3D25B;--yellow-dark:#9E7F0A;--white:#FFFFFF;--dark:#1A1A2E;--gray:#6B7280;--success:#22C55E;--error:#EF4444;--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#F8FAFC;color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+.progress-bar{height:6px;background:#E5E7EB;position:fixed;top:0;left:0;right:0;z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--coral));transition:width .4s ease}
+.star-counter{position:fixed;top:16px;right:20px;z-index:100;background:var(--white);border-radius:24px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:var(--yellow-dark);display:flex;align-items:center;gap:6px}
+.star-counter .star-icon{font-size:20px}
+.star-counter.animate .star-icon{animation:starPop .5s ease}
+@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+.slide-container{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px 100px}
+.slide{display:none;max-width:900px;width:100%;min-height:480px;background:var(--white);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:48px;animation:fadeIn .4s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.slide-header{margin-bottom:10px}
+.phase-label{display:inline-block;font-family:'Open Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.slide-title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.slide-subtitle{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px}
+.slide-text{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid #E5E7EB;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.nav-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;padding:10px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.prev{background:var(--blue-pale);color:var(--teal)}.nav-btn.prev:hover:not(:disabled){background:var(--light-blue)}
+.nav-btn.next{background:var(--coral);color:var(--white)}.nav-btn.next:hover:not(:disabled){background:#D45A4D}
+.slide-counter{font-family:'Open Sans',sans-serif;font-size:13px;color:var(--gray)}
+.title-slide{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.title-brand{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.title-unit{font-family:'Poppins',sans-serif;font-size:14px;color:var(--gray);margin-bottom:20px}
+.title-main{font-family:'Poppins',sans-serif;font-size:36px;font-weight:700;color:var(--dark);margin-bottom:8px;line-height:1.2}
+.title-sub{font-family:'Poppins',sans-serif;font-size:18px;color:var(--coral);margin-bottom:28px}
+.title-goal{background:var(--blue-pale);border-radius:var(--radius);padding:16px 28px;font-family:'Poppins',sans-serif;font-size:15px;color:var(--teal);max-width:640px}
+.title-goal strong{font-weight:600}
+.concept-intro{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.concept-word{font-family:'Poppins',sans-serif;font-size:52px;font-weight:700;color:var(--teal);margin-bottom:12px;line-height:1.2}
+.concept-tag{font-family:'Poppins',sans-serif;font-size:20px;color:var(--coral)}
+
+/* Skills recap grid */
+.skills-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0}
+.skill-card{border-radius:var(--radius);padding:14px;text-align:center}
+.skill-num{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;margin-bottom:4px;opacity:.7}
+.skill-name{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600}
+.skill-desc{font-family:'Poppins',sans-serif;font-size:11px;margin-top:4px;opacity:.8}
+
+/* Passage analysis */
+.passage-box{background:#FEF3C7;border-radius:var(--radius);padding:18px;margin:14px 0;font-family:'Poppins',sans-serif;font-size:14px;line-height:1.8;font-style:italic}
+.analysis-exercise{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.analysis-item{background:var(--blue-pale);border-radius:var(--radius);padding:14px}
+.analysis-q{font-family:'Poppins',sans-serif;font-size:14px;margin-bottom:8px;font-weight:500}
+.analysis-options{display:flex;gap:8px;flex-wrap:wrap}
+.analysis-opt{font-family:'Poppins',sans-serif;font-size:13px;padding:6px 14px;border:2px solid #CBD5E1;border-radius:20px;background:var(--white);cursor:pointer;transition:all .2s}
+.analysis-opt:hover:not(.disabled){border-color:var(--teal);background:var(--light-blue)}
+.analysis-opt.selected{border-color:var(--teal);background:var(--light-blue);font-weight:600}
+.analysis-opt.correct{border-color:var(--success);background:#F0FDF4}.analysis-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.analysis-opt.disabled{cursor:default}
+.analysis-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.analysis-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.analysis-btn:hover{background:#D45A4D}
+.analysis-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.analysis-feedback.show{display:block}.analysis-feedback.success{background:#F0FDF4;color:#166534}.analysis-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Skill match — match description to skill */
+.match-exercise{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.match-item{background:var(--blue-pale);border-radius:var(--radius);padding:14px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.match-desc{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.5}
+.match-select{font-family:'Poppins',sans-serif;font-size:13px;padding:6px 12px;border:2px solid #CBD5E1;border-radius:8px;background:var(--white);cursor:pointer;min-width:160px}
+.match-select:focus{border-color:var(--teal);outline:none}
+.match-result{font-size:16px;margin-left:4px}
+.match-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.match-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--teal);color:var(--white);transition:all .2s}
+.match-btn:hover{background:#2E6470}
+.match-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.match-feedback.show{display:block}.match-feedback.success{background:#F0FDF4;color:#166534}.match-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* MC */
+.mc-options{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.mc-opt{font-family:'Poppins',sans-serif;font-size:15px;padding:14px 20px;border:2px solid #E5E7EB;border-radius:var(--radius);cursor:pointer;transition:all .2s;background:var(--white);text-align:left}
+.mc-opt:hover:not(.disabled){border-color:var(--teal);background:var(--blue-pale)}
+.mc-opt.correct{border-color:var(--success);background:#F0FDF4}.mc-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.mc-opt.disabled{cursor:default}
+.mc-feedback{margin-top:14px;font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);display:none}
+.mc-feedback.show{display:block}.mc-feedback.success{background:#F0FDF4;color:#166534}.mc-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+/* Checklist */
+.checklist{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.check-item{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-size:14px;padding:10px 16px;border-radius:var(--radius);cursor:pointer;transition:all .2s;user-select:none}
+.check-item .check-box{width:24px;height:24px;border:2px solid #CBD5E1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0}
+.check-item.checked .check-box{background:var(--success);border-color:var(--success);color:var(--white)}
+
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.review-card{border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .3s;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center}
+.review-card .rc-q{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600}
+.review-card .rc-a{font-family:'Poppins',sans-serif;font-size:14px;display:none;line-height:1.6}
+.review-card.flipped .rc-q{display:none}.review-card.flipped .rc-a{display:block}
+.rc-teal{background:var(--blue-pale);color:var(--teal)}.rc-teal.flipped{background:var(--light-blue)}
+.rc-coral{background:var(--coral-pale);color:var(--coral)}.rc-coral.flipped{background:#FADCD8}
+.rc-yellow{background:#FEF3C7;color:var(--yellow-dark)}.rc-yellow.flipped{background:#FDE68A}
+.rc-blue{background:#DBEAFE;color:#1E40AF}.rc-blue.flipped{background:#BFDBFE}
+
+.celebration{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.celeb-emoji{font-size:64px;margin-bottom:16px}
+.celeb-title{font-family:'Poppins',sans-serif;font-size:32px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.celeb-sub{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px;max-width:540px}
+.celeb-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.celeb-stat{background:var(--blue-pale);border-radius:var(--radius);padding:16px 24px;text-align:center;min-width:120px}
+.celeb-stat-val{font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--teal)}
+.celeb-stat-label{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:4px}
+.start-over-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);padding:12px 32px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.start-over-btn:hover{background:#D45A4D}
+.confetti-piece{position:fixed;width:10px;height:10px;z-index:1000;pointer-events:none;animation:confettiFall 2.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+.copyright{text-align:center;font-size:11px;color:#999;padding:8px;font-family:'Open Sans',sans-serif;position:fixed;bottom:60px;left:0;right:0}
+@media(max-width:700px){.slide{padding:28px 20px}.slide-title{font-size:22px}.concept-word{font-size:36px}.title-main{font-size:28px}.review-grid{grid-template-columns:1fr}.skills-grid{grid-template-columns:1fr 1fr}.celeb-stats{flex-direction:column;align-items:center}.match-item{grid-template-columns:1fr}}
+@media(max-width:500px){.slide{padding:20px 14px}.slide-title{font-size:19px}.concept-word{font-size:30px}.skills-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="star-counter" id="starCounter"><span class="star-icon">⭐</span><span id="starCount">0</span></div>
+<div class="slide-container">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="1">
+  <div class="title-slide">
+    <div class="title-brand">Structured Steps to Writing</div>
+    <div class="title-unit">Unit 3: Sentence Variety &amp; Types &bull; Lesson 8</div>
+    <div class="title-main">Application &amp; Review</div>
+    <div class="title-sub">Putting All Your Sentence Variety Skills Together</div>
+    <div class="title-goal"><strong>Today's Goal:</strong> I can apply ALL of my Unit 3 sentence variety skills — types, conjunctions, compound sentences, combining, varied beginnings, and varied lengths — to analyse and improve writing.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: CONCEPT INTRO -->
+<div class="slide" data-slide="2">
+  <div class="concept-intro">
+    <div class="concept-word">Your Complete<br>Toolkit</div>
+    <div class="concept-tag">Seven lessons. Six powerful skills. One amazing writer.</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: SKILLS RECAP -->
+<div class="slide" data-slide="3">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Your Unit 3 Skills</div>
+  <div class="slide-subtitle">Everything you've learned in this unit.</div>
+  <div class="skills-grid">
+    <div class="skill-card" style="background:var(--blue-pale);color:var(--teal);"><div class="skill-num">Lessons 1–2</div><div class="skill-name">Four Sentence Types</div><div class="skill-desc">Declarative, interrogative, exclamatory, imperative</div></div>
+    <div class="skill-card" style="background:var(--coral-pale);color:var(--coral);"><div class="skill-num">Lesson 3</div><div class="skill-name">Conjunctions</div><div class="skill-desc">FANBOYS — connecting words and ideas</div></div>
+    <div class="skill-card" style="background:#FEF3C7;color:var(--yellow-dark);"><div class="skill-num">Lesson 4</div><div class="skill-name">Compound Sentences</div><div class="skill-desc">Two independent clauses + comma + conjunction</div></div>
+    <div class="skill-card" style="background:#DBEAFE;color:#1E40AF;"><div class="skill-num">Lesson 5</div><div class="skill-name">Sentence Combining</div><div class="skill-desc">Three strategies to fix choppy writing</div></div>
+    <div class="skill-card" style="background:#EDE9FE;color:#7C3AED;"><div class="skill-num">Lesson 6</div><div class="skill-name">Varied Beginnings</div><div class="skill-desc">Five ways to start a sentence</div></div>
+    <div class="skill-card" style="background:#D1FAE5;color:#065F46;"><div class="skill-num">Lesson 7</div><div class="skill-name">Varied Lengths</div><div class="skill-desc">Short = punch, long = flow, mix = rhythm</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 4: QUICK CHECK — MC -->
+<div class="slide" data-slide="4">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Check</div>
+  <div class="slide-subtitle">Let's warm up with a review question.</div>
+  <div class="slide-text" style="margin-bottom:14px;">What is a <strong>compound sentence</strong>?</div>
+  <div class="mc-options" id="mc1">
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">A) A sentence with lots of adjectives and adverbs</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',true)">B) Two independent clauses joined with a comma and a FANBOYS conjunction</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">C) A sentence that asks a question</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">D) A very long sentence with many words</div>
+  </div>
+  <div class="mc-feedback" id="mc1Fb"></div>
+</div>
+
+<!-- SLIDE 5: PASSAGE ANALYSIS -->
+<div class="slide" data-slide="5">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Analyse</span></div>
+  <div class="slide-title" style="color:var(--coral);">Analyse This Passage</div>
+  <div class="slide-subtitle">Read carefully, then answer the questions below.</div>
+  <div class="passage-box" id="passageBox">"My family went to the beach last summer. We drove for three hours to get there. We found a spot near the water. We put up our umbrella and laid out our towels. My brother and I ran into the waves. The water was cold. We built a sandcastle after that. We ate sandwiches for lunch. We stayed until the sun went down. It was a good day."</div>
+  <div class="analysis-exercise" id="analysisExercise"></div>
+  <div class="analysis-controls"><button class="analysis-btn" onclick="checkAnalysis()">Check My Work</button></div>
+  <div class="analysis-feedback" id="analysisFeedback"></div>
+</div>
+
+<!-- SLIDE 6: SKILL MATCH -->
+<div class="slide" data-slide="6">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Match the Skill</div>
+  <div class="slide-subtitle">Which Unit 3 skill would best fix each problem?</div>
+  <div class="match-exercise" id="matchExercise"></div>
+  <div class="match-controls"><button class="match-btn" onclick="checkMatch()">Check My Work</button></div>
+  <div class="match-feedback" id="matchFeedback"></div>
+</div>
+
+<!-- SLIDE 7: PICK THE BEST REVISION -->
+<div class="slide" data-slide="7">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Pick the Best Revision</div>
+  <div class="slide-subtitle">Which version uses the most sentence variety skills?</div>
+  <div class="slide-text" style="margin-bottom:10px;font-size:13px;color:var(--gray);">Original: "We went to the museum. We saw dinosaur bones. We saw a space exhibit. We ate lunch. We went home."</div>
+  <div class="mc-options" id="mc2">
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">A) "We went to the museum and saw dinosaur bones and a space exhibit and ate lunch and went home." — just one long sentence</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">B) "We went to the museum. We saw dinosaur bones and a space exhibit. We ate lunch. Then we went home." — some combining, but still repetitive beginnings</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',true)">C) "Our class visited the museum, and the dinosaur exhibit took our breath away. Enormous bones towered over us. After exploring the space exhibit, we ate lunch in the courtyard, then headed home. What an incredible day." — varied types, beginnings, lengths, combining</div>
+  </div>
+  <div class="mc-feedback" id="mc2Fb"></div>
+</div>
+
+<!-- SLIDE 8: SELF-CHECK CHECKLIST -->
+<div class="slide" data-slide="8">
+  <div class="slide-header"><span class="phase-label" style="background:#FEF3C7;color:var(--yellow-dark);">Apply</span></div>
+  <div class="slide-title" style="color:var(--yellow-dark);">Your Writing Checklist</div>
+  <div class="slide-subtitle">Use this checklist every time you write or revise. Click each item to check it off.</div>
+  <div class="checklist" id="checklist"></div>
+  <div style="background:var(--blue-pale);border-radius:var(--radius);padding:14px;text-align:center;margin-top:14px;">
+    <span style="font-family:'Poppins',sans-serif;font-size:14px;color:var(--teal);font-weight:600;">Tip: After writing a paragraph, read it aloud. Your ear will catch problems your eyes might miss.</span>
+  </div>
+</div>
+
+<!-- SLIDE 9: REVIEW CARDS -->
+<div class="slide" data-slide="9">
+  <div class="slide-header"><span class="phase-label" style="background:var(--blue-pale);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Final Review — Click to Reveal</div>
+  <div class="slide-subtitle">Click each card for a final check of your skills.</div>
+  <div class="review-grid" id="reviewGrid"></div>
+</div>
+
+<!-- SLIDE 10: CELEBRATION -->
+<div class="slide" data-slide="10">
+  <div class="celebration">
+    <div class="celeb-emoji">🏆</div>
+    <div class="celeb-title">Unit 3 Complete!</div>
+    <div class="celeb-sub">You've mastered sentence variety — four sentence types, conjunctions, compound sentences, sentence combining, varied beginnings, and varied lengths. Your writing toolkit is ready for anything. Next stop: Unit 4 — Advanced Sentence Structure.</div>
+    <div class="celeb-stats" id="celebStats"></div>
+    <button class="start-over-btn" onclick="startOver()">Start Over</button>
+  </div>
+</div>
+
+</div>
+<div class="copyright">© 2026 Structured Steps to Writing. All rights reserved.</div>
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="slideNum">1 / 10</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+const L={
+  analysisItems:[
+    {q:'How many sentences start with "We"?',options:['3','5','6','8'],answer:'6'},
+    {q:'How many different sentence types are used?',options:['1 (declarative only)','2 (declarative + exclamatory)','3 types','All 4 types'],answer:'1 (declarative only)'},
+    {q:'Are there any compound sentences?',options:['Yes','No'],answer:'No'},
+    {q:'Do the sentence lengths vary much?',options:['Yes, good variety','No, mostly the same length'],answer:'No, mostly the same length'},
+    {q:'What would MOST improve this passage?',options:['More adjectives','Varied beginnings + combining','Longer sentences only','More exclamation marks'],answer:'Varied beginnings + combining'}
+  ],
+  matchItems:[
+    {desc:'"She likes cats. She likes dogs. She likes birds."',answer:'combining',explain:'Repeated parts — combine: "She likes cats, dogs, and birds."'},
+    {desc:'Every sentence starts with "The boy..."',answer:'beginnings',explain:'Vary beginnings: start some with adverbs, where/when phrases, or describing phrases.'},
+    {desc:'Every sentence is about the same medium length — no drama, no flow.',answer:'lengths',explain:'Add short sentences for punch and longer ones for flow and detail.'},
+    {desc:'The passage only uses periods. No questions, no commands, no exclamations.',answer:'types',explain:'Mix in other sentence types: a question to engage, an exclamation for emphasis.'},
+    {desc:'"I was tired. I kept working." — These two ideas are related.',answer:'compound',explain:'Join with comma + conjunction: "I was tired, but I kept working."'}
+  ],
+  matchSkills:[
+    {id:'types',label:'Sentence Types'},
+    {id:'compound',label:'Compound Sentences'},
+    {id:'combining',label:'Sentence Combining'},
+    {id:'beginnings',label:'Varied Beginnings'},
+    {id:'lengths',label:'Varied Lengths'}
+  ],
+  checklistItems:[
+    {text:'Did I use more than one sentence type? (Not all declarative)',color:'var(--blue-pale)'},
+    {text:'Did I use at least one compound sentence?',color:'var(--coral-pale)'},
+    {text:'Did I combine any choppy or repetitive sentences?',color:'#FEF3C7'},
+    {text:'Do my sentences start in different ways? (Not all with the subject)',color:'#DBEAFE'},
+    {text:'Do my sentence lengths vary? (Mix of short, medium, long)',color:'#EDE9FE'},
+    {text:'Did I read my writing aloud to check the rhythm?',color:'#D1FAE5'}
+  ],
+  review:[
+    {q:'Name the six Unit 3 skills.',a:'1) Four sentence types, 2) Conjunctions (FANBOYS), 3) Compound sentences, 4) Sentence combining, 5) Varied beginnings, 6) Varied lengths.',color:'rc-teal'},
+    {q:'What are the three combining strategies?',a:'1) Use a conjunction, 2) Combine repeated parts, 3) Move details into one sentence.',color:'rc-coral'},
+    {q:'Name five ways to start a sentence.',a:'1) Subject, 2) Adverb, 3) Where/when phrase, 4) Adjective/describing phrase, 5) Transitional word.',color:'rc-yellow'},
+    {q:'What is the "secret weapon" for sentence length?',a:'A short sentence right after a long one creates maximum dramatic contrast and impact.',color:'rc-blue'},
+    {q:'How do you check your writing for variety?',a:'Read it aloud, circle first words (check for repeats), and look for a mix of lengths and types.',color:'rc-teal'},
+    {q:'What is the compound sentence formula?',a:'Independent Clause + , + FANBOYS + Independent Clause.',color:'rc-coral'}
+  ]
+};
+
+let currentSlide=1;const totalSlides=10;
+let stars=0,activitiesCompleted=0,mcAnswered={};
+let analysisChecked=false,matchChecked=false;
+let analysisSelections={},matchSelections={};
+
+function showSlide(n){document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));const t=document.querySelector(`[data-slide="${n}"]`);if(t)t.classList.add('active');document.getElementById('prevBtn').disabled=(n===1);document.getElementById('nextBtn').disabled=(n===totalSlides);document.getElementById('slideNum').textContent=`${n} / ${totalSlides}`;document.getElementById('progressFill').style.width=`${(n/totalSlides)*100}%`;if(n===totalSlides)showCelebration();}
+function changeSlide(d){const n=currentSlide+d;if(n>=1&&n<=totalSlides){currentSlide=n;showSlide(n);}}
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();changeSlide(1);}if(e.key==='ArrowLeft'){e.preventDefault();changeSlide(-1);}});
+function addStars(n){stars+=n;document.getElementById('starCount').textContent=stars;const c=document.getElementById('starCounter');c.classList.remove('animate');void c.offsetWidth;c.classList.add('animate');}
+function fireConfetti(){const colors=['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#22C55E','#A855F7'];for(let i=0;i<80;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'vw';p.style.top='-10px';p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.borderRadius=Math.random()>.5?'50%':'2px';p.style.width=(6+Math.random()*10)+'px';p.style.height=(6+Math.random()*10)+'px';p.style.animationDuration=(2+Math.random()*2)+'s';p.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),4500);}}
+
+function checkMC(el,id,correct){if(mcAnswered[id])return;mcAnswered[id]=true;document.querySelectorAll(`#${id} .mc-opt`).forEach(o=>{o.classList.add('disabled');if(o===el)o.classList.add(correct?'correct':'incorrect');const oc=o.getAttribute('onclick');if(oc&&oc.includes('true'))o.classList.add('correct');});const fb=document.getElementById(id+'Fb');fb.textContent=correct?'That\'s right!':'Not quite. The correct answer is highlighted.';fb.className='mc-feedback show '+(correct?'success':'retry');if(correct){addStars(1);activitiesCompleted++;}}
+
+// Analysis
+function initAnalysis(){
+  const c=document.getElementById('analysisExercise');
+  L.analysisItems.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='analysis-item';
+    d.innerHTML=`<div class="analysis-q">${item.q}</div><div class="analysis-options" id="anaOpts${i}">${item.options.map(o=>`<div class="analysis-opt" data-val="${o}" onclick="selectAnalysis(${i},'${o}')">${o}</div>`).join('')}</div>`;
+    c.appendChild(d);
+  });
+}
+function selectAnalysis(i,val){if(analysisChecked)return;document.querySelectorAll(`#anaOpts${i} .analysis-opt`).forEach(o=>o.classList.remove('selected'));const el=document.querySelector(`#anaOpts${i} [data-val="${CSS.escape(val)}"]`);if(!el){document.querySelectorAll(`#anaOpts${i} .analysis-opt`).forEach(o=>{if(o.dataset.val===val)o.classList.add('selected');});}else{el.classList.add('selected');}analysisSelections[i]=val;}
+function checkAnalysis(){
+  if(analysisChecked)return;let allFilled=true,allCorrect=true;
+  L.analysisItems.forEach((item,i)=>{if(!analysisSelections[i]){allFilled=false;return;}document.querySelectorAll(`#anaOpts${i} .analysis-opt`).forEach(o=>{o.classList.add('disabled');if(o.dataset.val===item.answer)o.classList.add('correct');if(o.classList.contains('selected')&&o.dataset.val!==item.answer)o.classList.add('incorrect');});if(analysisSelections[i]!==item.answer)allCorrect=false;});
+  const fb=document.getElementById('analysisFeedback');
+  if(!allFilled){fb.textContent='Answer all questions first.';fb.className='analysis-feedback show retry';return;}
+  analysisChecked=true;
+  if(allCorrect){fb.textContent='All correct! Great analysis skills. ⭐';fb.className='analysis-feedback show success';addStars(3);activitiesCompleted++;fireConfetti();}
+  else{fb.textContent='Some need another look. The correct answers are highlighted.';fb.className='analysis-feedback show retry';activitiesCompleted++;}
+}
+
+// Skill Match
+function initMatch(){
+  const c=document.getElementById('matchExercise');
+  L.matchItems.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='match-item';
+    d.innerHTML=`<div class="match-desc">${item.desc}</div><div style="display:flex;align-items:center;gap:4px;"><select class="match-select" id="matchSel${i}"><option value="">Choose skill...</option>${L.matchSkills.map(s=>`<option value="${s.id}">${s.label}</option>`).join('')}</select><span class="match-result" id="matchRes${i}"></span></div>`;
+    c.appendChild(d);
+  });
+}
+function checkMatch(){
+  if(matchChecked)return;let allFilled=true,allCorrect=true;
+  L.matchItems.forEach((item,i)=>{
+    const sel=document.getElementById('matchSel'+i);const res=document.getElementById('matchRes'+i);const val=sel.value;
+    if(!val){allFilled=false;return;}
+    if(val===item.answer){res.textContent='✓';res.style.color='var(--success)';sel.style.borderColor='var(--success)';}
+    else{res.textContent='✗';res.style.color='var(--error)';sel.style.borderColor='var(--error)';allCorrect=false;}
+  });
+  const fb=document.getElementById('matchFeedback');
+  if(!allFilled){fb.textContent='Choose a skill for each problem first.';fb.className='match-feedback show retry';return;}
+  if(allCorrect){fb.textContent='All correct! You know exactly which tool to use for every problem. ⭐';fb.className='match-feedback show success';if(!matchChecked){addStars(3);activitiesCompleted++;matchChecked=true;}fireConfetti();document.querySelectorAll('.match-select').forEach(s=>s.disabled=true);}
+  else{fb.textContent='Some need another look. Think about what specific problem each description shows.';fb.className='match-feedback show retry';}
+}
+
+// Checklist
+function initChecklist(){
+  const c=document.getElementById('checklist');
+  L.checklistItems.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='check-item';d.style.background=item.color;
+    d.innerHTML=`<div class="check-box"></div><span>${item.text}</span>`;
+    d.onclick=()=>{d.classList.toggle('checked');d.querySelector('.check-box').textContent=d.classList.contains('checked')?'✓':'';};
+    c.appendChild(d);
+  });
+}
+
+function initReview(){const g=document.getElementById('reviewGrid');L.review.forEach(r=>{const c=document.createElement('div');c.className='review-card '+r.color;c.innerHTML=`<div><div class="rc-q">${r.q}</div><div class="rc-a">${r.a}</div></div>`;c.onclick=()=>c.classList.toggle('flipped');g.appendChild(c);});}
+function showCelebration(){document.getElementById('celebStats').innerHTML=`<div class="celeb-stat"><div class="celeb-stat-val">${stars}</div><div class="celeb-stat-label">Stars Earned</div></div><div class="celeb-stat"><div class="celeb-stat-val">${activitiesCompleted}</div><div class="celeb-stat-label">Activities Completed</div></div>`;setTimeout(fireConfetti,400);}
+
+function startOver(){
+  stars=0;activitiesCompleted=0;mcAnswered={};analysisChecked=false;matchChecked=false;analysisSelections={};matchSelections={};
+  document.getElementById('starCount').textContent='0';
+  ['mc1','mc2'].forEach(id=>{document.querySelectorAll(`#${id} .mc-opt`).forEach(o=>o.classList.remove('correct','incorrect','disabled'));const fb=document.getElementById(id+'Fb');fb.className='mc-feedback';fb.textContent='';});
+  document.getElementById('analysisExercise').innerHTML='';initAnalysis();document.getElementById('analysisFeedback').className='analysis-feedback';
+  document.getElementById('matchExercise').innerHTML='';initMatch();document.getElementById('matchFeedback').className='match-feedback';
+  document.getElementById('checklist').innerHTML='';initChecklist();
+  document.querySelectorAll('.review-card').forEach(c=>c.classList.remove('flipped'));
+  currentSlide=1;showSlide(1);
+}
+
+initAnalysis();initMatch();initChecklist();initReview();showSlide(1);
+</script>
+</body>
+</html>

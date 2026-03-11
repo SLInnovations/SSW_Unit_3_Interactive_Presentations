@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 6: Varying Sentence Beginnings</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--coral:#E66B5D;--coral-pale:#FDF0EE;--teal:#3A7D8C;--light-blue:#D7ECF0;--blue-pale:#EBF5F8;--yellow:#F3D25B;--yellow-dark:#9E7F0A;--white:#FFFFFF;--dark:#1A1A2E;--gray:#6B7280;--success:#22C55E;--error:#EF4444;--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#F8FAFC;color:var(--dark);min-height:100vh;display:flex;flex-direction:column}
+
+.progress-bar{height:6px;background:#E5E7EB;position:fixed;top:0;left:0;right:0;z-index:100}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--coral));transition:width .4s ease}
+.star-counter{position:fixed;top:16px;right:20px;z-index:100;background:var(--white);border-radius:24px;padding:6px 16px;box-shadow:0 2px 8px rgba(0,0,0,.1);font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:var(--yellow-dark);display:flex;align-items:center;gap:6px}
+.star-counter .star-icon{font-size:20px}
+.star-counter.animate .star-icon{animation:starPop .5s ease}
+@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+.slide-container{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 20px 100px}
+.slide{display:none;max-width:900px;width:100%;min-height:480px;background:var(--white);border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:48px;animation:fadeIn .4s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.slide-header{margin-bottom:10px}
+.phase-label{display:inline-block;font-family:'Open Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px}
+.slide-title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.slide-subtitle{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px}
+.slide-text{font-family:'Poppins',sans-serif;font-size:15px;line-height:1.7;color:var(--dark)}
+
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid #E5E7EB;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.nav-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:12px;padding:10px 24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.prev{background:var(--blue-pale);color:var(--teal)}.nav-btn.prev:hover:not(:disabled){background:var(--light-blue)}
+.nav-btn.next{background:var(--coral);color:var(--white)}.nav-btn.next:hover:not(:disabled){background:#D45A4D}
+.slide-counter{font-family:'Open Sans',sans-serif;font-size:13px;color:var(--gray)}
+
+.title-slide{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.title-brand{font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.title-unit{font-family:'Poppins',sans-serif;font-size:14px;color:var(--gray);margin-bottom:20px}
+.title-main{font-family:'Poppins',sans-serif;font-size:36px;font-weight:700;color:var(--dark);margin-bottom:8px;line-height:1.2}
+.title-sub{font-family:'Poppins',sans-serif;font-size:18px;color:var(--coral);margin-bottom:28px}
+.title-goal{background:var(--blue-pale);border-radius:var(--radius);padding:16px 28px;font-family:'Poppins',sans-serif;font-size:15px;color:var(--teal);max-width:620px}
+.title-goal strong{font-weight:600}
+
+.concept-intro{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.concept-word{font-family:'Poppins',sans-serif;font-size:52px;font-weight:700;color:var(--teal);margin-bottom:12px;line-height:1.2}
+.concept-tag{font-family:'Poppins',sans-serif;font-size:20px;color:var(--coral)}
+
+.mc-options{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.mc-opt{font-family:'Poppins',sans-serif;font-size:15px;padding:14px 20px;border:2px solid #E5E7EB;border-radius:var(--radius);cursor:pointer;transition:all .2s;background:var(--white);text-align:left}
+.mc-opt:hover:not(.disabled){border-color:var(--teal);background:var(--blue-pale)}
+.mc-opt.correct{border-color:var(--success);background:#F0FDF4}.mc-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.mc-opt.disabled{cursor:default}
+.mc-feedback{margin-top:14px;font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);display:none}
+.mc-feedback.show{display:block}.mc-feedback.success{background:#F0FDF4;color:#166534}.mc-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+.compare-box{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-side{border-radius:var(--radius);padding:20px}
+.compare-label{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.compare-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.8}
+.highlight-word{background:var(--yellow);padding:1px 4px;border-radius:4px;font-weight:600}
+
+.ways-grid{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.way-card{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:12px 16px;border-radius:var(--radius)}
+.way-num{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:var(--white);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.way-content{}
+.way-name{font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;margin-bottom:2px}
+.way-example{font-family:'Poppins',sans-serif;font-size:13px;color:var(--gray);line-height:1.5}
+.way-example strong{color:var(--dark)}
+
+.begin-exercise{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.begin-item{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.begin-sentence{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.6;margin-bottom:10px}
+.begin-sentence .begin-opener{font-weight:700;color:var(--coral);text-decoration:underline}
+.begin-options{display:flex;gap:8px;flex-wrap:wrap}
+.begin-opt{font-family:'Poppins',sans-serif;font-size:12px;padding:6px 12px;border:2px solid #CBD5E1;border-radius:20px;background:var(--white);cursor:pointer;transition:all .2s}
+.begin-opt:hover:not(.disabled){border-color:var(--teal);background:var(--light-blue)}
+.begin-opt.selected{border-color:var(--teal);background:var(--light-blue);font-weight:600}
+.begin-opt.correct{border-color:var(--success);background:#F0FDF4}.begin-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.begin-opt.disabled{cursor:default}
+.begin-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.begin-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.begin-check-btn:hover{background:#D45A4D}
+.begin-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.begin-feedback.show{display:block}.begin-feedback.success{background:#F0FDF4;color:#166534}.begin-feedback.retry{background:#FEF2F2;color:#991B1B}
+.strat-explain{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:6px;display:none;font-style:italic}
+.strat-explain.show{display:block}
+
+.match-exercise{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.match-item{background:var(--blue-pale);border-radius:var(--radius);padding:16px}
+.match-original{font-family:'Poppins',sans-serif;font-size:14px;margin-bottom:4px}
+.match-instruction{font-family:'Poppins',sans-serif;font-size:12px;color:var(--coral);font-weight:600;margin-bottom:10px}
+.match-options{display:flex;flex-direction:column;gap:8px}
+.match-opt{font-family:'Poppins',sans-serif;font-size:14px;padding:10px 16px;border:2px solid #CBD5E1;border-radius:var(--radius);background:var(--white);cursor:pointer;transition:all .2s;text-align:left}
+.match-opt:hover:not(.disabled){border-color:var(--coral);background:var(--coral-pale)}
+.match-opt.selected{border-color:var(--coral);background:var(--coral-pale);font-weight:600}
+.match-opt.correct{border-color:var(--success);background:#F0FDF4}.match-opt.incorrect{border-color:var(--error);background:#FEF2F2;opacity:.6}.match-opt.disabled{cursor:default}
+.match-controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.match-check-btn{font-family:'Open Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--radius);padding:10px 24px;cursor:pointer;background:var(--teal);color:var(--white);transition:all .2s}
+.match-check-btn:hover{background:#2E6470}
+.match-feedback{font-family:'Poppins',sans-serif;font-size:14px;padding:12px 18px;border-radius:var(--radius);margin-top:12px;text-align:center;display:none}
+.match-feedback.show{display:block}.match-feedback.success{background:#F0FDF4;color:#166534}.match-feedback.retry{background:#FEF2F2;color:#991B1B}
+
+.tricky-card{background:#FEF3C7;border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.tricky-title{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:var(--yellow-dark);margin-bottom:8px}
+.tricky-text{font-family:'Poppins',sans-serif;font-size:14px;line-height:1.7}
+.tricky-example{font-family:'Poppins',sans-serif;font-size:14px;background:var(--white);border-radius:10px;padding:12px 16px;margin-top:10px;line-height:1.6}
+
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.review-card{border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .3s;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center}
+.review-card .rc-q{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600}
+.review-card .rc-a{font-family:'Poppins',sans-serif;font-size:14px;display:none;line-height:1.6}
+.review-card.flipped .rc-q{display:none}.review-card.flipped .rc-a{display:block}
+.rc-teal{background:var(--blue-pale);color:var(--teal)}.rc-teal.flipped{background:var(--light-blue)}
+.rc-coral{background:var(--coral-pale);color:var(--coral)}.rc-coral.flipped{background:#FADCD8}
+.rc-yellow{background:#FEF3C7;color:var(--yellow-dark)}.rc-yellow.flipped{background:#FDE68A}
+.rc-blue{background:#DBEAFE;color:#1E40AF}.rc-blue.flipped{background:#BFDBFE}
+
+.celebration{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px}
+.celeb-emoji{font-size:64px;margin-bottom:16px}
+.celeb-title{font-family:'Poppins',sans-serif;font-size:32px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.celeb-sub{font-family:'Poppins',sans-serif;font-size:16px;color:var(--gray);margin-bottom:24px;max-width:500px}
+.celeb-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.celeb-stat{background:var(--blue-pale);border-radius:var(--radius);padding:16px 24px;text-align:center;min-width:120px}
+.celeb-stat-val{font-family:'Poppins',sans-serif;font-size:28px;font-weight:700;color:var(--teal)}
+.celeb-stat-label{font-family:'Poppins',sans-serif;font-size:12px;color:var(--gray);margin-top:4px}
+.start-over-btn{font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);padding:12px 32px;cursor:pointer;background:var(--coral);color:var(--white);transition:all .2s}
+.start-over-btn:hover{background:#D45A4D}
+
+.confetti-piece{position:fixed;width:10px;height:10px;z-index:1000;pointer-events:none;animation:confettiFall 2.5s ease-out forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+.copyright{text-align:center;font-size:11px;color:#999;padding:8px;font-family:'Open Sans',sans-serif;position:fixed;bottom:60px;left:0;right:0}
+
+@media(max-width:700px){.slide{padding:28px 20px}.slide-title{font-size:22px}.concept-word{font-size:36px}.title-main{font-size:28px}.review-grid{grid-template-columns:1fr}.compare-box{grid-template-columns:1fr}.celeb-stats{flex-direction:column;align-items:center}.way-card{grid-template-columns:36px 1fr}}
+@media(max-width:500px){.slide{padding:20px 14px}.slide-title{font-size:19px}.concept-word{font-size:30px}}
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="star-counter" id="starCounter"><span class="star-icon">⭐</span><span id="starCount">0</span></div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active" data-slide="1">
+  <div class="title-slide">
+    <div class="title-brand">Structured Steps to Writing</div>
+    <div class="title-unit">Unit 3: Sentence Variety &amp; Types &bull; Lesson 6</div>
+    <div class="title-main">Varying Sentence Beginnings</div>
+    <div class="title-sub">Starting Sentences in Different Ways</div>
+    <div class="title-goal"><strong>Today's Goal:</strong> I can start my sentences in different ways to avoid repetition and make my writing more interesting.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: CONCEPT INTRO -->
+<div class="slide" data-slide="2">
+  <div class="concept-intro">
+    <div class="concept-word">Sentence<br>Beginnings</div>
+    <div class="concept-tag">Same start every time = flat writing. Variety = engaging writing.</div>
+  </div>
+</div>
+
+<!-- SLIDE 3: REVIEW (Lesson 5 — Sentence Combining) -->
+<div class="slide" data-slide="3">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Review: Sentence Combining</div>
+  <div class="slide-subtitle">Let's remember what we learned in Lesson 5.</div>
+  <div class="slide-text" style="margin-bottom:14px;">"The cat was fluffy. The cat was orange." — Which combining strategy works best here?</div>
+  <div class="mc-options" id="mc1">
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">A) Use a conjunction: "The cat was fluffy, and the cat was orange."</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">B) Combine repeated parts: "The cat was fluffy and orange."</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',true)">C) Move details: "The fluffy, orange cat..."</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc1',false)">D) Leave them as two sentences.</div>
+  </div>
+  <div class="mc-feedback" id="mc1Fb"></div>
+</div>
+
+<!-- SLIDE 4: THE PROBLEM — Before/After -->
+<div class="slide" data-slide="4">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">The Problem: Same Beginnings</div>
+  <div class="slide-subtitle">When every sentence starts the same way, writing sounds flat.</div>
+  <div class="compare-box">
+    <div class="compare-side" style="background:var(--coral-pale);">
+      <div class="compare-label" style="color:var(--coral);">✗ Repetitive</div>
+      <div class="compare-text"><span class="highlight-word">The dog</span> ran across the yard. <span class="highlight-word">The dog</span> chased a squirrel. <span class="highlight-word">The dog</span> barked loudly. <span class="highlight-word">The dog</span> wagged his tail. <span class="highlight-word">The dog</span> came back inside.</div>
+    </div>
+    <div class="compare-side" style="background:#D1FAE5;">
+      <div class="compare-label" style="color:#065F46;">✓ Varied</div>
+      <div class="compare-text"><span class="highlight-word">The dog</span> ran across the yard. <span class="highlight-word">Excitedly,</span> he barked at the squirrel from below. <span class="highlight-word">Meanwhile,</span> his tail wagged with excitement. <span class="highlight-word">Tired</span> and happy, he finally came back inside.</div>
+    </div>
+  </div>
+  <div style="background:var(--blue-pale);border-radius:var(--radius);padding:14px;text-align:center;margin-top:8px;">
+    <span style="font-family:'Poppins',sans-serif;font-size:14px;color:var(--teal);font-weight:600;">Editing trick: Circle the first word of every sentence. Too many repeats? Time to revise.</span>
+  </div>
+</div>
+
+<!-- SLIDE 5: FIVE WAYS TO START A SENTENCE -->
+<div class="slide" data-slide="5">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Five Ways to Start a Sentence</div>
+  <div class="slide-subtitle">Same idea, five different openings.</div>
+  <div class="ways-grid">
+    <div class="way-card" style="background:var(--blue-pale);">
+      <div class="way-num" style="background:var(--teal);">1</div>
+      <div class="way-content"><div class="way-name" style="color:var(--teal);">Subject (the usual way)</div><div class="way-example"><strong>"The dog barked at the mailman."</strong></div></div>
+    </div>
+    <div class="way-card" style="background:var(--coral-pale);">
+      <div class="way-num" style="background:var(--coral);">2</div>
+      <div class="way-content"><div class="way-name" style="color:var(--coral);">Adverb</div><div class="way-example"><strong>"Quietly,</strong> the cat crept across the room."<br><span style="font-size:11px;">Tells how, when, or where. Comma after.</span></div></div>
+    </div>
+    <div class="way-card" style="background:#FEF3C7;">
+      <div class="way-num" style="background:var(--yellow-dark);">3</div>
+      <div class="way-content"><div class="way-name" style="color:var(--yellow-dark);">Where/When Phrase</div><div class="way-example"><strong>"In the morning,</strong> we packed our bags."<br><span style="font-size:11px;">A group of words telling where or when. Comma after.</span></div></div>
+    </div>
+    <div class="way-card" style="background:#DBEAFE;">
+      <div class="way-num" style="background:#1E40AF;">4</div>
+      <div class="way-content"><div class="way-name" style="color:#1E40AF;">Adjective / Describing Phrase</div><div class="way-example"><strong>"Tired and hungry,</strong> the hikers reached camp."<br><span style="font-size:11px;">Describing words about the subject. Comma after.</span></div></div>
+    </div>
+    <div class="way-card" style="background:#EDE9FE;">
+      <div class="way-num" style="background:#7C3AED;">5</div>
+      <div class="way-content"><div class="way-name" style="color:#7C3AED;">Transitional Word</div><div class="way-example"><strong>"Finally,</strong> the rain stopped."<br><span style="font-size:11px;">Connects to what came before: However, Meanwhile, Then...</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: QUICK CHECK -->
+<div class="slide" data-slide="6">
+  <div class="slide-header"><span class="phase-label" style="background:var(--light-blue);color:var(--teal);">Learn</span></div>
+  <div class="slide-title" style="color:var(--teal);">Quick Check</div>
+  <div class="slide-subtitle">What type of beginning is this?</div>
+  <div class="slide-text" style="margin-bottom:14px;"><strong>"Tired and hungry,</strong> the hikers reached camp."</div>
+  <div class="mc-options" id="mc2">
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">A) Subject</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">B) Adverb</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',false)">C) Where/When phrase</div>
+    <div class="mc-opt" onclick="checkMC(this,'mc2',true)">D) Adjective / Describing phrase</div>
+  </div>
+  <div class="mc-feedback" id="mc2Fb"></div>
+</div>
+
+<!-- SLIDE 7: PRACTICE — Identify the Beginning Type -->
+<div class="slide" data-slide="7">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Name That Beginning</div>
+  <div class="slide-subtitle">Identify the type of sentence beginning used.</div>
+  <div class="begin-exercise" id="beginExercise"></div>
+  <div class="begin-controls"><button class="begin-check-btn" onclick="checkBegin()">Check My Work</button></div>
+  <div class="begin-feedback" id="beginFeedback"></div>
+</div>
+
+<!-- SLIDE 8: PRACTICE — Pick the Best Rewrite -->
+<div class="slide" data-slide="8">
+  <div class="slide-header"><span class="phase-label" style="background:var(--coral-pale);color:var(--coral);">Practice</span></div>
+  <div class="slide-title" style="color:var(--coral);">Pick the Best Rewrite</div>
+  <div class="slide-subtitle">Each sentence starts with the subject. Choose the best revised version.</div>
+  <div class="match-exercise" id="matchExercise"></div>
+  <div class="match-controls"><button class="match-check-btn" onclick="checkMatch()">Check My Work</button></div>
+  <div class="match-feedback" id="matchFeedback"></div>
+</div>
+
+<!-- SLIDE 9: TRICKY -->
+<div class="slide" data-slide="9">
+  <div class="slide-header"><span class="phase-label" style="background:#FEF3C7;color:var(--yellow-dark);">Tricky</span></div>
+  <div class="slide-title" style="color:var(--yellow-dark);">Watch Out</div>
+  <div class="slide-subtitle">Two important things to remember.</div>
+  <div class="tricky-card">
+    <div class="tricky-title">✏️ Don't Forget the Comma</div>
+    <div class="tricky-text">When you start a sentence with an adverb, where/when phrase, describing phrase, or transitional word, you almost always need a <strong>comma</strong> before the main part of the sentence.</div>
+    <div class="tricky-example">
+      <span style="color:var(--success);">✓</span> "<strong>Carefully,</strong> she placed the vase on the shelf."<br>
+      <span style="color:var(--error);">✗</span> "Carefully she placed the vase on the shelf."
+    </div>
+  </div>
+  <div class="tricky-card">
+    <div class="tricky-title">⚖️ Variety Means a MIX</div>
+    <div class="tricky-text">The goal is <strong>variety</strong>, not replacing one pattern with another. Don't fix "every sentence starts with She" by making every sentence start with an adverb. A good paragraph has a mix of different beginnings.</div>
+    <div class="tricky-example">
+      <span style="color:var(--error);">✗</span> "Quickly, she ran. Happily, she smiled. Eagerly, she waved." — Still repetitive.<br>
+      <span style="color:var(--success);">✓</span> "She ran quickly. <strong>Happily,</strong> she smiled. <strong>At the gate,</strong> she waved." — Now that is variety.
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: REVIEW CARDS -->
+<div class="slide" data-slide="10">
+  <div class="slide-header"><span class="phase-label" style="background:var(--blue-pale);color:var(--teal);">Review</span></div>
+  <div class="slide-title" style="color:var(--teal);">Review — Click to Reveal</div>
+  <div class="slide-subtitle">Click each card to check your understanding.</div>
+  <div class="review-grid" id="reviewGrid"></div>
+</div>
+
+<!-- SLIDE 11: CELEBRATION -->
+<div class="slide" data-slide="11">
+  <div class="celebration">
+    <div class="celeb-emoji">🎉</div>
+    <div class="celeb-title">Lesson Complete!</div>
+    <div class="celeb-sub">You now know five different ways to start a sentence. Your writing will never sound like a flat list again.</div>
+    <div class="celeb-stats" id="celebStats"></div>
+    <button class="start-over-btn" onclick="startOver()">Start Over</button>
+  </div>
+</div>
+
+</div>
+
+<div class="copyright">© 2026 Structured Steps to Writing. All rights reserved.</div>
+
+<div class="nav-bar">
+  <button class="nav-btn prev" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <span class="slide-counter" id="slideNum">1 / 11</span>
+  <button class="nav-btn next" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+const L = {
+  beginItems: [
+    { sentence: '<span class="begin-opener">Nervously,</span> the student walked to the front of the class.', answer: 'adverb', explain: '"Nervously" is an adverb describing how the student walked.' },
+    { sentence: '<span class="begin-opener">Behind the old barn,</span> a family of foxes had built a den.', answer: 'prep', explain: '"Behind the old barn" is a where/when phrase telling where.' },
+    { sentence: '<span class="begin-opener">The children</span> played happily in the snow.', answer: 'subject', explain: '"The children" is the subject — the usual way to start.' },
+    { sentence: '<span class="begin-opener">Tired and cold,</span> the hikers finally reached the cabin.', answer: 'adjective', explain: '"Tired and cold" is an adjective/describing phrase about the hikers.' },
+    { sentence: '<span class="begin-opener">Meanwhile,</span> the teacher was setting up the experiment.', answer: 'transition', explain: '"Meanwhile" is a transitional word connecting to the previous event.' },
+    { sentence: '<span class="begin-opener">Excited about the trip,</span> Maria packed her suitcase early.', answer: 'adjective', explain: '"Excited about the trip" is a describing phrase about Maria.' }
+  ],
+  beginLabels: [
+    { id: 'subject', label: 'Subject' },
+    { id: 'adverb', label: 'Adverb' },
+    { id: 'prep', label: 'Where/When' },
+    { id: 'adjective', label: 'Adj. / Describing' },
+    { id: 'transition', label: 'Transitional Word' }
+  ],
+  matchItems: [
+    {
+      original: '"The students worked quietly on their projects."',
+      instruction: 'Rewrite starting with an ADVERB',
+      options: [
+        { text: '"Quietly, the students worked on their projects."', correct: true },
+        { text: '"On their projects, the students worked quietly."', correct: false },
+        { text: '"Tired and focused, the students worked on their projects."', correct: false }
+      ]
+    },
+    {
+      original: '"The scared, lost puppy hid under the porch."',
+      instruction: 'Rewrite starting with an ADJECTIVE / DESCRIBING PHRASE',
+      options: [
+        { text: '"Under the porch, a puppy hid."', correct: false },
+        { text: '"Scared and lost, the puppy hid under the porch."', correct: true },
+        { text: '"Finally, the scared puppy hid under the porch."', correct: false }
+      ]
+    },
+    {
+      original: '"The family finally arrived at the campsite."',
+      instruction: 'Rewrite starting with a TRANSITIONAL WORD',
+      options: [
+        { text: '"At the campsite, the family set up their tent."', correct: false },
+        { text: '"Exhausted and relieved, the family arrived."', correct: false },
+        { text: '"Finally, the family arrived at the campsite."', correct: true }
+      ]
+    }
+  ],
+  review: [
+    { q: "What are the five ways to start a sentence?", a: "1) Subject, 2) Adverb, 3) Where/when phrase, 4) Adjective/describing phrase, 5) Transitional word.", color: "rc-teal" },
+    { q: "What punctuation follows an introductory word or phrase?", a: "A comma. When you start with anything other than the subject, add a comma before the main clause.", color: "rc-coral" },
+    { q: "What is the editing trick for checking beginnings?", a: "Circle the first word of every sentence. If the same word appears more than twice, revise some beginnings.", color: "rc-yellow" },
+    { q: "Should every sentence start differently?", a: "No — the goal is a MIX. Some sentences starting with the subject is fine. Variety, not a new pattern.", color: "rc-blue" },
+    { q: "What is a transitional word?", a: "A word that connects to what came before: Finally, However, Meanwhile, Then, Next, Therefore.", color: "rc-teal" }
+  ]
+};
+
+let currentSlide=1; const totalSlides=11;
+let stars=0, activitiesCompleted=0, mcAnswered={};
+let beginChecked=false, matchChecked=false;
+let beginSelections={}, matchSelections={};
+
+function showSlide(n){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  const t=document.querySelector(`[data-slide="${n}"]`);if(t)t.classList.add('active');
+  document.getElementById('prevBtn').disabled=(n===1);
+  document.getElementById('nextBtn').disabled=(n===totalSlides);
+  document.getElementById('slideNum').textContent=`${n} / ${totalSlides}`;
+  document.getElementById('progressFill').style.width=`${(n/totalSlides)*100}%`;
+  if(n===totalSlides)showCelebration();
+}
+function changeSlide(d){const n=currentSlide+d;if(n>=1&&n<=totalSlides){currentSlide=n;showSlide(n);}}
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();changeSlide(1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();changeSlide(-1);}
+});
+
+function addStars(n){stars+=n;document.getElementById('starCount').textContent=stars;const c=document.getElementById('starCounter');c.classList.remove('animate');void c.offsetWidth;c.classList.add('animate');}
+function fireConfetti(){const colors=['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#22C55E','#A855F7'];for(let i=0;i<60;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'vw';p.style.top='-10px';p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.borderRadius=Math.random()>.5?'50%':'2px';p.style.width=(6+Math.random()*8)+'px';p.style.height=(6+Math.random()*8)+'px';p.style.animationDuration=(2+Math.random()*2)+'s';p.style.animationDelay=Math.random()*.5+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),4000);}}
+
+function checkMC(el,id,correct){if(mcAnswered[id])return;mcAnswered[id]=true;document.querySelectorAll(`#${id} .mc-opt`).forEach(o=>{o.classList.add('disabled');if(o===el)o.classList.add(correct?'correct':'incorrect');const oc=o.getAttribute('onclick');if(oc&&oc.includes('true'))o.classList.add('correct');});const fb=document.getElementById(id+'Fb');fb.textContent=correct?'That\'s right!':'Not quite. The correct answer is highlighted.';fb.className='mc-feedback show '+(correct?'success':'retry');if(correct){addStars(1);activitiesCompleted++;}}
+
+function initBegin(){
+  const c=document.getElementById('beginExercise');
+  L.beginItems.forEach((item,i)=>{
+    const d=document.createElement('div');d.className='begin-item';
+    d.innerHTML=`<div class="begin-sentence">${item.sentence}</div><div class="begin-options" id="beginOpts${i}">${L.beginLabels.map(l=>`<div class="begin-opt" data-val="${l.id}" onclick="selectBegin(${i},'${l.id}')">${l.label}</div>`).join('')}</div><div class="strat-explain" id="beginExp${i}">${item.explain}</div>`;
+    c.appendChild(d);
+  });
+}
+function selectBegin(i,val){if(beginChecked)return;document.querySelectorAll(`#beginOpts${i} .begin-opt`).forEach(o=>o.classList.remove('selected'));document.querySelector(`#beginOpts${i} [data-val="${val}"]`).classList.add('selected');beginSelections[i]=val;}
+function checkBegin(){
+  if(beginChecked)return;let allFilled=true,allCorrect=true;
+  L.beginItems.forEach((item,i)=>{if(!beginSelections[i]){allFilled=false;return;}document.querySelectorAll(`#beginOpts${i} .begin-opt`).forEach(o=>{o.classList.add('disabled');if(o.dataset.val===item.answer)o.classList.add('correct');if(o.classList.contains('selected')&&o.dataset.val!==item.answer)o.classList.add('incorrect');});if(beginSelections[i]!==item.answer)allCorrect=false;document.getElementById('beginExp'+i).classList.add('show');});
+  const fb=document.getElementById('beginFeedback');
+  if(!allFilled){fb.textContent='Select a type for each sentence first.';fb.className='begin-feedback show retry';return;}
+  beginChecked=true;
+  if(allCorrect){fb.textContent='All correct! You can identify every type of beginning. ⭐';fb.className='begin-feedback show success';addStars(2);activitiesCompleted++;fireConfetti();}
+  else{fb.textContent='Some need another look. Check the explanations.';fb.className='begin-feedback show retry';activitiesCompleted++;}
+}
+
+function initMatch(){
+  const c=document.getElementById('matchExercise');
+  L.matchItems.forEach((item,i)=>{
+    const shuffled=item.options.map((o,oi)=>({...o,idx:oi})).sort(()=>Math.random()-.5);
+    const d=document.createElement('div');d.className='match-item';
+    d.innerHTML=`<div class="match-original">${item.original}</div><div class="match-instruction">→ ${item.instruction}</div><div class="match-options" id="matchOpts${i}">${shuffled.map(o=>`<div class="match-opt" data-correct="${o.correct}" onclick="selectMatch(${i},this)">${o.text}</div>`).join('')}</div>`;
+    c.appendChild(d);
+  });
+}
+function selectMatch(i,el){if(matchChecked)return;document.querySelectorAll(`#matchOpts${i} .match-opt`).forEach(o=>o.classList.remove('selected'));el.classList.add('selected');matchSelections[i]=el;}
+function checkMatch(){
+  if(matchChecked)return;let allFilled=true,allCorrect=true;
+  L.matchItems.forEach((item,i)=>{if(!matchSelections[i]){allFilled=false;return;}document.querySelectorAll(`#matchOpts${i} .match-opt`).forEach(o=>{o.classList.add('disabled');if(o.dataset.correct==='true')o.classList.add('correct');if(o.classList.contains('selected')&&o.dataset.correct!=='true')o.classList.add('incorrect');});if(matchSelections[i].dataset.correct!=='true')allCorrect=false;});
+  const fb=document.getElementById('matchFeedback');
+  if(!allFilled){fb.textContent='Choose a rewrite for each sentence first.';fb.className='match-feedback show retry';return;}
+  matchChecked=true;
+  if(allCorrect){fb.textContent='All correct! Great rewrites. ⭐';fb.className='match-feedback show success';addStars(2);activitiesCompleted++;fireConfetti();}
+  else{fb.textContent='Some need another look. The best answers are highlighted.';fb.className='match-feedback show retry';activitiesCompleted++;}
+}
+
+function initReview(){const g=document.getElementById('reviewGrid');L.review.forEach(r=>{const c=document.createElement('div');c.className='review-card '+r.color;c.innerHTML=`<div><div class="rc-q">${r.q}</div><div class="rc-a">${r.a}</div></div>`;c.onclick=()=>c.classList.toggle('flipped');g.appendChild(c);});}
+function showCelebration(){document.getElementById('celebStats').innerHTML=`<div class="celeb-stat"><div class="celeb-stat-val">${stars}</div><div class="celeb-stat-label">Stars Earned</div></div><div class="celeb-stat"><div class="celeb-stat-val">${activitiesCompleted}</div><div class="celeb-stat-label">Activities Completed</div></div>`;setTimeout(fireConfetti,400);}
+
+function startOver(){
+  stars=0;activitiesCompleted=0;mcAnswered={};beginChecked=false;matchChecked=false;beginSelections={};matchSelections={};
+  document.getElementById('starCount').textContent='0';
+  ['mc1','mc2'].forEach(id=>{document.querySelectorAll(`#${id} .mc-opt`).forEach(o=>o.classList.remove('correct','incorrect','disabled'));const fb=document.getElementById(id+'Fb');fb.className='mc-feedback';fb.textContent='';});
+  document.getElementById('beginExercise').innerHTML='';initBegin();document.getElementById('beginFeedback').className='begin-feedback';
+  document.getElementById('matchExercise').innerHTML='';initMatch();document.getElementById('matchFeedback').className='match-feedback';
+  document.querySelectorAll('.review-card').forEach(c=>c.classList.remove('flipped'));
+  currentSlide=1;showSlide(1);
+}
+
+initBegin();initMatch();initReview();showSlide(1);
+</script>
+</body>
+</html>

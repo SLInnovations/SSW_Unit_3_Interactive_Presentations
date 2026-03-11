@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSW Unit 3, Lesson 1: Four Sentence Types</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral: #E66B5D;
+  --coral-pale: #FDF0EE;
+  --teal: #3A7D8C;
+  --light-blue: #D7ECF0;
+  --blue-pale: #EBF5F8;
+  --yellow: #F3D25B;
+  --yellow-dark: #9E7F0A;
+  --dark-gold: #B8860B;
+  --white: #FFFFFF;
+  --dark: #1A1A2E;
+  --gray: #6B7280;
+  --success: #22C55E;
+  --error: #EF4444;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: 'Open Sans', sans-serif;
+  background: #F8FAFC;
+  color: var(--dark);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Progress Bar ── */
+.progress-bar {
+  height: 6px;
+  background: #E5E7EB;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--coral));
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ── Star Counter ── */
+.star-counter {
+  position: fixed;
+  top: 16px; right: 20px;
+  z-index: 100;
+  background: var(--white);
+  border-radius: 24px;
+  padding: 6px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--yellow-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.star-counter .star-icon { font-size: 20px; transition: transform 0.3s; }
+.star-counter.animate .star-icon {
+  animation: starPop 0.5s ease;
+}
+@keyframes starPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* ── Slide Wrapper ── */
+#slideWrapper {
+  position: fixed;
+  top: 6px;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px 20px;
+}
+
+.slide {
+  display: none;
+  max-width: 900px;
+  width: 100%;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 44px;
+  animation: fadeSlideIn 0.35s ease-out;
+}
+.slide.active { display: block; }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Nav Bar ── */
+.nav-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--white);
+  border-top: 2px solid var(--light-blue);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+.nav-btn {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn.back { background: var(--blue-pale); color: var(--teal); }
+.nav-btn.back:hover { background: var(--light-blue); }
+.nav-btn.next { background: var(--teal); color: var(--white); }
+.nav-btn.next:hover { background: #2d6570; }
+.nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.slide-counter {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: var(--gray);
+}
+
+/* ── Phase Labels ── */
+.phase-label {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+.phase-learn    { background: var(--light-blue); color: var(--teal); }
+.phase-practice { background: var(--coral-pale); color: var(--coral); }
+.phase-review   { background: var(--blue-pale);  color: var(--teal); }
+
+/* ── Typography ── */
+.slide-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.7rem;
+  color: var(--teal);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.slide-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--coral);
+  margin-bottom: 18px;
+}
+.slide-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--dark);
+}
+.directions {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--gray);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+/* ── Title Slide ── */
+.title-inner {
+  text-align: center;
+  padding: 32px 0;
+}
+.title-inner .brand {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--coral);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.title-inner .unit-label {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 24px;
+}
+.title-inner h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2.3rem;
+  color: var(--teal);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.title-inner .subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--dark);
+  margin-bottom: 28px;
+}
+.goal-box {
+  display: inline-block;
+  background: var(--light-blue);
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  color: var(--teal);
+  font-size: 1rem;
+}
+
+/* ── Concept Intro ── */
+.concept-inner {
+  text-align: center;
+  padding: 60px 0;
+}
+.concept-word {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 3.2rem;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+.concept-sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--gray);
+}
+
+/* ── Multiple Choice ── */
+.mc-options { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+.mc-option {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 13px 18px;
+  border-radius: 10px;
+  border: 2px solid #E5E7EB;
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+.mc-option:hover:not(.locked) { border-color: var(--teal); background: var(--blue-pale); }
+.mc-option.selected   { border-color: var(--teal); background: var(--light-blue); }
+.mc-option.correct    { border-color: var(--success); background: #F0FDF4; }
+.mc-option.incorrect  { border-color: var(--error); background: #FEF2F2; }
+.mc-option.locked     { cursor: default; pointer-events: none; }
+.mc-feedback {
+  margin-top: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.93rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: none;
+}
+.mc-feedback.show { display: block; }
+.mc-feedback.fb-correct   { background: #F0FDF4; color: var(--success); }
+.mc-feedback.fb-incorrect { background: #FEF2F2; color: var(--error); }
+
+/* ── Category Cards ── */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+}
+.cat-card {
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.cat-card:hover { transform: translateY(-3px); }
+.cat-card .cat-icon   { font-size: 1.8rem; margin-bottom: 6px; }
+.cat-card .cat-name   { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+.cat-card .cat-job    { font-family: 'Open Sans', sans-serif; font-size: 0.82rem; margin-bottom: 5px; }
+.cat-card .cat-punct  { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; }
+.cat-card .cat-memo   { font-family: 'Open Sans', sans-serif; font-size: 0.78rem; font-style: italic; margin-top: 5px; opacity: 0.8; }
+.cc-decl  { background: #E8F5E9; color: #2E7D32; border: 2px solid #66BB6A; }
+.cc-inter { background: var(--light-blue); color: var(--teal); border: 2px solid var(--teal); }
+.cc-excl  { background: var(--coral-pale); color: var(--coral); border: 2px solid var(--coral); }
+.cc-imper { background: #FFF3E0; color: #E65100; border: 2px solid #FB8C00; }
+
+/* ── Example Bars ── */
+.example-bar {
+  padding: 13px 18px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.example-bar .ex-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-right: 6px;
+}
+.example-bar .ex-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+}
+.eb-decl  { background: #E8F5E9; border-left: 4px solid #66BB6A; }
+.eb-decl  .ex-label { color: #2E7D32; }
+.eb-inter { background: var(--light-blue); border-left: 4px solid var(--teal); }
+.eb-inter .ex-label { color: var(--teal); }
+.eb-excl  { background: var(--coral-pale); border-left: 4px solid var(--coral); }
+.eb-excl  .ex-label { color: var(--coral); }
+.eb-imper { background: #FFF3E0; border-left: 4px solid #FB8C00; }
+.eb-imper .ex-label { color: #E65100; }
+
+/* ── Sort Activity ── */
+.sort-bank {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  min-height: 48px; padding: 12px;
+  background: var(--blue-pale);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  border: 2px dashed #bbb;
+}
+.sort-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.sort-col {
+  border-radius: 12px;
+  padding: 10px;
+  min-height: 110px;
+}
+.sort-col-hdr {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-align: center;
+  margin-bottom: 6px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid currentColor;
+}
+.sort-col-items {
+  display: flex; flex-direction: column; gap: 5px;
+  min-height: 36px;
+}
+.sc-decl  { background: #E8F5E9; border: 2px solid #66BB6A; }
+.sc-decl  .sort-col-hdr { color: #2E7D32; }
+.sc-inter { background: var(--light-blue); border: 2px solid var(--teal); }
+.sc-inter .sort-col-hdr { color: var(--teal); }
+.sc-excl  { background: var(--coral-pale); border: 2px solid var(--coral); }
+.sc-excl  .sort-col-hdr { color: var(--coral); }
+.sc-imper { background: #FFF3E0; border: 2px solid #FB8C00; }
+.sc-imper .sort-col-hdr { color: #E65100; }
+
+.sort-tile {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.82rem;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: grab;
+  transition: all 0.15s;
+  border: 2px solid #ddd;
+  background: var(--white);
+  user-select: none;
+}
+.sort-tile:hover { transform: translateY(-2px); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.sort-tile.dragging { opacity: 0.4; }
+.sort-tile.correct-tile { border-color: var(--success); background: #F0FDF4; }
+.sort-tile.wrong-tile   { border-color: var(--error);   background: #FEF2F2; }
+.sort-tile.selected-tile { border-color: var(--teal); background: var(--light-blue); box-shadow: 0 0 0 2px var(--teal); }
+
+.action-btn {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  padding: 10px 26px;
+  border-radius: 8px;
+  border: none;
+  background: var(--teal);
+  color: var(--white);
+  cursor: pointer;
+  font-size: 0.93rem;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+.action-btn:hover { background: #2d6570; }
+.activity-fb {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 0.93rem;
+  font-family: 'Open Sans', sans-serif;
+}
+.activity-fb.fb-ok   { color: var(--teal); }
+.activity-fb.fb-err  { color: var(--coral); }
+
+/* ── Sentence Type Identifier ── */
+.sti-item {
+  margin-bottom: 14px;
+  padding: 14px;
+  background: var(--blue-pale);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.sti-item.sti-ok  { border-color: var(--success); background: #F0FDF4; }
+.sti-item.sti-bad { border-color: var(--error);   background: #FEF2F2; }
+.sti-sentence {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: var(--dark);
+}
+.sti-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.sti-btn {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sti-btn:hover:not(.sti-locked) { border-color: var(--teal); }
+.sti-btn.sti-sel   { border-color: var(--teal); background: var(--light-blue); color: var(--teal); font-weight: 700; }
+.sti-btn.sti-locked { cursor: default; pointer-events: none; }
+.sti-btn.sti-right  { border-color: var(--success); background: #F0FDF4; color: #166534; }
+.sti-btn.sti-wrong  { border-color: var(--error);   background: #FEF2F2; color: #991B1B; }
+
+/* ── Tricky Box ── */
+.tricky-box {
+  background: #FEF9E7;
+  padding: 15px 18px;
+  border-radius: 12px;
+  border-left: 4px solid var(--yellow);
+  margin-bottom: 12px;
+}
+.tricky-box .tricky-hdr {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: var(--dark-gold);
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+.tricky-box .tricky-body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--dark);
+}
+
+/* ── Review Cards ── */
+.rv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0;
+}
+.rv-card {
+  border-radius: 12px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+.rv-teal  { background: var(--light-blue); color: var(--teal); border: 2px solid var(--teal); }
+.rv-coral { background: var(--coral-pale); color: var(--coral); border: 2px solid var(--coral); }
+.rv-gold  { background: #FEF9E7; color: var(--dark-gold); border: 2px solid var(--yellow); }
+.rv-blue  { background: var(--blue-pale); color: var(--teal); border: 2px solid var(--light-blue); }
+.rv-card .rv-q   { font-weight: 600; }
+.rv-card .rv-a   { display: none; font-weight: 400; font-size: 0.85rem; color: var(--dark); margin-top: 8px; }
+.rv-card .rv-tap { font-size: 0.72rem; opacity: 0.45; margin-top: 6px; }
+.rv-card.flipped .rv-q   { font-size: 0.78rem; opacity: 0.55; margin-bottom: 4px; }
+.rv-card.flipped .rv-a   { display: block; }
+.rv-card.flipped .rv-tap { display: none; }
+
+/* ── Celebration ── */
+.celeb-inner { text-align: center; padding: 30px 0; }
+.celeb-inner .trophy { font-size: 3.5rem; margin-bottom: 12px; }
+.celeb-inner h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700; font-size: 1.9rem;
+  color: var(--teal); margin-bottom: 10px;
+}
+.celeb-inner .celeb-msg {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem; color: var(--dark); margin-bottom: 22px;
+}
+.stats-row {
+  display: flex; gap: 14px;
+  justify-content: center;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+.stat-box {
+  background: var(--blue-pale);
+  border-radius: 12px;
+  padding: 16px 24px;
+  text-align: center;
+  min-width: 110px;
+}
+.stat-box .sv {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700; font-size: 1.7rem; color: var(--teal);
+}
+.stat-box .sl {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.78rem; color: var(--gray); margin-top: 3px;
+}
+.restart-btn {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600; font-size: 1rem;
+  padding: 12px 30px; border-radius: 10px;
+  border: 2px solid var(--coral);
+  background: var(--white); color: var(--coral);
+  cursor: pointer; transition: all 0.2s; margin-top: 14px;
+}
+.restart-btn:hover { background: var(--coral-pale); }
+
+/* ── Confetti ── */
+.confetti-bit {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+}
+
+/* ── Responsive ── */
+@media (max-width:700px) {
+  .slide { padding: 24px 16px; }
+  .title-inner h1 { font-size: 1.7rem; }
+  .concept-word { font-size: 2.4rem; }
+  .cat-grid, .sort-cols, .rv-grid { grid-template-columns: 1fr; }
+}
+@media (max-width:500px) {
+  .slide { padding: 18px 12px; }
+  .title-inner h1 { font-size: 1.4rem; }
+  .nav-btn { padding: 8px 14px; font-size: 13px; }
+  .sti-btns { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+
+<!-- Star Counter -->
+<div class="star-counter" id="starBox">
+  <span class="star-icon" id="starIcon">⭐</span>
+  <span id="starNum">0</span>
+</div>
+
+<!-- ════════════ ALL SLIDES ════════════ -->
+<div id="slideWrapper">
+
+  <!-- SLIDE 1 — Title -->
+  <div class="slide" id="s1">
+    <div class="title-inner">
+      <div class="brand">Structured Steps to Writing</div>
+      <div class="unit-label">Unit 3: Sentence Variety &amp; Types &bull; Lesson 1</div>
+      <h1>Four Sentence Types</h1>
+      <div class="subtitle">Every sentence has a job.</div>
+      <div class="goal-box">🎯 I can identify the four sentence types and explain what each one does.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — Concept Intro -->
+  <div class="slide" id="s2">
+    <div class="concept-inner">
+      <span class="phase-label phase-learn">Learn</span>
+      <div class="concept-word">Sentence Types</div>
+      <div class="concept-sub">Declarative &bull; Interrogative &bull; Exclamatory &bull; Imperative</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — Review (Unit 2 recap) -->
+  <div class="slide" id="s3">
+    <span class="phase-label phase-learn">Review</span>
+    <div class="slide-title">Quick Review</div>
+    <div class="slide-subtitle">Let's recall what we learned in Unit 2.</div>
+    <p class="slide-text" style="margin-bottom:14px;">Which sentence uses a describing word (adjective) to expand the barebone sentence?</p>
+    <p class="slide-text" style="font-weight:600;margin-bottom:14px;color:var(--teal);">Barebone sentence: "The cat slept."</p>
+    <div class="mc-options" id="mc1">
+      <div class="mc-option" data-ok="0" onclick="doMC(this,'mc1','fb1')">A) The cat slept on the mat.</div>
+      <div class="mc-option" data-ok="1" onclick="doMC(this,'mc1','fb1')">B) The fluffy cat slept.</div>
+      <div class="mc-option" data-ok="0" onclick="doMC(this,'mc1','fb1')">C) The cat slept soundly.</div>
+      <div class="mc-option" data-ok="0" onclick="doMC(this,'mc1','fb1')">D) The cat slept and purred.</div>
+    </div>
+    <div class="mc-feedback" id="fb1"></div>
+  </div>
+
+  <!-- SLIDE 4 — Category Cards -->
+  <div class="slide" id="s4">
+    <span class="phase-label phase-learn">Learn</span>
+    <div class="slide-title">Every Sentence Has a Job</div>
+    <p class="slide-text" style="margin-bottom:16px;">Just like people have different jobs, sentences have different jobs too. There are four types:</p>
+    <div class="cat-grid">
+      <div class="cat-card cc-decl">
+        <div class="cat-icon">📢</div>
+        <div class="cat-name">Declarative</div>
+        <div class="cat-job">Makes a statement (tells something)</div>
+        <div class="cat-punct">Ends with a period (.)</div>
+        <div class="cat-memo">Think: DECLARE = announce</div>
+      </div>
+      <div class="cat-card cc-inter">
+        <div class="cat-icon">❓</div>
+        <div class="cat-name">Interrogative</div>
+        <div class="cat-job">Asks a question</div>
+        <div class="cat-punct">Ends with a question mark (?)</div>
+        <div class="cat-memo">Think: INTERROGATE = ask</div>
+      </div>
+      <div class="cat-card cc-excl">
+        <div class="cat-icon">😲</div>
+        <div class="cat-name">Exclamatory</div>
+        <div class="cat-job">Shows strong feeling</div>
+        <div class="cat-punct">Ends with an exclamation point (!)</div>
+        <div class="cat-memo">Think: EXCLAIM = cry out</div>
+      </div>
+      <div class="cat-card cc-imper">
+        <div class="cat-icon">👑</div>
+        <div class="cat-name">Imperative</div>
+        <div class="cat-job">Gives a command or request</div>
+        <div class="cat-punct">Ends with a period (.) or (!)</div>
+        <div class="cat-memo">Think: EMPEROR = gives orders</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — One Topic, Four Ways -->
+  <div class="slide" id="s5">
+    <span class="phase-label phase-learn">Learn</span>
+    <div class="slide-title">One Topic, Four Sentence Types</div>
+    <p class="slide-text" style="margin-bottom:16px;">Watch how we can write about the same topic using all four types:</p>
+    <div class="example-bar eb-decl">
+      <span class="ex-label">DECLARATIVE:</span>
+      <span class="ex-text">The CN Tower is located in Toronto.</span>
+    </div>
+    <div class="example-bar eb-inter">
+      <span class="ex-label">INTERROGATIVE:</span>
+      <span class="ex-text">Have you ever visited the CN Tower?</span>
+    </div>
+    <div class="example-bar eb-excl">
+      <span class="ex-label">EXCLAMATORY:</span>
+      <span class="ex-text">The view from the CN Tower is breathtaking!</span>
+    </div>
+    <div class="example-bar eb-imper">
+      <span class="ex-label">IMPERATIVE:</span>
+      <span class="ex-text">Visit the CN Tower when you go to Toronto.</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — Quick Check MC -->
+  <div class="slide" id="s6">
+    <span class="phase-label phase-learn">Quick Check</span>
+    <div class="slide-title">Check Your Understanding</div>
+    <p class="slide-text" style="margin-bottom:12px;">What type of sentence is this?</p>
+    <div style="background:var(--blue-pale);padding:14px 18px;border-radius:10px;margin-bottom:14px;font-family:'Poppins',sans-serif;font-weight:600;font-size:1.05rem;color:var(--dark);text-align:center;">
+      "Close the door quietly."
+    </div>
+    <div class="mc-options" id="mc2">
+      <div class="mc-option" data-ok="0" onclick="doMC(this,'mc2','fb2')">A) Declarative — it makes a statement</div>
+      <div class="mc-option" data-ok="0" onclick="doMC(this,'mc2','fb2')">B) Interrogative — it asks a question</div>
+      <div class="mc-option" data-ok="0" onclick="doMC(this,'mc2','fb2')">C) Exclamatory — it shows strong feeling</div>
+      <div class="mc-option" data-ok="1" onclick="doMC(this,'mc2','fb2')">D) Imperative — it gives a command</div>
+    </div>
+    <div class="mc-feedback" id="fb2"></div>
+  </div>
+
+  <!-- SLIDE 7 — Sort Activity -->
+  <div class="slide" id="s7">
+    <span class="phase-label phase-practice">Practice</span>
+    <div class="slide-title">Sentence Sort</div>
+    <div class="directions">Drag each sentence into the correct column. On mobile, tap a sentence then tap a column to place it.</div>
+    <div class="sort-bank" id="sortBank"></div>
+    <div class="sort-cols">
+      <div class="sort-col sc-decl" data-col="declarative">
+        <div class="sort-col-hdr">📢 Declarative</div>
+        <div class="sort-col-items" data-col="declarative"></div>
+      </div>
+      <div class="sort-col sc-inter" data-col="interrogative">
+        <div class="sort-col-hdr">❓ Interrogative</div>
+        <div class="sort-col-items" data-col="interrogative"></div>
+      </div>
+      <div class="sort-col sc-excl" data-col="exclamatory">
+        <div class="sort-col-hdr">😲 Exclamatory</div>
+        <div class="sort-col-items" data-col="exclamatory"></div>
+      </div>
+      <div class="sort-col sc-imper" data-col="imperative">
+        <div class="sort-col-hdr">👑 Imperative</div>
+        <div class="sort-col-items" data-col="imperative"></div>
+      </div>
+    </div>
+    <button class="action-btn" onclick="checkSort()">Check My Answers</button>
+    <div class="activity-fb" id="sortFB"></div>
+  </div>
+
+  <!-- SLIDE 8 — Sentence Type Identifier -->
+  <div class="slide" id="s8">
+    <span class="phase-label phase-practice">Practice</span>
+    <div class="slide-title">Name That Type</div>
+    <div class="directions">Read each sentence and click the correct sentence type. Then check your answers.</div>
+    <div id="stiBox"></div>
+    <button class="action-btn" onclick="checkSTI()">Check My Answers</button>
+    <div class="activity-fb" id="stiFB"></div>
+  </div>
+
+  <!-- SLIDE 9 — Tricky Concepts -->
+  <div class="slide" id="s9">
+    <span class="phase-label phase-learn">Tricky Concepts</span>
+    <div class="slide-title">Watch Out for These</div>
+    <div style="margin-top:14px;">
+      <div class="tricky-box">
+        <div class="tricky-hdr">Imperative vs. Exclamatory</div>
+        <div class="tricky-body">"Stop right there!" looks exclamatory because of the exclamation point, but it is <strong>imperative</strong> — it gives a command. The exclamation point just shows urgency.</div>
+      </div>
+      <div class="tricky-box">
+        <div class="tricky-hdr">Hidden Subjects in Imperatives</div>
+        <div class="tricky-body">Imperative sentences often have a hidden subject: "you." When someone says "Open the window," they mean "<em>(You)</em> open the window."</div>
+      </div>
+      <div class="tricky-box">
+        <div class="tricky-hdr">Ask: What Is the Sentence's Job?</div>
+        <div class="tricky-body">When you are unsure, ask: "What is this sentence <em>doing</em>?" Is it telling? Asking? Showing strong feeling? Or commanding?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 — Review Cards -->
+  <div class="slide" id="s10">
+    <span class="phase-label phase-review">Review</span>
+    <div class="slide-title">Review What You Learned</div>
+    <div class="directions">Click each card to reveal the answer.</div>
+    <div class="rv-grid" id="rvGrid"></div>
+  </div>
+
+  <!-- SLIDE 11 — Celebration -->
+  <div class="slide" id="s11">
+    <div class="celeb-inner">
+      <div class="trophy">🏆</div>
+      <h2>Amazing Work!</h2>
+      <div class="celeb-msg">You learned all four sentence types today.</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv" id="endStars">0</div><div class="sl">Stars Earned</div></div>
+        <div class="stat-box"><div class="sv" id="endActs">0</div><div class="sl">Activities</div></div>
+        <div class="stat-box"><div class="sv" id="endAcc">0%</div><div class="sl">Accuracy</div></div>
+      </div>
+      <button class="restart-btn" onclick="startOver()">🔄 Start Over</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Nav Bar -->
+<div class="nav-bar">
+  <button class="nav-btn back" id="btnBack" onclick="go(-1)">← Back</button>
+  <span class="slide-counter" id="slideCtr">1 / 11</span>
+  <button class="nav-btn next" id="btnNext" onclick="go(1)">Next →</button>
+</div>
+
+<!-- ════════════ JAVASCRIPT ════════════ -->
+<script>
+(function() {
+  /* ── Data ── */
+  var TOTAL = 11;
+
+  var SORT_DATA = [
+    { text: "Niagara Falls is on the border of Ontario and New York.", type: "declarative" },
+    { text: "Where did you put my backpack?", type: "interrogative" },
+    { text: "That sunset is absolutely gorgeous!", type: "exclamatory" },
+    { text: "Please pass the salt.", type: "imperative" },
+    { text: "The hockey game starts at seven.", type: "declarative" },
+    { text: "Can you help me with this problem?", type: "interrogative" },
+    { text: "I cannot believe we won the tournament!", type: "exclamatory" },
+    { text: "Finish your homework before dinner.", type: "imperative" }
+  ];
+
+  var STI_DATA = [
+    { s: "The library closes at five o'clock.", a: "declarative" },
+    { s: "Did you remember to bring your lunch?", a: "interrogative" },
+    { s: "Look both ways before crossing the street.", a: "imperative" },
+    { s: "That was the funniest joke I have ever heard!", a: "exclamatory" },
+    { s: "What time does the train leave?", a: "interrogative" },
+    { s: "My favourite colour is blue.", a: "declarative" }
+  ];
+
+  var RV_DATA = [
+    { q: "What does a declarative sentence do?", a: "It makes a statement — it tells the reader something. It ends with a period.", c: "rv-teal" },
+    { q: "What does an interrogative sentence do?", a: "It asks a question. It always ends with a question mark.", c: "rv-coral" },
+    { q: "How can you tell exclamatory from imperative?", a: "Exclamatory shows strong feeling. Imperative gives a command. Ask: Is it telling someone to DO something, or expressing an emotion?", c: "rv-gold" },
+    { q: "What punctuation does an imperative sentence use?", a: "Usually a period. Sometimes an exclamation point if the command is urgent.", c: "rv-blue" },
+    { q: "Why does knowing sentence types matter for writing?", a: "Using all four types adds variety and keeps readers interested. Writing with only one type gets repetitive.", c: "rv-teal" }
+  ];
+
+  /* ── State ── */
+  var cur = 1;
+  var stars = 0;
+  var acts = 0;
+  var hits = 0;
+  var tries = 0;
+  var sortDone = false;
+  var stiDone = false;
+  var selectedTile = null;
+
+  /* ── Navigation ── */
+  function show(n) {
+    for (var i = 1; i <= TOTAL; i++) {
+      document.getElementById('s' + i).style.display = 'none';
+      document.getElementById('s' + i).classList.remove('active');
+    }
+    var el = document.getElementById('s' + n);
+    el.style.display = 'block';
+    el.classList.add('active');
+    cur = n;
+    document.getElementById('progFill').style.width = ((n / TOTAL) * 100) + '%';
+    document.getElementById('slideCtr').textContent = n + ' / ' + TOTAL;
+    document.getElementById('btnBack').disabled = (n === 1);
+    document.getElementById('btnNext').disabled = (n === TOTAL);
+    document.getElementById('slideWrapper').scrollTop = 0;
+    if (n === TOTAL) showCeleb();
+  }
+
+  window.go = function(d) {
+    var next = cur + d;
+    if (next >= 1 && next <= TOTAL) show(next);
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); window.go(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); window.go(-1); }
+  });
+
+  /* ── Stars ── */
+  function earnStars(n) {
+    stars += n;
+    document.getElementById('starNum').textContent = stars;
+    var box = document.getElementById('starBox');
+    box.classList.remove('animate');
+    void box.offsetWidth;
+    box.classList.add('animate');
+  }
+
+  /* ── Multiple Choice ── */
+  window.doMC = function(el, gId, fId) {
+    var g = document.getElementById(gId);
+    if (g.dataset.done === '1') return;
+    g.dataset.done = '1';
+    var opts = g.querySelectorAll('.mc-option');
+    var fb = document.getElementById(fId);
+    var ok = el.getAttribute('data-ok') === '1';
+    opts.forEach(function(o) {
+      o.classList.add('locked');
+      if (o.getAttribute('data-ok') === '1') o.classList.add('correct');
+    });
+    if (ok) {
+      el.classList.add('correct');
+      fb.textContent = '✓ Correct!';
+      fb.className = 'mc-feedback show fb-correct';
+      earnStars(1);
+      hits++;
+    } else {
+      el.classList.add('incorrect');
+      fb.textContent = '✗ Not quite. The correct answer is highlighted.';
+      fb.className = 'mc-feedback show fb-incorrect';
+    }
+    tries++;
+  };
+
+  /* ── Sort Activity ── */
+  function buildSort() {
+    var bank = document.getElementById('sortBank');
+    bank.innerHTML = '';
+    var items = SORT_DATA.slice().sort(function() { return Math.random() - 0.5; });
+
+    items.forEach(function(item) {
+      var tile = document.createElement('div');
+      tile.className = 'sort-tile';
+      tile.textContent = item.text;
+      tile.dataset.type = item.type;
+      tile.draggable = true;
+
+      tile.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', '');
+        tile.classList.add('dragging');
+        window._dragTile = tile;
+      });
+      tile.addEventListener('dragend', function() {
+        tile.classList.remove('dragging');
+        window._dragTile = null;
+      });
+
+      tile.addEventListener('click', function() {
+        if (sortDone) return;
+        if (tile.parentElement.classList.contains('sort-col-items')) {
+          bank.appendChild(tile);
+          tile.classList.remove('selected-tile');
+          selectedTile = null;
+          return;
+        }
+        document.querySelectorAll('.sort-tile.selected-tile').forEach(function(t) { t.classList.remove('selected-tile'); });
+        tile.classList.add('selected-tile');
+        selectedTile = tile;
+      });
+
+      bank.appendChild(tile);
+    });
+
+    document.querySelectorAll('.sort-col-items').forEach(function(zone) {
+      zone.addEventListener('dragover', function(e) { e.preventDefault(); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (window._dragTile && !sortDone) zone.appendChild(window._dragTile);
+      });
+    });
+
+    bank.addEventListener('dragover', function(e) { e.preventDefault(); });
+    bank.addEventListener('drop', function(e) {
+      e.preventDefault();
+      if (window._dragTile && !sortDone) bank.appendChild(window._dragTile);
+    });
+
+    document.querySelectorAll('.sort-col').forEach(function(col) {
+      col.addEventListener('click', function(e) {
+        if (sortDone || !selectedTile) return;
+        if (e.target.classList.contains('sort-tile')) return;
+        var items = col.querySelector('.sort-col-items');
+        items.appendChild(selectedTile);
+        selectedTile.classList.remove('selected-tile');
+        selectedTile = null;
+      });
+    });
+  }
+
+  window.checkSort = function() {
+    if (sortDone) return;
+    var bank = document.getElementById('sortBank');
+    if (bank.querySelectorAll('.sort-tile').length > 0) {
+      var fb = document.getElementById('sortFB');
+      fb.textContent = 'Please sort all sentences before checking.';
+      fb.className = 'activity-fb fb-err';
+      return;
+    }
+    sortDone = true;
+    var right = 0;
+    var total = SORT_DATA.length;
+    document.querySelectorAll('.sort-col-items').forEach(function(zone) {
+      var col = zone.dataset.col;
+      zone.querySelectorAll('.sort-tile').forEach(function(tile) {
+        if (tile.dataset.type === col) { tile.classList.add('correct-tile'); right++; }
+        else { tile.classList.add('wrong-tile'); }
+      });
+    });
+    hits += right; tries += total; acts++;
+    var fb = document.getElementById('sortFB');
+    if (right === total) {
+      fb.textContent = '✓ Perfect! You sorted all ' + total + ' sentences correctly.';
+      fb.className = 'activity-fb fb-ok';
+      earnStars(3); confetti();
+    } else {
+      fb.textContent = 'You got ' + right + ' out of ' + total + ' correct. Incorrect ones are highlighted in red.';
+      fb.className = 'activity-fb fb-err';
+      earnStars(1);
+    }
+  };
+
+  /* ── Sentence Type Identifier ── */
+  function buildSTI() {
+    var box = document.getElementById('stiBox');
+    box.innerHTML = '';
+    var types = ['declarative', 'interrogative', 'exclamatory', 'imperative'];
+    var labels = { declarative: '📢 Declarative', interrogative: '❓ Interrogative', exclamatory: '😲 Exclamatory', imperative: '👑 Imperative' };
+
+    STI_DATA.forEach(function(item) {
+      var div = document.createElement('div');
+      div.className = 'sti-item';
+      div.dataset.ans = item.a;
+
+      var sent = document.createElement('div');
+      sent.className = 'sti-sentence';
+      sent.textContent = item.s;
+      div.appendChild(sent);
+
+      var btns = document.createElement('div');
+      btns.className = 'sti-btns';
+
+      types.forEach(function(t) {
+        var b = document.createElement('button');
+        b.className = 'sti-btn';
+        b.textContent = labels[t];
+        b.dataset.type = t;
+        b.addEventListener('click', function() {
+          if (stiDone) return;
+          btns.querySelectorAll('.sti-btn').forEach(function(x) { x.classList.remove('sti-sel'); });
+          b.classList.add('sti-sel');
+        });
+        btns.appendChild(b);
+      });
+
+      div.appendChild(btns);
+      box.appendChild(div);
+    });
+  }
+
+  window.checkSTI = function() {
+    if (stiDone) return;
+    var items = document.querySelectorAll('.sti-item');
+    var allDone = true;
+    items.forEach(function(it) { if (!it.querySelector('.sti-btn.sti-sel')) allDone = false; });
+    if (!allDone) {
+      var fb = document.getElementById('stiFB');
+      fb.textContent = 'Please select a type for every sentence before checking.';
+      fb.className = 'activity-fb fb-err';
+      return;
+    }
+    stiDone = true;
+    var right = 0;
+    var total = STI_DATA.length;
+    items.forEach(function(it) {
+      var ans = it.dataset.ans;
+      var sel = it.querySelector('.sti-btn.sti-sel');
+      it.querySelectorAll('.sti-btn').forEach(function(b) { b.classList.add('sti-locked'); });
+      if (sel.dataset.type === ans) {
+        sel.classList.add('sti-right'); it.classList.add('sti-ok'); right++;
+      } else {
+        sel.classList.add('sti-wrong'); it.classList.add('sti-bad');
+        it.querySelectorAll('.sti-btn').forEach(function(b) {
+          if (b.dataset.type === ans) b.classList.add('sti-right');
+        });
+      }
+    });
+    hits += right; tries += total; acts++;
+    var fb = document.getElementById('stiFB');
+    if (right === total) {
+      fb.textContent = '✓ Outstanding! All ' + total + ' sentence types identified correctly.';
+      fb.className = 'activity-fb fb-ok';
+      earnStars(2); confetti();
+    } else {
+      fb.textContent = 'You got ' + right + ' out of ' + total + ' correct. Correct answers are in green.';
+      fb.className = 'activity-fb fb-err';
+      earnStars(1);
+    }
+  };
+
+  /* ── Review Cards ── */
+  function buildRV() {
+    var grid = document.getElementById('rvGrid');
+    grid.innerHTML = '';
+    RV_DATA.forEach(function(card) {
+      var d = document.createElement('div');
+      d.className = 'rv-card ' + card.c;
+      d.innerHTML = '<div class="rv-q">' + card.q + '</div><div class="rv-a">' + card.a + '</div><div class="rv-tap">Click to reveal</div>';
+      d.addEventListener('click', function() { d.classList.toggle('flipped'); });
+      grid.appendChild(d);
+    });
+  }
+
+  /* ── Celebration ── */
+  function showCeleb() {
+    document.getElementById('endStars').textContent = stars;
+    document.getElementById('endActs').textContent = acts;
+    var pct = tries > 0 ? Math.round((hits / tries) * 100) : 0;
+    document.getElementById('endAcc').textContent = pct + '%';
+    confetti();
+  }
+
+  /* ── Confetti ── */
+  function confetti() {
+    var cols = ['#E66B5D','#3A7D8C','#F3D25B','#D7ECF0','#66BB6A','#FB8C00'];
+    for (var i = 0; i < 55; i++) {
+      var p = document.createElement('div');
+      p.className = 'confetti-bit';
+      var sz = Math.random() * 8 + 5;
+      p.style.width = sz + 'px';
+      p.style.height = sz + 'px';
+      p.style.background = cols[Math.floor(Math.random() * cols.length)];
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top = '-12px';
+      document.body.appendChild(p);
+      var dur = Math.random() * 2000 + 1400;
+      var drift = (Math.random() - 0.5) * 200;
+      p.animate([
+        { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateY(100vh) translateX(' + drift + 'px) rotate(' + (Math.random()*720) + 'deg)', opacity: 0 }
+      ], { duration: dur, easing: 'cubic-bezier(0.25,0.46,0.45,0.94)' }).onfinish = (function(el) { return function() { el.remove(); }; })(p);
+    }
+  }
+
+  /* ── Start Over ── */
+  window.startOver = function() {
+    stars = 0; acts = 0; hits = 0; tries = 0;
+    sortDone = false; stiDone = false; selectedTile = null;
+    document.getElementById('starNum').textContent = '0';
+
+    ['mc1','mc2'].forEach(function(id) {
+      var g = document.getElementById(id);
+      g.dataset.done = '0';
+      g.querySelectorAll('.mc-option').forEach(function(o) { o.className = 'mc-option'; });
+    });
+    ['fb1','fb2'].forEach(function(id) {
+      var el = document.getElementById(id);
+      el.className = 'mc-feedback'; el.textContent = '';
+    });
+
+    document.querySelectorAll('.sort-col-items').forEach(function(z) { z.innerHTML = ''; });
+    document.getElementById('sortFB').textContent = '';
+    document.getElementById('sortFB').className = 'activity-fb';
+    buildSort();
+
+    document.getElementById('stiFB').textContent = '';
+    document.getElementById('stiFB').className = 'activity-fb';
+    buildSTI();
+
+    document.querySelectorAll('.rv-card').forEach(function(c) { c.classList.remove('flipped'); });
+    show(1);
+  };
+
+  /* ── Init ── */
+  buildSort();
+  buildSTI();
+  buildRV();
+  show(1);
+
+})();
+</script>
+</body>
+</html>
